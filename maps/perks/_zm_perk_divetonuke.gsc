@@ -26,5 +26,7 @@ divetonuke_explode(attacker, origin)
 	RadiusDamage(origin, level.zombie_vars["zombie_perk_divetonuke_radius"], level.zombie_vars["zombie_perk_divetonuke_max_damage"], level.zombie_vars["zombie_perk_divetonuke_min_damage"], attacker, "MOD_GRENADE_SPLASH");
 	PlayFX(level._effect["divetonuke_groundhit"], origin);
 	attacker PlaySound("zmb_phdflop_explo");
-	levelNotify("divetonuke_vision", attacker);
+	attacker visionset_activate("divetonuke_vision");
+	wait .5;
+	attacker visionset_deactivate("divetonuke_vision");
 }

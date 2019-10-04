@@ -108,7 +108,6 @@ main()
 	level thread zombie_dog_pathing_hack();
 	level thread barricade_glitch_fix();
 
-	visionsetnaked( "zombie_theater", 0 );
 	// DSM: Setting chandelier Scale
 	chandelier = getentarray("theater_chandelier","targetname");
 	array_thread( chandelier, ::theater_chandelier_model_scale );

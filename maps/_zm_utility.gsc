@@ -396,9 +396,19 @@ visionset_activate(visionset_name)
 	set_client_system_state("_visionset_mgr", "activate:" + visionset_name, self);
 }
 
+visionset_activate_all_players(visionset_name)
+{
+	array_run(GetPlayers(), ::visionset_activate, visionset_name);
+}
+
 visionset_deactivate(visionset_name)
 {
 	set_client_system_state("_visionset_mgr", "deactivate:" + visionset_name, self);
+}
+
+visionset_deactivate_all_players(visionset_name)
+{
+	array_run(GetPlayers(), ::visionset_deactivate, visionset_name);
 }
 
 // Common
@@ -453,8 +463,6 @@ get_round_enemy_array()
 
 set_client_system_state(system, state, player)
 {
-	// setClientSysState("lsm", "0", self);
-
 	if(!isdefined(state))
 		return;
 	if(!isdefined(system))
