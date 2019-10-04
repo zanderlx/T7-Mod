@@ -1,0 +1,51 @@
+#include "ui/menudef.h"
+
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+#define BETA_TEXT "@MOD_BETA"
+#define BETA_TEXT_FONT UI_FONT_EXTRABIG
+#define BETA_TEXT_FONT_SIZE TEXTSIZE_LARGE
+#define BETA_TEXT_WIDTH (GetTextWidth(BETA_TEXT, BETA_TEXT_FONT, BETA_TEXT_FONT_SIZE))
+#define BETA_TEXT_HEIGHT 100
+#define BETA_TEXT_X ((SCREEN_WIDTH / 2) - BETA_TEXT_WIDTH)
+#define BETA_TEXT_Y (SCREEN_HEIGHT - 25)
+#define BTEA_TEXT_COLOR 1 1 1 .25
+
+{
+	assetGlobalDef
+	{
+		fadeClamp			1
+		fadeCycle			1
+		fadeAmount			0.1
+	}
+
+	menuDef
+	{
+		name				hud_test
+		rect				0 0 SCREEN_WIDTH SCREEN_HEIGHT HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+		fullscreen			0
+		visible				when(!DvarBool(#"ammoCounterHide") && !DvarBool(#"hud_missionFailed") && !ui_active() && DvarBool(#"zombiemode") && !DvarBool(#"zombietron") && !DvarBool(#"splitscreen"))
+
+		// Beta
+		itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			rect			0 0 0 0
+			exp				rect X(BETA_TEXT_X)
+			exp				rect Y(BETA_TEXT_Y)
+			exp				rect W(BETA_TEXT_WIDTH)
+			exp				rect H(BETA_TEXT_HEIGHT)
+			textScale		TEXTSIZE_LARGE
+			textStyle		ITEM_TEXTSTYLE_SHADOWED
+			textFont		UI_FONT_EXTRABIG
+			text			BETA_TEXT
+			foreColor		BTEA_TEXT_COLOR
+			visible			when(1)
+			decoration
+		}
+
+		// Perk Icons
+		#include "ui/hud_zm_perks.inc"
+	}
+}
