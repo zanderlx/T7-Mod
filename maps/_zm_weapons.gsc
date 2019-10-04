@@ -428,7 +428,7 @@ switch_back_primary_weapon(oldprimary)
 	if(isdefined(oldprimary) && IsInArray(primaryWeapons, oldprimary))
 		self SwitchToWeapon(oldprimary);
 	else if(primaryWeapons.size > 0)
-		self SwitchToWeapon();
+		self SwitchToWeapon(primaryWeapons[0]);
 }
 
 can_upgrade_weapon(weapon_name)
