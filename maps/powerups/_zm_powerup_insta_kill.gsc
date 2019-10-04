@@ -8,7 +8,7 @@ include_powerup_for_level()
 	maps\_zm_powerups::register_powerup("insta_kill", "p7_zm_power_up_insta_kill");
 	maps\_zm_powerups::register_powerup_fx("insta_kill", "powerup_green");
 	maps\_zm_powerups::register_powerup_threads("insta_kill", undefined, undefined, undefined, undefined);
-	maps\_zm_powerups::register_powerup_ui("insta_kill", false, "uie_moto_powerup_insta_kill", "zombie_powerup_insta_kill_on", "zombie_powerup_insta_kill_time");
+	maps\_zm_powerups::register_powerup_ui("insta_kill", false, "uie_moto_powerup_insta_kill", "zombie_powerup_insta_kill_time", "zombie_powerup_insta_kill_on");
 	maps\_zm_powerups::register_timed_powerup_threads("insta_kill", ::insta_kill_on, ::insta_kill_off);
 
 	set_zombie_var("zombie_insta_kill", false);

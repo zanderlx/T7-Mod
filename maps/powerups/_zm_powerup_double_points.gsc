@@ -8,7 +8,7 @@ include_powerup_for_level()
 	maps\_zm_powerups::register_powerup("double_points", "p7_zm_power_up_double_points");
 	maps\_zm_powerups::register_powerup_fx("double_points", "powerup_green");
 	maps\_zm_powerups::register_powerup_threads("double_points", undefined, undefined, undefined, undefined);
-	maps\_zm_powerups::register_powerup_ui("double_points", false, "uie_moto_powerup_double_points", "zombie_powerup_point_doubler_on", "zombie_powerup_point_doubler_time");
+	maps\_zm_powerups::register_powerup_ui("double_points", false, "uie_moto_powerup_double_points", "zombie_powerup_point_doubler_time", "zombie_powerup_point_doubler_on");
 	maps\_zm_powerups::register_timed_powerup_threads("double_points", ::double_points_on, ::double_points_off, undefined);
 
 	set_zombie_var("zombie_point_scalar", 1);

@@ -8,7 +8,7 @@ include_powerup_for_level()
 	maps\_zm_powerups::register_powerup("fire_sale", "p7_zm_power_up_firesale");
 	maps\_zm_powerups::register_powerup_fx("fire_sale", "powerup_green");
 	maps\_zm_powerups::register_powerup_threads("fire_sale", ::func_should_drop_fire_sale, undefined, undefined, undefined);
-	maps\_zm_powerups::register_powerup_ui("fire_sale", false, "uie_moto_powerup_fire_sale", "zombie_powerup_fire_sale_on", "zombie_powerup_fire_sale_time");
+	maps\_zm_powerups::register_powerup_ui("fire_sale", false, "uie_moto_powerup_fire_sale", "zombie_powerup_fire_sale_time", "zombie_powerup_fire_sale_on");
 	maps\_zm_powerups::register_timed_powerup_threads("fire_sale", ::fire_sale_on, ::fire_sale_off, undefined);
 }
 
