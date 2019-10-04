@@ -9,6 +9,9 @@ LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy Tombstone [Cost: &&1]"
 REFERENCE			PERK_CHUGABUD
 LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Who's Who [Cost: &&1]"
 
+REFERENCE			PERK_ELECTRICCHERRY
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Electric Cherry [Cost: &&1]"
+
 // Weapons
 REFERENCE			DYN_WEAPONCOST
 LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy &&1 [Cost: &&2]"

@@ -57,7 +57,7 @@ default_include_perks()
 	// T6
 	maps\perks\_zm_perk_tombstone::include_perk_for_level();
 	maps\perks\_zm_perk_chugabud::include_perk_for_level();
-	// maps\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	maps\perks\_zm_perk_electric_cherry::include_perk_for_level();
 	// maps\perks\_zm_perk_vulture_aid::include_perk_for_level();
 
 	// T7
