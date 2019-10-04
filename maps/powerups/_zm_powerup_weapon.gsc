@@ -56,6 +56,21 @@ set_powerup_weapon_name(powerup, weapon)
 	maps\_zm_powerups::set_weapon_ignore_max_ammo(weapon);
 }
 
+is_powerup_weapon(weapon)
+{
+	if(isdefined(level._zm_powerup_weapons))
+	{
+		keys = GetArrayKeys(level._zm_powerup_weapons);
+
+		for(i = 0; i < keys.size; i++)
+		{
+			if(level._zm_powerup_weapons[keys[i]] == weapon)
+				return true;
+		}
+	}
+	return false;
+}
+
 func_can_drop_powerup_weapon(powerup)
 {
 	return isdefined(level._zm_powerup_weapons) && isdefined(level._zm_powerup_weapons[powerup]);

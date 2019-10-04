@@ -56,7 +56,10 @@ chugabud_laststand()
 	self endon("disconnect");
 	self endon("chugabud_bleedout");
 	self increment_downed_stat();
-	self maps\_zombiemode_powerups::minigun_weapon_powerup_off();
+
+	if(self has_powerup_weapon() && isdefined(self._current_powerup_weapon))
+		maps\powerups\_zm_powerup_weapon::remove_powerup_weapon(self._current_powerup_weapon);
+	
 	self.ignore_insta_kill = true;
 	self.health = self.maxhealth;
 	loadout_chugabud = self chugabud_save_loadout();

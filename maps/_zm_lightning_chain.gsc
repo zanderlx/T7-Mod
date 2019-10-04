@@ -367,7 +367,7 @@ lc_do_damage(source_enemy, arc_num, player, params)
 	{
 		player.tesla_powerup_dropped = true;
 		level.zombie_vars["zombie_drop_item"] = true;
-		level thread maps\_zombiemode_powerups::powerup_drop(self.origin);
+		level thread maps\_zm_powerups::powerup_drop(self.origin);
 	}
 	*/
 }

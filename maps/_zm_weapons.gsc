@@ -952,6 +952,9 @@ create_loadout(weapons)
 
 	for(i = 0; i < weapons.size; i++)
 	{
+		if(maps\powerups\_zm_powerup_weapon::is_powerup_weapon(weapons[i]))
+			continue;
+
 		loadout.weapons[loadout.weapons.size] = get_default_weapondata(weapons[i]);
 
 		if(!isdefined(loadout.current))
@@ -970,6 +973,8 @@ player_get_loadout()
 
 	for(i = 0; i < weapons.size; i++)
 	{
+		if(maps\powerups\_zm_powerup_weapon::is_powerup_weapon(weapons[i]))
+			continue;
 		loadout.weapons[loadout.weapons.size] = get_player_weapondata(self, weapons[i]);
 	}
 
