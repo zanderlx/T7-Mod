@@ -37,8 +37,8 @@ DRAW_PERK_SLOT("additionalprimaryweapon")
 // Black Ops 2
 DRAW_PERK_SLOT("tombstone")
 DRAW_PERK_SLOT("chugabud")
-DRAW_PERK_SLOT("electric_cherry")
-DRAW_PERK_SLOT("vulture_aid")
+DRAW_PERK_SLOT("cherry")
+DRAW_PERK_SLOT("vulture")
 
 // Black Ops 3
-DRAW_PERK_SLOT("widows_wine")
+DRAW_PERK_SLOT("widows")
