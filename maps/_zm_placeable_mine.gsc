@@ -76,7 +76,7 @@ replenish_placeable_mines_after_round()
 
 			if(!isdefined(weapon_name) || weapon_name == "none")
 				continue;
-			
+
 			players[i] maps\_zm_weapons::give_weapon_or_ammo(weapon_name);
 		}
 	}

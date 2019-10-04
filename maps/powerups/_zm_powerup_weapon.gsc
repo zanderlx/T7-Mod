@@ -13,16 +13,16 @@
 
 		To manually remove a powerup weapon
 			call `maps\powerups\_zm_powerup_weapon::remove_powerup_weapon(<powerup_name>);`
-		
+
 		Optional but reccomended
 			Add the following to your powerups 'can_drop' function, This ensures that the powerup only drops when it has a weapon assigned
 			```
 			if(!maps\powerups\_zm_powerup_weapon::func_can_drop_powerup_weapon(<powerup_name>))
 				return false;
 			```
-		
+
 		`maps\powerups\_zm_powerup_weapon::init();` does not have to be called, but can be called from your powerup registration
-		
+
 		See minigun for a example powerup using this system
 */
 
@@ -37,7 +37,7 @@ init()
 remove_powerup_weapon(powerup)
 {
 	time_name = level.zombie_powerups[powerup].time_name;
-	
+
 	if(is_true(level.zombie_powerups[powerup].per_player))
 		self.zombie_vars[time_name] = 0;
 	else
@@ -50,7 +50,7 @@ set_powerup_weapon_name(powerup, weapon)
 
 	if(!isdefined(level._zm_powerup_weapons))
 		level._zm_powerup_weapons = [];
-	
+
 	PrecacheItem(weapon);
 	level._zm_powerup_weapons[powerup] = weapon;
 	maps\_zm_powerups::set_weapon_ignore_max_ammo(weapon);
@@ -122,7 +122,7 @@ powerup_weapon_change(powerup)
 	self endon("player_downed");
 	self endon("powerup_weapon_cleanup");
 	self endon("replace_weapon_powerup");
-	
+
 	for(;;)
 	{
 		self waittill("weapon_change", new_weapon, old_weapon);
@@ -140,20 +140,20 @@ powerup_weapon_cleanup(powerup)
 
 	if(result != "powerup_weapon_cleanup")
 		self notify("powerup_weapon_cleanup");
-	
+
 	remove_powerup_weapon(powerup);
 
 	if(result == "disconnect")
 		return;
 
 	self TakeWeapon(level._zm_powerup_weapons[powerup]);
-	
+
 	if(result != "player_downed")
 	{
 		self maps\_zm_weapons::switch_back_primary_weapon(self._zombie_gun_before_powerup_weapon);
 		self decrement_is_drinking();
 	}
-	
+
 	self.has_powerup_weapon = false;
 	self._current_powerup_weapon = undefined;
 	self._zombie_gun_before_powerup_weapon = undefined;

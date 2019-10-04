@@ -9,7 +9,7 @@
 		1 - Obtained
 		2 - Paused
 		3 - Unpaused
-	
+
 	Has Perk -> 1 or 3
 	Has Perk Paused -> 2
 */
@@ -18,7 +18,7 @@ init()
 {
 	if(!isdefined(level._zm_include_perks))
 		level._zm_include_perks = ::default_include_perks;
-	
+
 	run_function(level, level._zm_include_perks);
 	precache_perks();
 	spawn_perk_machines();
@@ -59,7 +59,7 @@ default_include_perks()
 	maps\perks\_zm_perk_chugabud::include_perk_for_level();
 	// maps\perks\_zm_perk_electric_cherry::include_perk_for_level();
 	// maps\perks\_zm_perk_vulture_aid::include_perk_for_level();
-	
+
 	// T7
 	// maps\perks\_zm_perk_widows_wine::include_perk_for_level();
 
@@ -106,7 +106,7 @@ perk_power_on()
 
 	if(isdefined(level._custom_perks) && isdefined(level._custom_perks[perk]) && isdefined(level._custom_perks[perk].model_on))
 		machine SetModel(level._custom_perks[perk].model_on);
-	
+
 	machine Vibrate((0, -100, 0), .3, .4, 3);
 	machine PlaySound("zmb_perks_power_on");
 	machine thread perk_fx(perk);
@@ -132,7 +132,7 @@ perk_power_off()
 
 	if(isdefined(level._custom_perks) && isdefined(level._custom_perks[perk]) && isdefined(level._custom_perks[perk].model_off))
 		machine SetModel(level._custom_perks[perk].model_off);
-	
+
 	machine notify("stop_loop_sound");
 	machine notify("stop_light_fx");
 
@@ -154,7 +154,7 @@ spawn_perk_machines()
 
 	if(isdefined(level._zm_extra_perk_machines) && level._zm_extra_perk_machines.size > 0)
 		structs = array_merge(structs, level._zm_extra_perk_machines);
-	
+
 	perk_counts = [];
 
 	if(isdefined(structs) && structs.size > 0)
@@ -167,7 +167,7 @@ spawn_perk_machines()
 				continue;
 			if(!struct maps\_zm_gametype::is_zm_scr_ent_valid("perks"))
 				continue;
-			
+
 			origin = struct.origin;
 			perk = struct.script_noteworthy;
 			angles = (0, 0, 0);
@@ -185,7 +185,7 @@ spawn_perk_machines()
 				model = struct.model;
 			if(isdefined(level._custom_perks[perk].model_off))
 				model = level._custom_perks[perk].model_off;
-			
+
 			// Player Trigger
 			stub = SpawnStruct();
 			stub.origin = origin + (0, 0, 60);
@@ -196,7 +196,7 @@ spawn_perk_machines()
 			stub.spawn_struct = struct;
 			stub.prompt_and_visibility_func = ::playertrigger_perk_update_trigger;
 			stub.can_notify_power = perk_counts[perk] == 0;
-			
+
 			// Powerable
 			stub.powerable_stub = maps\_zm_power::add_powerable(::perk_power_on, ::perk_power_off);
 			stub.powerable_stub.playertrigger = stub;
@@ -206,7 +206,7 @@ spawn_perk_machines()
 				stub.machine = struct.machine_override;
 			else
 				stub.machine = spawn_model(model, origin, angles);
-			
+
 			stub.machine SetModel(model);
 
 			// Collision Model
@@ -264,6 +264,9 @@ playertrigger_perk_update_stub(player)
 {
 	if(is_true(self.stub.power_on))
 	{
+		if(player has_perk(self.stub.script_noteworthy))
+			return false;
+
 		self.hint_string = get_perk_hint_string(self.stub.script_noteworthy);
 		self.hint_param = get_perk_cost(self.stub.script_noteworthy);
 		return true;
@@ -288,7 +291,7 @@ playertrigger_perk_think()
 
 		if(!is_true(self.stub.power_on))
 			continue;
-		
+
 		if(!self vending_trigger_can_player_use(player))
 		{
 			wait .1;
@@ -366,7 +369,7 @@ convert_legacy_perk_prefabs()
 				if(isdefined(level._custom_perks[keys[j]].specialty) && perk == level._custom_perks[keys[j]].specialty)
 				{
 					perk = keys[j];
-					
+
 					struct = generate_machine_location(perk, origin, angles);
 					struct.machine_override = machine;
 					struct.clip_override = clip;
@@ -382,7 +385,7 @@ vending_trigger_post_think(stub)
 	perk = stub.script_noteworthy;
 	cost = get_perk_cost(perk);
 	origin = stub maps\_zm_trigger_per_player::playertrigger_origin();
-	
+
 	PlaySoundAtPosition("evt_bottle_dispense", origin);
 	self maps\_zombiemode_score::minus_to_player_score(cost);
 	self.perk_purchased = perk;
@@ -397,7 +400,7 @@ vending_trigger_post_think(stub)
 		return;
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
-	
+
 	self give_perk(perk, true);
 }
 
@@ -428,7 +431,7 @@ perk_fx(perk)
 		return;
 	if(!isdefined(level._effect[fx_name]))
 		return;
-	
+
 	wait 3;
 
 	ent = spawn_model("tag_origin", self.origin, self.angles);
@@ -455,7 +458,7 @@ delete_perk_machines(perk, do_anim)
 		return;
 	if(!isdefined(level._zm_perk_machines[perk]) || level._zm_perk_machines[perk].size == 0)
 		return;
-	
+
 	array_thread(level._zm_perk_machines[perk], ::delete_perk_machine_core, do_anim);
 }
 
@@ -486,7 +489,7 @@ delete_perk_machine_core(do_anim)
 				dir = (dir[0], dir[1] * -1, 0);
 			else if(dir[0] < 0)
 				dir = (dir[0] * -1, dir[1], 0);
-			
+
 			machine Vibrate(dir, 10, .5, 5);
 		}
 
@@ -503,7 +506,7 @@ delete_perk_machine_core(do_anim)
 
 	if(isdefined(self.bump))
 		self.bump Delete();
-	
+
 	machine Delete();
 }
 
@@ -514,12 +517,12 @@ perk_hud_create(perk)
 		self.perk_hud = [];
 	if(isdefined(self.perk_hud[perk]))
 		return;
-	
+
 	shader = "";
 
 	if(isdefined(level._custom_perks) && isdefined(level._custom_perks[perk]) && isdefined(level._custom_perks[perk].shader))
 		shader = level._custom_perks[perk].shader;
-	
+
 	self.perk_hud[perk] = self.perk_hud.size * 30;
 
 	self SetClientDvars(
@@ -550,7 +553,7 @@ perk_hud_destroy(perk)
 		return;
 	if(!isdefined(self.perk_hud[perk]))
 		return;
-	
+
 	self.perk_hud[perk] = undefined;
 
 	self SetClientDvars(
@@ -579,7 +582,7 @@ perk_hud_grey(perk, on_off)
 		// }
 
 		self SetClientDvar("ui_zm_perk_" + perk + "_alpha", .33);
-		
+
 	}
 	else
 	{
@@ -614,7 +617,7 @@ perk_give_bottle_begin(perk)
 
 	gun = self GetCurrentWeapon();
 	bottle = get_perk_bottle(perk);
-	
+
 	if(isdefined(bottle))
 	{
 		self GiveWeapon(bottle);
@@ -633,7 +636,7 @@ perk_give_bottle_end(gun, perk)
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
-	
+
 	if(self is_multiple_drinking())
 	{
 		self decrement_is_drinking();
@@ -677,13 +680,13 @@ perk_think(perk)
 		self UnSetPerk(level._custom_perks[perk].specialty);
 	if(isdefined(level._custom_perks[perk].thread_take))
 		single_thread(self, level._custom_perks[perk].thread_take);
-	
+
 	self perk_hud_destroy(perk);
 	self.perk_purchased = undefined;
 
 	if(isdefined(level.perk_lost_func))
 		run_function(self, level.perk_lost_func, perk);
-	
+
 	self notify("perk_lost", perk);
 }
 
@@ -709,7 +712,7 @@ give_perk_core(perk, bought)
 {
 	if(self get_player_perk_state(perk) > 0)
 		return;
-	
+
 	self set_player_perk_state(perk, 1);
 	self.num_perks++;
 
@@ -732,7 +735,7 @@ give_perk_core(perk, bought)
 		if(isdefined(level._custom_perks[perk].thread_give))
 			single_thread(self, level._custom_perks[perk].thread_give);
 	}
-	
+
 	if(!isdefined(self.perk_history))
 		self.perk_history = [];
 	if(!isdefined(self.perks_active))
@@ -762,7 +765,7 @@ pause_perk_core(perk)
 			if(isdefined(level._custom_perks[perk].thread_pause))
 				single_thread(self, level._custom_perks[perk].thread_pause);
 		}
-		
+
 		self perk_hud_grey(perk, true);
 		self notify("perk_paused", perk);
 	}
@@ -772,7 +775,7 @@ unpause_perk_core(perk)
 {
 	if(self has_perk(perk))
 		return;
-	
+
 	if(self has_perk_paused(perk))
 	{
 		self set_player_perk_state(perk, 3);
@@ -784,7 +787,7 @@ unpause_perk_core(perk)
 			if(isdefined(level._custom_perks[perk].thread_unpause))
 				single_thread(self, level._custom_perks[perk].thread_unpause);
 		}
-		
+
 		self perk_hud_grey(perk, false);
 		self notify("perk_unpaused", perk);
 		self set_player_max_health(false, false);
@@ -817,7 +820,7 @@ set_player_perk_state(perk, state)
 {
 	old_state = self get_player_perk_state(perk);
 	new_state = state;
-	
+
 	if(new_state != old_state)
 	{
 		set_client_system_state("_zm_perks", perk + "," + new_state, self);
@@ -836,7 +839,7 @@ generate_machine_location(perk, origin, angles)
 
 	if(!isdefined(level._zm_extra_perk_machines))
 		level._zm_extra_perk_machines = [];
-	
+
 	level._zm_extra_perk_machines[level._zm_extra_perk_machines.size] = struct;
 	return struct;
 }
@@ -874,7 +877,7 @@ _register_undefined_perk(perk)
 		level._custom_perks = [];
 	if(isdefined(level._custom_perks[perk]))
 		return;
-	
+
 	level._custom_perks[perk] = SpawnStruct();
 }
 

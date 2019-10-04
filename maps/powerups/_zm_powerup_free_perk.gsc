@@ -23,7 +23,7 @@ free_perk()
 		return;
 	if(self.sessionstate == "spectator")
 		return;
-	
+
 	IPrintLnBold("give random perk");
 	self give_random_perk();
 }

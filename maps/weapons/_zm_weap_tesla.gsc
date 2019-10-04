@@ -17,7 +17,7 @@ init()
 	level._effect["tesla_viewmodel_tube2_upgraded"] = LoadFX("maps/zombie/fx_zombie_tesla_tube_view2_ug");
 	level._effect["tesla_viewmodel_tube3_upgraded"] = LoadFX("maps/zombie/fx_zombie_tesla_tube_view3_ug");
 
-	level.tesla_lightning_params = maps\_zm_lightning_chain::create_lightning_chain_params( 
+	level.tesla_lightning_params = maps\_zm_lightning_chain::create_lightning_chain_params(
 		5, // max_arcs
 		10, // max_enemies_killed
 		300, // radius_start
@@ -64,7 +64,7 @@ tesla_sound_thread()
 
 		if(!isdefined(result))
 			continue;
-		
+
 		if((result == "weapon_change" || result == "grenade_fire") && is_tesla_gun(weapon))
 		{
 			if(!isdefined(self.tesla_loop_sound))
@@ -120,7 +120,7 @@ tesla_pvp_thread()
 			continue;
 		if(!is_tesla_damage(mod, weapon))
 			continue;
-		
+
 		if(self == attacker)
 		{
 			damage = Max(Int(self.maxhealth * .25), 25);
@@ -145,7 +145,7 @@ play_tesla_sound(emotion)
 		level.one_emo_at_a_time = false;
 	if(!isdefined(level.var_counter))
 		level.var_counter = 0;
-	
+
 	if(is_true(level.one_emo_at_a_time))
 	{
 		level.var_counter++;

@@ -12,7 +12,7 @@ magicbox_cycle_callback(clientnum, set, newEnt)
 {
 	if(clientnum != 0)
 		return;
-	
+
 	if(set)
 		self thread weapon_floats_up();
 	else

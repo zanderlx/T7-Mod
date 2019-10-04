@@ -15,7 +15,7 @@ spawn_wallbuys()
 
 	if(isdefined(level._zm_extra_weapon_wallbuys) && level._zm_extra_weapon_wallbuys.size > 0)
 		structs = array_merge(structs, level._zm_extra_weapon_wallbuys);
-	
+
 	if(!isdefined(structs) || structs.size == 0)
 		return;
 
@@ -27,14 +27,14 @@ spawn_wallbuys()
 			continue;
 		if(!struct maps\_zm_gametype::is_zm_scr_ent_valid("wallbuys"))
 			continue;
-		
+
 		origin = struct.origin;
 		weapon = struct.zombie_weapon_upgrade;
 		angles = (0, 0, 0);
 
 		if(isdefined(struct.angles))
 			angles = struct.angles;
-		
+
 		// Player Trigger
 		stub = SpawnStruct();
 		stub.origin = origin;
@@ -56,7 +56,7 @@ spawn_wallbuys()
 		}
 		else
 			stub.model = maps\_zm_weapons::spawn_weapon_model(weapon, origin, angles);
-		
+
 		stub.model Hide();
 
 		if(isdefined(stub.model.lh_model))
@@ -75,7 +75,7 @@ wallbuy_give_weapon(stub)
 	{
 		if(self HasWeapon(weapon))
 			return;
-		
+
 		self thread maps\_zm_melee_weapon::give_melee_weapon(weapon, true);
 	}
 	else
@@ -95,7 +95,7 @@ wallbuy_give_weapon(stub)
 					ammo_given = self maps\_zm_weapons::ammo_give(weapon);
 				else
 					ammo_given = false;
-				
+
 				if(!ammo_given)
 					return;
 			}
@@ -114,19 +114,19 @@ wallbuy_do_first_time_trigger(player)
 {
 	if(is_true(self.first_time_triggered))
 		return;
-	
+
 	self.first_time_triggered = true;
 	model = self.model;
 	player_angles = VectortoAngles(player.origin - model.origin);
 	player_yaw = player_angles[1];
 	weapon_yaw = model.angles[1];
 	yaw_diff = AngleClamp180(player_yaw - weapon_yaw);
-	
+
 	if(yaw_diff > 0)
 		yaw = weapon_yaw - 90;
 	else
 		yaw = weapon_yaw + 90;
-	
+
 	model.og_origin = model.origin;
 	model.origin = model.origin + (AnglesToForward((0, yaw, 0)) * 8);
 	wait .05;
@@ -134,7 +134,7 @@ wallbuy_do_first_time_trigger(player)
 
 	if(isdefined(model.lh_model))
 		model.lh_model Show();
-	
+
 	play_sound_at_pos("weapon_show", model.origin, model);
 	model MoveTo(model.og_origin, 1);
 }
@@ -246,7 +246,7 @@ playertrigger_weapon_think()
 			continue;
 		if(player has_powerup_weapon())
 			continue;
-		
+
 		if(!player can_player_purchase(cost))
 		{
 			self.stub.model play_sound_on_ent("no_purchase");
@@ -263,7 +263,7 @@ playertrigger_set_weapon_hintstring(player)
 	stub = self.stub;
 	weapon = stub.zombie_weapon_upgrade;
 	weapon_stats = maps\_zm_weapons::get_weapon_stats(weapon);
-	
+
 	self.hint_string = &"ZOMBIE_DYN_WEAPONCOST";
 	self.hint_param1 = weapon_stats.display_name;
 	self.hint_param2 = weapon_stats.cost;
@@ -313,7 +313,7 @@ generate_wallbuy(weapon, origin, angles)
 
 	if(!isdefined(level._zm_extra_weapon_wallbuys))
 		level._zm_extra_weapon_wallbuys = [];
-	
+
 	level._zm_extra_weapon_wallbuys[level._zm_extra_weapon_wallbuys.size] = struct;
 	return struct;
 }

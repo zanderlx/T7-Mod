@@ -9,7 +9,7 @@ init()
 {
 	if(!maps\_zm_weapons::is_weapon_included("thundergun_zm"))
 		return;
-	
+
 	level._effect["thundergun_viewmodel_power_cell1"] = LoadFX("weapon/thunder_gun/fx_thundergun_power_cell_view1");
 	level._effect["thundergun_viewmodel_power_cell2"] = LoadFX("weapon/thunder_gun/fx_thundergun_power_cell_view2");
 	level._effect["thundergun_viewmodel_power_cell3"] = LoadFX("weapon/thunder_gun/fx_thundergun_power_cell_view3");
@@ -94,14 +94,14 @@ add_thundergun_knockdown_anim_legs(zombie_type, location, has_legs, anim_name)
 		level._zombie_knockdowns[zombie_type] = [];
 	if(!isdefined(level._zombie_knockdowns[zombie_type][location]))
 		level._zombie_knockdowns[zombie_type][location] = [];
-	
+
 	if(location == "front")
 	{
 		if(!isdefined(level._zombie_knockdowns[zombie_type][location]["no_legs"]))
 			level._zombie_knockdowns[zombie_type][location]["no_legs"] = [];
 		if(!isdefined(level._zombie_knockdowns[zombie_type][location]["has_legs"]))
 			level._zombie_knockdowns[zombie_type][location]["has_legs"] = [];
-		
+
 		if(is_true(has_legs))
 		{
 			if(!IsInArray(level._zombie_knockdowns[zombie_type][location]["has_legs"], anim_name))
@@ -187,7 +187,7 @@ thundergun_affect_ais()
 		level.thundergun_fling_enemies = [];
 	if(!isdefined(level.thundergun_fling_vecs))
 		level.thundergun_fling_vecs = [];
-	
+
 	self thundergun_get_enemies_in_range();
 	level.thundergun_network_choke_count = 0;
 
@@ -214,7 +214,7 @@ thundergun_get_enemies_in_range()
 
 	if(!isdefined(zombies))
 		return;
-	
+
 	knockdown_range_squared = level.zombie_vars["thundergun_knockdown_range"] * level.zombie_vars["thundergun_knockdown_range"];
 	gib_range_squared = level.zombie_vars["thundergun_gib_range"] * level.zombie_vars["thundergun_gib_range"];
 	fling_range_squared = level.zombie_vars["thundergun_fling_range"] * level.zombie_vars["thundergun_fling_range"];
@@ -237,7 +237,7 @@ thundergun_get_enemies_in_range()
 	{
 		if(!isdefined(zombies[i]) || !IsAlive(zombies[i]))
 			continue;
-		
+
 		test_origin = zombies[i] GetCentroid();
 		test_range_squared = DistanceSquared(view_pos, test_origin);
 
@@ -278,7 +278,7 @@ thundergun_get_enemies_in_range()
 
 			if(5000 < test_range_squared)
 				fling_vec = fling_vec + VectorNormalize(test_origin - radial_origin);
-			
+
 			fling_vec = (fling_vec[0], fling_vec[1], Abs(fling_vec[2]));
 			fling_vec = fling_vec * (200 * dist_mult);
 			level.thundergun_fling_vecs[level.thundergun_fling_vecs.size] = fling_vec;
@@ -306,7 +306,7 @@ thundergun_debug_print(msg, color)
 		return;
 	if(!isdefined(color))
 		color = (1, 1, 1);
-	
+
 	Print3D(self.origin + (0, 0, 60), msg, color, 1, 1, 40);
 	#/
 }
@@ -315,7 +315,7 @@ thundergun_fling_zombie(player, fling_vec, index)
 {
 	if(!isdefined(self) || !IsAlive(self))
 		return;
-	
+
 	if(isdefined(self.thundergun_fling_func))
 	{
 		run_function(self, self.thundergun_fling_func, player);
@@ -329,14 +329,14 @@ thundergun_fling_zombie(player, fling_vec, index)
 	{
 		if(isdefined(player) && isdefined(level.hero_power_update))
 			single_thread(level, level.hero_power_update, player, self);
-		
+
 		points = 10;
 
 		if(!index)
 			points = maps\_zombiemode_score::get_zombie_death_player_points();
 		else if(1 == index)
 			points = 30;
-		
+
 		player maps\_zombiemode_score::player_add_points("thundergun_fling", points);
 		self StartRagdoll();
 		self LaunchRagdoll(fling_vec);
@@ -410,7 +410,7 @@ setup_thundergun_vox(player, fling, gib, knockdown)
 {
 	if(!isdefined(self) || !IsAlive(self))
 		return;
-	
+
 	if(is_true(fling))
 	{
 		if(30 > RandomIntRange(1, 100))

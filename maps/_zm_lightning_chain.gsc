@@ -78,7 +78,7 @@ create_lightning_chain_params(max_arcs, max_enemies_killed, radius_start, radius
 	// 	arc_fx_sound = undefined;
 	if(!isdefined(no_fx))
 		no_fx = false;
-	
+
 	lcp = SpawnStruct();
 	lcp.max_arcs = max_arcs;
 	lcp.max_enemies_killed = max_enemies_killed;
@@ -134,7 +134,7 @@ damage_init(player, params)
 
 	if(is_true(self.zombie_tesla_hit))
 		return;
-	
+
 	/# debug_print("TESLA: Player: '" + player.playername + "' hit with the tesla gun"); #/
 
 	player.tesla_enemies = undefined;
@@ -147,7 +147,7 @@ damage_init(player, params)
 
 	if(player.tesla_enemies_hit >= 4)
 		player thread lc_killstreak_sound();
-	
+
 	player.tesla_enemies_hit = 0;
 	player.tesla_firing = false;
 }
@@ -170,7 +170,7 @@ arc_damage(source_enemy, player, arc_num, params)
 		player.tesla_network_death_choke = 0;
 	if(!isdefined(player.tesla_enemies_hit))
 		player.tesla_enemies_hit = 0;
-	
+
 	/# debug_print("TESLA: Evaluating arc damage for arc: " + arc_num + " Current enemies hit: " + player.tesla_enemies_hit); #/
 	lc_flag_hit(self, true);
 	radius_decay = params.radius_decay * arc_num;
@@ -178,7 +178,7 @@ arc_damage(source_enemy, player, arc_num, params)
 
 	if(!isdefined(origin))
 		origin = self.origin;
-	
+
 	enemies = lc_get_enemies_in_area(origin, params.radius_start - radius_decay, player);
 	wait_network_frame();
 	lc_flag_hit(enemies, true);
@@ -189,7 +189,7 @@ arc_damage(source_enemy, player, arc_num, params)
 	{
 		if(!isdefined(enemies[i]) || enemies[i] == self)
 			continue;
-		
+
 		if(lc_end_arc_damage(arc_num + 1, player.tesla_enemies_hit, params))
 		{
 			lc_flag_hit(enemies[i], false);
@@ -261,12 +261,12 @@ lc_get_enemies_in_area(origin, distance, player)
 				continue;
 			if(is_true(zombies[i].lightning_chain_immune))
 				continue;
-			
+
 			test_origin = zombies[i] GetTagOrigin("J_Head");
 
 			if(!isdefined(test_origin))
 				test_origin = zombies[i].origin;
-			
+
 			if(is_true(zombies[i].zombie_tesla_hit))
 				continue;
 			if(is_magic_bullet_shield_enabled(zombies[i]))
@@ -275,7 +275,7 @@ lc_get_enemies_in_area(origin, distance, player)
 				continue;
 			if(!BulletTracePassed(origin, test_origin, false, undefined))
 				continue;
-			
+
 			enemies[enemies.size] = zombies[i];
 		}
 	}
@@ -307,9 +307,9 @@ lc_do_damage(source_enemy, arc_num, player, params)
 		params = level.default_lightning_chain_params;
 	if(!isdefined(self) || !IsAlive(self))
 		return;
-	
+
 	self lc_set_death_anim();
-	
+
 	if(isdefined(source_enemy) && source_enemy != self)
 	{
 		if(player.tesla_arc_count > 3)
@@ -329,7 +329,7 @@ lc_do_damage(source_enemy, arc_num, player, params)
 
 	if(!isdefined(self) || !IsAlive(self))
 		return;
-	
+
 	player.tesla_network_death_choke++;
 	self lc_play_death_fx(arc_num, params);
 	self.tesla_death = params.should_kill_enemies;
@@ -339,7 +339,7 @@ lc_do_damage(source_enemy, arc_num, player, params)
 		origin = source_enemy.origin;
 	if(!isdefined(self) || !IsAlive(self))
 		return;
-	
+
 	if(is_true(params.should_kill_enemies))
 	{
 		if(isdefined(self.tesla_damage_func))
@@ -347,7 +347,7 @@ lc_do_damage(source_enemy, arc_num, player, params)
 			run_function(self, self.tesla_damage_func, origin, player);
 			return;
 		}
-		
+
 		self DoDamage(self.health + 666, origin, player, undefined, "MOD_UNKNOWN");
 
 		if(!is_true(self.deathpoints_already_given) && player player_can_score_from_zombies())
@@ -376,13 +376,13 @@ lc_play_death_fx(arc_num, params)
 {
 	if(!isdefined(params))
 		params = level.default_lightning_chain_params;
-	
+
 	tag = "J_SpineUpper";
 	fx = "tesla_shock";
 
 	if(is_true(self.isdog))
 		tag = "J_Spine1";
-	
+
 	if(isdefined(self.teslafxtag))
 		tag = self.teslafxtag;
 	else if(self.animname != "zombie")
@@ -406,7 +406,7 @@ lc_play_death_fx(arc_num, params)
 		maps\_zombiemode_net::network_safe_play_fx_on_tag("tesla_death_fx", 2, level._effect[fx], self, tag);
 		self PlaySound("wpn_imp_tesla");
 	}
-	
+
 	if(isdefined(self.tesla_head_gib_func) && !is_true(self.head_gibbed) && is_true(params.should_kill_enemies) && !is_true(self.no_gib))
 		run_function(self, self.tesla_head_gib_func);
 }
@@ -415,7 +415,7 @@ lc_play_arc_fx(target, params)
 {
 	if(!isdefined(params))
 		params = level.default_lightning_chain_params;
-	
+
 	if(!isdefined(self) || !isdefined(target))
 	{
 		wait params.arc_travel_time;
@@ -458,7 +458,7 @@ lc_play_arc_fx(target, params)
 
 	if(isdefined(params.arc_fx_sound))
 		PlaySoundAtPosition(params.arc_fx_sound, ent.origin);
-	
+
 	ent MoveTo(target_origin, params.arc_travel_time);
 	ent waittill("movedone");
 	ent Delete();
@@ -469,7 +469,7 @@ lc_debug_arc(origin, distance)
 	/#
 	if(GetDvarInt(#"zombie_debug") != 3)
 		return;
-	
+
 	start = GetTime();
 
 	while(GetTime() < start + 3000)

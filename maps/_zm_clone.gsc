@@ -96,7 +96,7 @@ clone_animate(animtype)
 		case "laststand":
 			self SetAnim(%pb_laststand_idle);
 			break;
-		
+
 		// case "afterlife":
 		// 	self SetAnim(%pb_afterlife_laststand_idle);
 		// 	break;

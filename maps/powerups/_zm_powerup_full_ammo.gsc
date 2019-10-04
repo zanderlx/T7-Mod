@@ -23,22 +23,22 @@ full_ammo()
 {
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
-	
+
 	self notify("zmb_max_ammo");
 	self notify("zmb_lost_knife");
-	
+
 	placeable_mine = self get_player_placeable_mine();
 
 	if(isdefined(placeable_mine) && placeable_mine != "none")
 		self maps\_zm_placeable_mine::disable_placeable_mine_triggers(placeable_mine);
-	
+
 	weapons = self GetWeaponsList();
 
 	for(i = 0; i < weapons.size; i++)
 	{
 		if(isdefined(level.zombie_weapons_no_max_ammo) && IsInArray(level.zombie_weapons_no_max_ammo, weapons[i]))
 			continue;
-		
+
 		type = WeaponInventoryType(weapons[i]);
 
 		if(type == "primary" || type == "altmode")

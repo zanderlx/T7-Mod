@@ -7,15 +7,15 @@ include_perk_for_level()
 {
 	maps\_zm_perks::register_perk("chugabud", "uie_moto_perk_chugabud", "zombie_perk_bottle_whoswho_t7");
 	maps\_zm_perks::register_perk_machine("chugabud", 3000, &"ZOMBIE_PERK_CHUGABUD", "p6_zm_vending_chugabud", "p6_zm_vending_chugabud_on", "chugabud_light", "mus_perks_chugabud_sting", "mus_perks_chugabud_jingle");
-	
+
 	maps\_zm_perks::register_perk_threads(
 		"chugabud", // Internal name of this perk
 		::give_chugabud, // Function called when perk is obtained
-		undefined, // Function called when perk is lost 
+		undefined, // Function called when perk is lost
 		undefined, // Function called when perk is paused
 		::give_chugabud // Function called when perk is unpaused
 	);
-	
+
 	maps\_zm_perks::register_perk_flash_audio(
 		"chugabud", // Internal name of this perk
 		undefined // Sound played when perk hud is flashing
@@ -59,7 +59,7 @@ chugabud_laststand()
 
 	if(self has_powerup_weapon() && isdefined(self._current_powerup_weapon))
 		maps\powerups\_zm_powerup_weapon::remove_powerup_weapon(self._current_powerup_weapon);
-	
+
 	self.ignore_insta_kill = true;
 	self.health = self.maxhealth;
 	loadout_chugabud = self chugabud_save_loadout();
@@ -123,7 +123,7 @@ chugabud_laststand_cleanup(corpse, str_notify)
 {
 	if(isdefined(str_notify))
 		self waittill(str_notify);
-	
+
 	self chugabud_give_loadout(corpse);
 	self chugabud_corpse_cleanup(corpse, true);
 }
@@ -227,7 +227,7 @@ chugabud_give_loadout(corpse)
 			continue;
 		if(loadout.perks[i] == "revive" && is_solo_game())
 			level.solo_game_free_player_quickrevive = true;
-		
+
 		self give_perk(loadout.perks[i], false);
 	}
 
@@ -258,12 +258,12 @@ chugabud_fake_revive()
 
 	if(isdefined(level._chugabud_post_respawn_override_func))
 		run_function(self, level._chugabud_post_respawn_override_func, spawnpoint.origin);
-	
+
 	if(isdefined(level.chugabud_force_corpse_position))
 	{
 		if(isdefined(self.e_chugabud_corpse))
 			self.e_chugabud_corpse.origin = level.chugabud_force_corpse_position;
-		
+
 		level.chugabud_force_corpse_position = undefined;
 	}
 
@@ -292,7 +292,7 @@ chugabud_get_spawnpoint()
 
 	if(get_chugabud_spawn_point_from_nodes(self.origin, 500, 700, 64, true))
 		spawnpoint = level.chugabud_spawn_struct;
-	
+
 	if(!isdefined(spawnpoint))
 	{
 		if(get_chugabud_spawn_point_from_nodes(self.origin, 100, 400, 64, true))
@@ -316,7 +316,7 @@ get_chugabud_spawn_point_from_nodes(v_origin, min_radius, max_radius, max_height
 {
 	if(!isdefined(level.chugabud_spawn_struct))
 		level.chugabud_spawn_struct = SpawnStruct();
-	
+
 	found_node = undefined;
 	a_nodes = GetNodesInRadiusSorted(v_origin, max_radius, min_radius, max_height, "pathnodes");
 
@@ -348,7 +348,7 @@ get_chugabud_spawn_point_from_nodes(v_origin, min_radius, max_radius, max_height
 
 						if(isdefined(level._chugabud_reject_node_override_func))
 							override_abort = run_function(level, level._chugabud_reject_node_override_func, v_origin, n_node);
-						
+
 						if(!is_true(override_abort))
 						{
 							found_node = n_node;
@@ -423,7 +423,7 @@ chugabud_corpse_revive_icon(player)
 	{
 		if(!isdefined(self.revive_hud_elem))
 			return;
-		
+
 		hud_elem.x = self.origin[0];
 		hud_elem.y = self.origin[1];
 		hud_elem.z = self.origin[2] + height_offset;
@@ -475,7 +475,7 @@ is_weapon_available_in_chugabud_corpse(weapon, player_to_check)
 			continue;
 		if(isdefined(player_to_check) && players[i] != player_to_check)
 			continue;
-		 
+
 		 loadout = players[i].e_chugabud_corpse.loadout_chugabud;
 		 count += maps\_zm_weapons::is_weapon_available_in_loadout(weapon, loadout.loadout);
 	}

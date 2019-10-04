@@ -17,13 +17,13 @@ init()
 		level.zm_scr_gametype = level.zm_scr_gametype_default;
 	if(level.zm_scr_gameloc == "")
 		level.zm_scr_gameloc = level.zm_scr_gameloc_default;
-	
+
 	switch(level.zm_scr_gametype)
 	{
 		case "classic":
 			maps\gametypes\classic::setup_gametype_for_level();
 			break;
-		
+
 		default:
 			/#
 			AssertMsg("Unsupported Gametype: " + level.zm_scr_gametype);

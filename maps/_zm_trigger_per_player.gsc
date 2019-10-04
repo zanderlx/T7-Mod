@@ -45,7 +45,7 @@ trigger_per_player_check(struct)
 	entity_num = self GetEntityNumber();
 	dist = Distance2DSquared(self.origin, check_origin);
 	test = (struct.radius + 15) * (struct.radius + 15);
-	
+
 	if(dist < test)
 	{
 		if(!isdefined(struct.trigger_pool[entity_num]))
@@ -60,7 +60,7 @@ trigger_per_player_check(struct)
 				struct.trigger_pool[entity_num] UseTriggerRequireLookAt();
 			if(isdefined(struct.onSpawnFunc))
 				run_function(struct, struct.onSpawnFunc, struct.trigger_pool[entity_num]);
-			
+
 			struct.trigger_pool[entity_num] thread check_visibility(self, struct);
 			struct.trigger_pool[entity_num].parent_player = self;
 		}
@@ -86,7 +86,7 @@ check_visibility(player, struct)
 
 		if(isdefined(struct.prompt_and_visibility_func))
 			is_visible = run_function(self, struct.prompt_and_visibility_func, player);
-		
+
 		if(is_visible)
 		{
 			if(!is_true(self.thread_running))
@@ -139,9 +139,9 @@ debug_playertrigger(struct)
 
 	if(isdefined(trigger))
 		Box(trigger.origin, (0 - radius, 0 - radius, 0 - height), (radius, radius, height), trigger.angles[1], (0, 1, 0));
-		
+
 	DrawCylinder(origin, radius, height);
-	
+
 	for(i = 0; i < text.size; i++)
 	{
 		Print3D(origin + (0, 0, text.size + 1 * 10) - (0, 0, i * 15), text[i]);

@@ -7,7 +7,7 @@ init()
 {
 	if(!maps\_zm_weapons::is_weapon_included("crossbow_explosive_zm"))
 		return;
-	
+
 	PrecacheItem("explosive_bolt_zm");
 	PrecacheItem("explosive_bolt_upgraded_zm");
 
@@ -30,7 +30,7 @@ crossbow_zombie_death_event()
 {
 	if(!isdefined(self.attacker))
 		return;
-	
+
 	if(isdefined(self.damageweapon))
 		weapon = self.damageweapon;
 	else
@@ -71,7 +71,7 @@ watch_for_monkey_bolt()
 		{
 			if(isdefined(level.zombiemode_cross_bow_fired))
 				single_thread(level, level.zombiemode_cross_bow_fired, grenade, weapon, parent, self);
-			
+
 			if(is_crossbow_upgraded(weapon) || is_crossbow_bolt_upgraded(weapon))
 				grenade thread crossbow_monkey_bolt(self);
 		}
@@ -102,7 +102,7 @@ crossbow_monkey_bolt(player)
 
 			if(is_true(level.monkey_bolt_holder.is_traversing))
 				level.monkey_bolt_holder waittill("zombie_end_traverse");
-			
+
 			if(IsAlive(level.monkey_bolt_holder))
 				level.monkey_bolt_holder thread monkey_bolt_taunts(self);
 
@@ -174,7 +174,7 @@ monkey_bolt_taunts(grenade)
 		return;
 	else if(is_true(self.in_the_ceiling))
 		return;
-	
+
 	while(isdefined(grenade))
 	{
 		if(isdefined(level._zombie_board_taunt[self.animname]))
@@ -183,17 +183,17 @@ monkey_bolt_taunts(grenade)
 
 			if(self.animname == "zombie")
 				self thread maps\_zombiemode_audio::do_zombies_playvocals("taunt", self.animname);
-			
+
 
 			if(!IsAlive(self))
 				return;
-			
+
 			self.allowdeath = true;
 			self AnimScripted("zombie_taunt", self.origin, self.angles, taunt_anim, "normal", undefined);
 
 			if(!IsAlive(self))
 				return;
-			
+
 			wait GetAnimLength(taunt_anim);
 		}
 		wait .05;

@@ -29,7 +29,7 @@ power_switch_think()
 		fx_pos = fx_struct.origin;
 	else if(isdefined(master_switch))
 		fx_pos = master_switch.origin;
-	
+
 	fx_ent = undefined;
 
 	for(;;)
@@ -51,7 +51,7 @@ power_switch_think()
 			fx_ent Delete();
 			fx_ent = undefined;
 		}
-		
+
 		if(isdefined(fx_pos))
 		{
 			fx_ent = spawn_model("tag_origin", fx_pos, (0, 0, 0));
@@ -62,13 +62,13 @@ power_switch_think()
 
 		if(!isdefined(trigger.script_string) || trigger.script_string != "allow_power_off")
 			break;
-		
+
 		trigger SetHintString(&"ZOMBIE_ELECTRIC_SWITCH_OFF");
 		trigger waittill("trigger", player);
 
 		if(isdefined(fx_ent))
 			fx_ent Delete();
-		
+
 		if(isdefined(master_switch))
 		{
 			master_switch RotateRoll(90, .3);
@@ -76,7 +76,7 @@ power_switch_think()
 		}
 		else
 			wait .3;
-		
+
 		flag_clear("power_on");
 	}
 }
@@ -85,10 +85,10 @@ global_power_on()
 {
 	if(flag("global_power_on"))
 		return;
-	
+
 	if(isdefined(level._zm_powerables))
 		array_run(level._zm_powerables, ::powerable_power_on);
-	
+
 	clientNotify("ZPO");
 	flag_set("power_on");
 	flag_set("global_power_on");
@@ -98,10 +98,10 @@ global_power_off()
 {
 	if(!flag("global_power_on"))
 		return;
-	
+
 	if(isdefined(level._zm_powerables))
 		array_run(level._zm_powerables, ::powerable_power_off);
-	
+
 	clientNotify("ZPOff");
 	flag_clear("power_off");
 	flag_clear("global_power_on");
@@ -122,7 +122,7 @@ add_powerable(thread_power_on, thread_power_off)
 {
 	if(!isdefined(level._zm_powerables))
 		level._zm_powerables = [];
-	
+
 	struct = SpawnStruct();
 	struct.thread_power_on = thread_power_on;
 	struct.thread_power_off = thread_power_off;

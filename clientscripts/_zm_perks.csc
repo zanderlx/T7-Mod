@@ -5,7 +5,7 @@ init()
 {
 	if(!isdefined(level._zm_include_perks))
 		level._zm_include_perks = ::default_include_perks;
-	
+
 	register_client_system("_zm_perks", ::perk_system_monitor);
 	run_function(level, level._zm_include_perks);
 }
@@ -29,7 +29,7 @@ default_include_perks()
 	clientscripts\perks\_zm_perk_chugabud::include_perk_for_level();
 	// clientscripts\perks\_zm_perk_electric_cherry::include_perk_for_level();
 	// clientscripts\perks\_zm_perk_vulture_aid::include_perk_for_level();
-	
+
 	// T7
 	// clientscripts\perks\_zm_perk_widows_wine::include_perk_for_level();
 
@@ -82,7 +82,7 @@ set_player_perk_state(clientnum, perk, state)
 				if(isdefined(level._custom_perks[perk].thread_pause))
 					single_thread(level, level._custom_perks[perk].thread_pause, clientnum);
 				break;
-			
+
 			case 3: // Unpaused
 				if(isdefined(level._custom_perks[perk].thread_unpause))
 					single_thread(level, level._custom_perks[perk].thread_unpause, clientnum);
@@ -98,7 +98,7 @@ register_perk(perk, thread_give, thread_take, thread_pause, thread_unpause)
 		level._custom_perks = [];
 	if(isdefined(level._custom_perks[perk]))
 		return;
-	
+
 	struct = SpawnStruct();
 	struct.thread_give = thread_give;
 	struct.thread_take = thread_take;

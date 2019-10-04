@@ -31,7 +31,7 @@ nuke_zombies(player, origin)
 	{
 		if(is_true(zombies[i].marked_for_death))
 			continue;
-		
+
 		if(isdefined(zombies[i].nuke_damage_func))
 		{
 			single_thread(zombies[i], zombies[i].nuke_damage_func);
@@ -40,7 +40,7 @@ nuke_zombies(player, origin)
 
 		if(is_magic_bullet_shield_enabled(zombies[i]))
 			continue;
-		
+
 		zombies[i].marked_for_death = true;
 		zombies[i].nuked = true;
 		zombies_nuked[zombies_nuked.size] = zombies[i];
@@ -54,7 +54,7 @@ nuke_zombies(player, origin)
 			continue;
 		if(is_magic_bullet_shield_enabled(zombies_nuked[i]))
 			continue;
-		
+
 		if(DistanceSquared(origin, zombies_nuked[i].origin) <= 13225 && !is_true(zombies_nuked[i].isdog) && ragdoll_count < 12)
 		{
 			dir = VectorNormalize(zombies_nuked[i].origin - origin);
@@ -70,7 +70,7 @@ nuke_zombies(player, origin)
 			PlayFX(level._effect["dog_gib"], zombies_nuked[i].origin);
 			mod = "MOD_EXPLOSIVE";
 		}
-		
+
 		zombies_nuked[i] DoDamage(zombies_nuked[i].health + 666, zombies_nuked[i].origin, undefined, undefined, remove_mod_from_methodofdeath(mod));
 	}
 	array_run(GetPlayers(), maps\_zombiemode_score::player_add_points, "nuke_powerup", 400);

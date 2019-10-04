@@ -21,7 +21,7 @@ load_melee_weapon(melee_weapon)
 
 	if(!isdefined(test) || test != melee_weapon)
 		return;
-	
+
 	flourish_name = TableLookup(melee_weapon_table, 0, melee_weapon, 1);
 	ballistic_name = TableLookup(melee_weapon_table, 0, melee_weapon, 2);
 
@@ -29,14 +29,14 @@ load_melee_weapon(melee_weapon)
 		flourish_name = "none";
 	if(!isdefined(ballistic_name) || ballistic_name == "")
 		ballistic_name = "none";
-	
+
 	struct = SpawnStruct();
 	struct.flourish_name = flourish_name;
 	struct.ballistic_name = ballistic_name;
 
 	if(flourish_name != "none")
 		PrecacheItem(flourish_name);
-	
+
 	// Ballistic knives should get precached with normal weapon loading
 	/*
 	if(flourish_name != "none")
@@ -59,7 +59,7 @@ change_melee_weapon(melee_weapon, current_weapon)
 
 	if(current_melee_weapon != melee_weapon)
 		self TakeWeapon(current_melee_weapon);
-	
+
 	self set_player_melee_weapon(melee_weapon);
 
 	had_ballistic = false;
@@ -75,7 +75,7 @@ change_melee_weapon(melee_weapon, current_weapon)
 
 			if(weapons[i] == current_weapon)
 				ballistic_was_primary = true;
-			
+
 			self notify("zmb_lost_knife");
 			self TakeWeapon(weapons[i]);
 
@@ -116,7 +116,7 @@ get_flourish_weapon(melee_weapon)
 {
 	if(is_ballistic_knife(melee_weapon))
 		melee_weapon = get_ballistic_root_knife(melee_weapon);
-	
+
 	data = get_melee_weapon(melee_weapon);
 	Assert(isdefined(data));
 	return data.flourish_name;
@@ -140,13 +140,13 @@ do_melee_weapon_flourish_end(original_weapon, flourish_name, melee_weapon)
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
-	
+
 	self maps\_zm_weapons::give_buildkit_weapon(melee_weapon);
 	original_weapon = self change_melee_weapon(melee_weapon, original_weapon);
 
 	if(self HasWeapon(level.zombie_vars["zombie_melee_default"]))
 		self TakeWeapon(level.zombie_vars["zombie_melee_default"]);
-	
+
 	if(is_multiple_drinking())
 	{
 		self decrement_is_drinking();
@@ -162,9 +162,9 @@ do_melee_weapon_flourish_end(original_weapon, flourish_name, melee_weapon)
 		self maps\_zm_weapons::switch_back_primary_weapon(original_weapon);
 	else
 		self maps\_zm_weapons::switch_back_primary_weapon();
-	
+
 	self waittill("weapon_change_complete");
-	
+
 	if(!self maps\_laststand::player_is_in_laststand() && !is_true(self.intermission))
 		self decrement_is_drinking();
 }

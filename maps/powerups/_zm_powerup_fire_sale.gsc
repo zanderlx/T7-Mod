@@ -46,7 +46,7 @@ add_temp_firesale_chest()
 		return;
 	if(self == level.chests[level.chest_index])
 		return;
-	
+
 	self.was_temp = true;
 	self thread maps\_zm_magicbox::show_chest();
 	wait_network_frame();
@@ -60,7 +60,7 @@ remove_temp_firesale_chest()
 		return;
 	if(!is_true(self.was_temp))
 		return;
-	
+
 	self.was_temp = undefined;
 	self thread remove_temp_chest();
 	wait_network_frame();

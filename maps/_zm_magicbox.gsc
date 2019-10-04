@@ -40,7 +40,7 @@ spawn_magicboxes()
 
 	if(isdefined(level._zm_extra_magicbox_locations) && level._zm_extra_magicbox_locations.size > 0)
 		structs = array_merge(structs, level._zm_extra_magicbox_locations);
-	
+
 	if(isdefined(structs) && structs.size > 0)
 	{
 		for(i = 0; i < structs.size; i++)
@@ -51,10 +51,10 @@ spawn_magicboxes()
 				continue;
 			if(!struct maps\_zm_gametype::is_zm_scr_ent_valid("magicbox"))
 				continue;
-			
+
 			origin = struct.origin;
 			angles = (0, 0, 0);
-			
+
 			if(isdefined(struct.angles))
 				angles = struct.angles;
 
@@ -78,7 +78,7 @@ spawn_magicboxes()
 			}
 			else
 				stub.chest = spawn_model("p6_anim_zm_magic_box", origin, angles);
-			
+
 			stub.chest UseAnimTree(#animtree);
 
 			// Rubble
@@ -128,7 +128,7 @@ generate_magicbox_location(origin, angles)
 
 	if(!isdefined(level._zm_extra_magicbox_locations))
 		level._zm_extra_magicbox_locations = [];
-	
+
 	level._zm_extra_magicbox_locations[level._zm_extra_magicbox_locations.size] = struct;
 	return struct;
 }
@@ -206,9 +206,9 @@ treasure_chest_think()
 			user = self.forced_user;
 		else
 			self waittill("trigger", user);
-		
+
 		cost = self treasure_chest_get_cost();
-		
+
 		if(is_true(self.auto_open) || user can_player_purchase(cost))
 		{
 			if(!isdefined(self.no_charge))
@@ -226,7 +226,7 @@ treasure_chest_think()
 	flag_set("chest_has_been_used");
 	self._box_open = true;
 	self._box_opened_by_fire_sale = self chest_opened_by_firesale();
-	
+
 	play_sound_at_pos("open_chest", self.chest.origin);
 	play_sound_at_pos("music_chest", self.chest.origin);
 	self thread set_magicbox_state("open");
@@ -239,7 +239,7 @@ treasure_chest_think()
 
 	if(flag("moving_chest_now") && !self._box_opened_by_fire_sale && isdefined(user_cost))
 		user maps\_zombiemode_score::add_to_player_score(user_cost);
-	
+
 	if(flag("moving_chest_now") && !firesale_active() && !self._box_opened_by_fire_sale)
 		self thread treasure_chest_move(user);
 	else
@@ -255,7 +255,7 @@ treasure_chest_think()
 
 			if(grabber != level && is_true(self.box_rerespun))
 				user = grabber;
-			
+
 			if(grabber == user || grabber == level)
 			{
 				self.box_rerespun = undefined;
@@ -277,7 +277,7 @@ treasure_chest_think()
 
 		if(!is_true(self._box_opened_by_fire_sale))
 			level.chest_accessed++;
-		
+
 		weapon_weighting_on_box_pull();
 		unregister_playertrigger(self);
 		play_sound_at_pos("close_chest", self.chest.origin);
@@ -321,7 +321,7 @@ treasure_chest_move(player)
 
 	if(isdefined(player))
 		player maps\_zombiemode_audio::create_and_play_dialog("general", "box_move");
-	
+
 	if(firesale_active() && self firesale_chest_valid())
 	{
 		self thread firesale_fix();
@@ -333,17 +333,17 @@ treasure_chest_move(player)
 	}
 	else
 		post_selection_wait_duration += 5;
-	
+
 	if(isdefined(level._zombiemode_custom_box_move_logic))
 		run_function(level, level._zombiemode_custom_box_move_logic);
 	else
 		default_box_move_logic();
-	
+
 	new_loc = level.chests[level.chest_index];
 
 	if(isdefined(new_loc.box_hacks["summon_box"]))
 		run_function(new_loc, new_loc.box_hacks["summon_box"], false);
-	
+
 	wait post_selection_wait_duration;
 	PlayFX(level._effect["poltergeist"], new_loc.chest.origin);
 	new_loc show_chest();
@@ -413,7 +413,7 @@ treasure_chest_weapon_spawn(player, respin)
 
 			if(level.chest_moves == 0 && level.chest_accessed >= 8)
 				chance_of_joker = 100;
-			
+
 			if(level.chest_accessed >= 4 && level.chest_accessed < 8)
 			{
 				if(random < 15)
@@ -629,7 +629,7 @@ playertrigger_magicbox_update_stub(player)
 {
 	if(!self trigger_visible_to_player(player))
 		return false;
-	
+
 	if(is_true(self.stub.grab_weapon_hint))
 	{
 		weapon_stats = maps\_zm_weapons::get_weapon_stats(self.stub.grab_weapon_name);
@@ -673,7 +673,7 @@ show_chest(dont_enable_trigger)
 
 	if(!is_true(dont_enable_trigger))
 		register_playertrigger(self, ::playertrigger_magicbox_think);
-	
+
 	PlaySoundAtPosition("zmb_box_poof_land", self.chest.origin);
 	PlaySoundAtPosition("zmb_couch_slam", self.chest.origin);
 
@@ -698,7 +698,7 @@ hide_chest(doBoxLeave)
 
 	if(isdefined(self.box_hacks["summon_box"]))
 		run_function(self, self.box_hacks["summon_box"], true);
-	
+
 	if(is_true(doBoxLeave))
 	{
 		PlaySoundAtPosition("zmb_box_move", self.chest.origin);
@@ -847,7 +847,7 @@ weapon_weighting_on_box_pull()
 		level.pulls_since_last_ray_gun++;
 	if(maps\_zm_weapons::is_weapon_included("tesla_gun_zm"))
 		level.pulls_since_last_tesla_gun++;
-	
+
 	if(isdefined(level._zm_custom_weapon_weighting_pull_func))
 		run_function(level, level._zm_custom_weapon_weighting_pull_func);
 }
@@ -864,7 +864,7 @@ weapon_weighting_on_box_weapon(weapon)
 	{
 		if(weapon == "ray_gun_zm")
 			level.pulls_since_last_ray_gun = 0;
-	
+
 		if(weapon == "tesla_gun_zm")
 		{
 			level.pulls_since_last_tesla_gun = 0;
@@ -897,7 +897,7 @@ get_weighted_weapons_list(player)
 
 		if(!treasure_chest_canPlayerReceiveWeapon(player, weapon_name))
 			continue;
-		
+
 		if(isdefined(level.weapon_weighting_funcs) && isdefined(level.weapon_weighting_funcs[weapon_name]))
 		{
 			num_entries = run_function(level, level.weapon_weighting_funcs[weapon_name]);
@@ -948,7 +948,7 @@ default_tesla_weighting_func()
 
 		if(is_true(level.player_drops_tesla_gun))
 			num_to_add = Int(.2 * weapons_list.size);
-		
+
 		if(!is_true(level.player_seen_tesla_gun))
 		{
 			if(level.round_number > 10)

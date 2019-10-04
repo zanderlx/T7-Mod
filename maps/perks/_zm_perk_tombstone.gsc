@@ -118,7 +118,7 @@ tombstone_grab()
 		{
 			if(players[i].is_zombie)
 				continue;
-			
+
 			if(isdefined(self.player) && players[i] == self.player)
 			{
 				istombstonepowered = false;
@@ -170,7 +170,7 @@ tombstone_give()
 			continue;
 		if(dc.perks[i] == "revive" && is_solo_game())
 			continue;
-		
+
 		self give_perk(dc.perks[i], false);
 	}
 }
@@ -205,7 +205,7 @@ tombstone_timeout()
 			self.icon Hide();
 		else
 			self.icon Show();
-		
+
 		if(i < 15)
 			wait .5;
 		else if(i < 25)
@@ -251,7 +251,7 @@ is_weapon_available_in_tombstone(weapon, player_to_check)
 
 		if(isdefined(player_to_check) && dc.player != player_to_check)
 			continue;
-		
+
 		count += maps\_zm_weapons::is_weapon_available_in_loadout(weapon, dc.loadout);
 	}
 	return count;
@@ -261,7 +261,7 @@ on_laststand()
 {
 	if(self ent_flag("tombstone_spawned"))
 		return;
-	
+
 	if(self has_perk("tombstone"))
 	{
 		run_function(self, level.tombstone_laststand_func);

@@ -13,7 +13,7 @@ run_function(self_ent, func, arg1, arg2, arg3, arg4, arg5, arg6)
 		return undefined;
 	if(!isdefined(self_ent))
 		self_ent = level;
-	
+
 	if(isdefined(arg6))
 		return self_ent [[func]](arg1, arg2, arg3, arg4, arg5, arg6);
 	else if(isdefined(arg5))
@@ -36,7 +36,7 @@ thread_func(self_ent, func, arg1, arg2, arg3, arg4, arg5, arg6)
 		return;
 	if(!isdefined(self_ent))
 		self_ent = level;
-	
+
 	if(isdefined(arg6))
 		self_ent thread [[func]](arg1, arg2, arg3, arg4, arg5, arg6);
 	else if(isdefined(arg5))
@@ -59,7 +59,7 @@ register_client_system(system, func)
 		level._apex_client_systems = [];
 	if(isdefined(level._apex_client_systems[system]))
 		return;
-	
+
 	struct = SpawnStruct();
 	struct.old_message = "";
 	struct.func = func;
@@ -95,7 +95,7 @@ is_internal_map()
 		case "zombie_cod5_sumpf":
 		case "zombie_cod5_factory":
 			return true;
-		
+
 		default:
 			return false;
 	}
@@ -134,7 +134,7 @@ array_run_function(a_ents, func, arg1, arg2, arg3, arg4, arg5, arg6)
 		return;
 	if(!isdefined(a_ents) || a_ents.size == 0)
 		return;
-	
+
 	keys = GetArrayKeys(a_ents);
 
 	for(i = 0; i < keys.size; i++)

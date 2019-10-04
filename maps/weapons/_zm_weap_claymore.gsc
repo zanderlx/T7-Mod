@@ -44,18 +44,18 @@ claymore_detonation(watcher)
 
 	if(!isdefined(level.claymores))
 		level.claymores = [];
-	
+
 	trigger = Spawn("trigger_radius", self.origin + (0, 0, 0 - 96), 1, 96, 192);
 	trigger EnableLinkTo();
 	trigger LinkTo(self);
 
 	self thread delete_claymores_on_death(trigger);
-	
+
 	level.claymores[level.claymores.size] = self;
 
 	if(level.claymores.size > 15)
 		level.claymores[0] Delete();
-	
+
 	for(;;)
 	{
 		trigger waittill("trigger", ent);
@@ -66,7 +66,7 @@ claymore_detonation(watcher)
 			continue;
 		if(!self can_zombie_detonate_claymore(watcher, ent))
 			continue;
-		
+
 		if(ent DamageConeTrace(self.origin, self) > 0)
 		{
 			self PlaySound(watcher.activateSound);
@@ -98,7 +98,7 @@ can_zombie_detonate_claymore(watcher, zombie)
 
 	if(dist < watcher.detectionMinDist)
 		return false;
-	
+
 	dirToPos = VectorNormalize(dirToPos);
 	dot = VectorDot(dirToPos, objectForward);
 	return dot > watcher.detectionDot;

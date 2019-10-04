@@ -67,7 +67,7 @@ repair_far_boards(barriers)
 	{
 		if(all_chunks_intact(barriers[i].barrier_chunks))
 			continue;
-		
+
 		for(j = 0; j < barriers[i].barrier_chunks.size; j++)
 		{
 			barriers[i].barrier_chunks[j] DontInterpolate();
@@ -92,12 +92,12 @@ repair_near_boards(barriers)
 		{
 			if(all_chunks_intact(barriers[i].barrier_chunks))
 				break;
-			
+
 			chunk = get_random_destroyed_chunk(barriers[i].barrier_chunks);
 
 			if(!isdefined(chunk))
 				break;
-			
+
 			barriers[i] thread maps\_zombiemode_blockers::replace_chunk(chunk, undefined, true);
 			last_repaired_chunk = chunk;
 			barriers[i].clip enable_trigger();

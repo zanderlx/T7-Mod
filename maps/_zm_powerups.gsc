@@ -56,7 +56,7 @@ default_include_powerups()
 	maps\powerups\_zm_powerup_nuke::include_powerup_for_level();
 	maps\powerups\_zm_powerup_double_points::include_powerup_for_level();
 	maps\powerups\_zm_powerup_carpenter::include_powerup_for_level();
-	
+
 	// T5
 	maps\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
 	// maps\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
@@ -113,7 +113,7 @@ powerup_hud_overlay()
 			flashing_delta_time = .1;
 		else
 			flashing_delta_time = .2;
-		
+
 		if(flashing_is_on)
 		{
 			flashing_timer = flashing_timer - flashing_delta_time - .05;
@@ -356,7 +356,7 @@ _register_undefined_powerup(powerup_name)
 {
 	if(isdefined(level.zombie_powerups[powerup_name]))
 		return;
-	
+
 	struct = SpawnStruct();
 	struct.powerup_fx = "powerup_green";
 	struct.can_pickup_in_laststand = true;
@@ -368,7 +368,7 @@ _register_undefined_powerup(powerup_name)
 register_powerup(powerup_name, model_name)
 {
 	_register_undefined_powerup(powerup_name);
-	
+
 	level.zombie_powerups[powerup_name].model_name = model_name;
 
 	PrecacheModel(model_name);
@@ -478,7 +478,7 @@ specific_powerup_drop(powerup_name, drop_point, powerup_player, b_stay_forever)
 
 		if(isdefined(level.zombie_powerups[powerup_name].thread_setup))
 			single_thread(powerup, level.zombie_powerups[powerup_name].thread_setup);
-		
+
 		level notify("powerup_dropped", powerup);
 		level.active_powerups[level.active_powerups.size] = powerup;
 	}
@@ -500,7 +500,7 @@ powerup_cleanup()
 
 	if(result != "powerup_cleanup")
 		self notify("powerup_cleanup");
-	
+
 	if(isdefined(level.zombie_powerups[self.powerup_name].func_cleanup))
 		single_thread(self, level.zombie_powerups[self.powerup_name].func_cleanup);
 
@@ -527,25 +527,25 @@ powerup_grab()
 				continue;
 			if(players[i] maps\_laststand::player_is_in_laststand() && !is_true(level.zombie_powerups[self.powerup_name].can_pickup_in_laststand))
 				continue;
-			
+
 			if(isdefined(level.zombie_powerups[self.powerup_name].func_grabbed))
 				can_grab = run_function(self, level.zombie_powerups[self.powerup_name].func_grabbed, players[i]);
 			else
 			{
 				if(isdefined(level._zombiemode_powerup_grab))
 					single_thread(level, level._zombiemode_powerup_grab, self);
-				
+
 				can_grab = true;
 			}
 
 			if(!is_true(can_grab))
 				continue;
-			
+
 			powerup_fx = level.zombie_powerups[self.powerup_name].powerup_fx;
 
 			if(!isdefined(powerup_fx))
 				powerup_fx = "powerup_green";
-			
+
 			if(isdefined(self.powerup_player))
 			{
 				play_oneshot_fx_to_player(self.powerup_player, powerup_fx + "_grabbed", self.origin, (0, 0, 0));
@@ -593,7 +593,7 @@ powerup_wobble()
 		powerup_fx = "powerup_green";
 
 	PlayFXOnTag(level._effect[powerup_fx + "_on"], self, "tag_origin");
-	
+
 	for(;;)
 	{
 		waittime = RandomFloatRange(2.5, 5);
@@ -603,7 +603,7 @@ powerup_wobble()
 			yaw = 300;
 		else if(yaw < 60)
 			yaw = 60;
-		
+
 		yaw = self.angles[1] + yaw;
 		new_angles = (-60 + RandomInt(120), yaw, -45 + RandomInt(90));
 		self RotateTo(new_angles, waittime, waittime * .5, waittime *.5);
@@ -642,7 +642,7 @@ powerup_timeout()
 			self powerup_show(false);
 		else
 			self powerup_show(true);
-		
+
 		if(i < 15)
 			wait .5;
 		else if(i < 25)

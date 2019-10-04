@@ -1,4 +1,4 @@
-#include maps\_utility; 
+#include maps\_utility;
 #include common_scripts\utility;
 #include maps\_zombiemode_utility;
 
@@ -35,7 +35,7 @@ player_add_points( event, mod, hit_location ,is_dog)
 				points = points * 2;
 			}
 
-			// Give bonus points 
+			// Give bonus points
 			player_points	= player_points + points;
 			// Don't give points if there's no team points involved.
 			if ( team_points > 0 )
@@ -54,8 +54,8 @@ player_add_points( event, mod, hit_location ,is_dog)
 			//stats tracking
 			self.stats["kills"] = self.kill_tracker;
 
-			break; 
-	
+			break;
+
 		case "ballistic_knife_death":
 			player_points = get_zombie_death_player_points() + level.zombie_vars["zombie_score_bonus_melee"];
 
@@ -70,18 +70,18 @@ player_add_points( event, mod, hit_location ,is_dog)
 			//stats tracking
 			self.stats["kills"] = self.kill_tracker;
 
-			break; 
-	
+			break;
+
 		case "damage_light":
 			player_points = level.zombie_vars["zombie_score_damage_light"];
 			break;
-	
+
 		case "damage":
 			player_points = level.zombie_vars["zombie_score_damage_normal"];
-			break; 
-	
+			break;
+
 		case "damage_ads":
-			player_points = Int( level.zombie_vars["zombie_score_damage_normal"] * 1.25 ); 
+			player_points = Int( level.zombie_vars["zombie_score_damage_normal"] * 1.25 );
 			break;
 
 		case "rebuild_board":
@@ -97,27 +97,27 @@ player_add_points( event, mod, hit_location ,is_dog)
 			player_points	= mod;
 			team_points		= mod;
 			break;
-	
+
 		case "thundergun_fling":
 			player_points = mod;
 			break;
-		
+
 		case "hacker_transfer":
 			player_points = mod;
 			break;
-		
+
 		case "reviver":
 			player_points = mod;
 			break;
 
 		default:
-			assertex( 0, "Unknown point event" ); 
-			break; 
+			assertex( 0, "Unknown point event" );
+			break;
 	}
 
 	player_points = multiplier * round_up_score( player_points, 5 );
 	team_points = multiplier * round_up_score( team_points, 5 );
-	
+
 	if ( isdefined( self.point_split_receiver ) && (event == "death" || event == "ballistic_knife_death") )
 	{
 		split_player_points = player_points - round_up_score( (player_points * self.point_split_keep_percent), 10 );
@@ -152,19 +152,19 @@ get_zombie_death_player_points()
 	players = get_players();
 	if( players.size == 1 )
 	{
-		points = level.zombie_vars["zombie_score_kill_1player"]; 
+		points = level.zombie_vars["zombie_score_kill_1player"];
 	}
 	else if( players.size == 2 )
 	{
-		points = level.zombie_vars["zombie_score_kill_2player"]; 
+		points = level.zombie_vars["zombie_score_kill_2player"];
 	}
 	else if( players.size == 3 )
 	{
-		points = level.zombie_vars["zombie_score_kill_3player"]; 
+		points = level.zombie_vars["zombie_score_kill_3player"];
 	}
 	else
 	{
-		points = level.zombie_vars["zombie_score_kill_4player"]; 
+		points = level.zombie_vars["zombie_score_kill_4player"];
 	}
 	return( points );
 }
@@ -176,19 +176,19 @@ get_zombie_death_team_points()
 	players = get_players();
 	if( players.size == 1 )
 	{
-		points = level.zombie_vars["zombie_score_kill_1p_team"]; 
+		points = level.zombie_vars["zombie_score_kill_1p_team"];
 	}
 	else if( players.size == 2 )
 	{
-		points = level.zombie_vars["zombie_score_kill_2p_team"]; 
+		points = level.zombie_vars["zombie_score_kill_2p_team"];
 	}
 	else if( players.size == 3 )
 	{
-		points = level.zombie_vars["zombie_score_kill_3p_team"]; 
+		points = level.zombie_vars["zombie_score_kill_3p_team"];
 	}
 	else
 	{
-		points = level.zombie_vars["zombie_score_kill_4p_team"]; 
+		points = level.zombie_vars["zombie_score_kill_4p_team"];
 	}
 	return( points );
 }
@@ -200,7 +200,7 @@ play_killstreak_vo()
 {
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	self.killstreak = "vox_killstreak";
-	
+
 	if(!isdefined (level.player_is_speaking))
 	{
 		level.player_is_speaking = 0;
@@ -209,7 +209,7 @@ play_killstreak_vo()
 	{
 		self.killstreak_points = 0;
 	}
-	self.killstreak_points = self.score_total;	
+	self.killstreak_points = self.score_total;
 	if (!isdefined (self.killstreaks))
 	{
 		self.killstreaks = 1;
@@ -223,11 +223,11 @@ play_killstreak_vo()
 			self playsound ("plr_" + index + "_" +self.killstreak, "sound_done");
 			self waittill("sound_done");
 			level.player_is_speaking = 0;
-				
+
 		}
 		self.killstreaks ++;
 	}
-	
+
 
 }
 */
@@ -235,7 +235,7 @@ player_add_points_kill_bonus( mod, hit_location )
 {
 	if( mod == "MOD_MELEE" )
 	{
-		return level.zombie_vars["zombie_score_bonus_melee"]; 
+		return level.zombie_vars["zombie_score_bonus_melee"];
 	}
 
 	if( mod == "MOD_BURNED" )
@@ -243,26 +243,26 @@ player_add_points_kill_bonus( mod, hit_location )
 		return level.zombie_vars["zombie_score_bonus_burn"];
 	}
 
-	score = 0; 
+	score = 0;
 
 	switch( hit_location )
 	{
 		case "head":
 		case "helmet":
-			score = level.zombie_vars["zombie_score_bonus_head"]; 
-			break; 
-	
+			score = level.zombie_vars["zombie_score_bonus_head"];
+			break;
+
 		case "neck":
-			score = level.zombie_vars["zombie_score_bonus_neck"]; 
-			break; 
-	
+			score = level.zombie_vars["zombie_score_bonus_neck"];
+			break;
+
 		case "torso_upper":
 		case "torso_lower":
-			score = level.zombie_vars["zombie_score_bonus_torso"]; 
-			break; 
+			score = level.zombie_vars["zombie_score_bonus_torso"];
+			break;
 	}
 
-	return score; 
+	return score;
 }
 
 player_reduce_points( event, mod, hit_location )
@@ -272,19 +272,19 @@ player_reduce_points( event, mod, hit_location )
 		return;
 	}
 
-	points = 0; 
+	points = 0;
 
 	switch( event )
 	{
 		case "no_revive_penalty":
 			percent = level.zombie_vars["penalty_no_revive"];
 			points = self.score * percent;
-			break; 
-	
+			break;
+
 		case "died":
 			percent = level.zombie_vars["penalty_died"];
 			points = self.score * percent;
-			break; 
+			break;
 
 		case "downed":
 			percent = level.zombie_vars["penalty_downed"];;
@@ -292,11 +292,11 @@ player_reduce_points( event, mod, hit_location )
 			points = self.score * percent;
 
 			self.score_lost_when_downed = round_up_to_ten( int( points ) );
-			break; 
-	
+			break;
+
 		default:
-			assertex( 0, "Unknown point event" ); 
-			break; 
+			assertex( 0, "Unknown point event" );
+			break;
 	}
 
 	points = self.score - round_up_to_ten( int( points ) );
@@ -307,8 +307,8 @@ player_reduce_points( event, mod, hit_location )
 	}
 
 	self.score = points;
-	
-	self set_player_score_hud(); 
+
+	self set_player_score_hud();
 }
 
 
@@ -328,7 +328,7 @@ add_to_player_score( points, add_to_total )
 		return;
 	}
 
-	self.score += points; 
+	self.score += points;
 
 	if ( add_to_total )
 	{
@@ -336,7 +336,7 @@ add_to_player_score( points, add_to_total )
 	}
 
 	// also set the score onscreen
-	self set_player_score_hud(); 
+	self set_player_score_hud();
 }
 
 
@@ -351,10 +351,10 @@ minus_to_player_score( points )
 		return;
 	}
 
-	self.score -= points; 
+	self.score -= points;
 
 	// also set the score onscreen
-	self set_player_score_hud(); 
+	self set_player_score_hud();
 }
 
 
@@ -370,19 +370,19 @@ add_to_team_score( points )
 // 	{
 // 		return;
 // 	}
-// 
+//
 // 	// Find out which team pool to adjust
 // 	team_pool = level.team_pool[ 0 ];
 // 	if ( IsDefined( self.team_num ) && self.team_num != 0 )
 // 	{
 // 		team_pool = level.team_pool[ self.team_num ];
 // 	}
-// 
-// 	team_pool.score += points; 
-// 	team_pool.score_total += points; 
-// 
+//
+// 	team_pool.score += points;
+// 	team_pool.score_total += points;
+//
 // 	// also set the score onscreen
-// 	team_pool set_team_score_hud(); 
+// 	team_pool set_team_score_hud();
 }
 
 
@@ -403,10 +403,10 @@ minus_to_team_score( points )
 		team_pool = level.team_pool[ self.team_num ];
 	}
 
-	team_pool.score -= points; 
+	team_pool.score -= points;
 
 	// also set the score onscreen
-	team_pool set_team_score_hud(); 
+	team_pool set_team_score_hud();
 }
 
 
@@ -434,7 +434,7 @@ player_downed_penalty()
 {
 	self player_reduce_points( "downed" );
 
-		
+
 }
 
 
@@ -449,7 +449,7 @@ player_downed_penalty()
 //
 set_player_score_hud( init )
 {
-	num = self.entity_num; 
+	num = self.entity_num;
 
 	score_diff = self.score - self.old_score;
 
@@ -472,10 +472,10 @@ set_player_score_hud( init )
 
 	if( IsDefined( init ) && init )
 	{
-		return; 
+		return;
 	}
 
-	self.old_score = self.score; 
+	self.old_score = self.score;
 }
 
 
@@ -489,12 +489,12 @@ set_team_score_hud( init )
 	self.score = 0;
 	self.score_total = 0;
 
-// 
+//
 // 	if ( !IsDefined(init) )
 // 	{
 // 		init = false;
 // 	}
-// 
+//
 // 	//		TEMP function call.  Might rename this function so it makes more sense
 // 	self set_player_score_hud( false );
 // 	self.hud SetValue( self.score );
@@ -504,7 +504,7 @@ set_team_score_hud( init )
 // Creates a hudelem used for the points awarded/taken away
 create_highlight_hud( x, y, value )
 {
-	font_size = 8; 
+	font_size = 8;
 	if ( self IsSplitscreen() )
 	{
 		font_size *= 2;
@@ -512,21 +512,21 @@ create_highlight_hud( x, y, value )
 
 	hud = create_simple_hud( self );
 
-	level.hudelem_count++; 
+	level.hudelem_count++;
 
-	hud.foreground = true; 
-	hud.sort = 0; 
-	hud.x = x; 
-	hud.y = y; 
-	hud.fontScale = font_size; 
-	hud.alignX = "right"; 
-	hud.alignY = "middle"; 
+	hud.foreground = true;
+	hud.sort = 0;
+	hud.x = x;
+	hud.y = y;
+	hud.fontScale = font_size;
+	hud.alignX = "right";
+	hud.alignY = "middle";
 	hud.horzAlign = "user_right";
 	hud.vertAlign = "user_bottom";
 
 	if( value < 1 )
 	{
-		//		hud.color = ( 0.8, 0, 0 ); 
+		//		hud.color = ( 0.8, 0, 0 );
 		hud.color = ( 0.21, 0, 0 );
 	}
 	else
@@ -536,12 +536,12 @@ create_highlight_hud( x, y, value )
 	}
 
 	//	hud.glowColor = ( 0.3, 0.6, 0.3 );
-	//	hud.glowAlpha = 1; 
-	hud.hidewheninmenu = false; 
+	//	hud.glowAlpha = 1;
+	hud.hidewheninmenu = false;
 
-	hud SetValue( value ); 
+	hud SetValue( value );
 
-	return hud; 	
+	return hud;
 }
 
 
@@ -550,7 +550,7 @@ create_highlight_hud( x, y, value )
 //
 score_highlight( scoring_player, score, value )
 {
-	self endon( "disconnect" ); 
+	self endon( "disconnect" );
 
 	// Location from hud.menu
 	score_x = -103;
@@ -572,7 +572,7 @@ score_highlight( scoring_player, score, value )
 	{
 		players = get_players();
 
-		num = 0;		
+		num = 0;
 		for ( i = 0; i < players.size; i++ )
 		{
 			if ( scoring_player == players[i] )
@@ -588,26 +588,26 @@ score_highlight( scoring_player, score, value )
 		y *= 2;
 	}
 
-	time = 0.5; 
-	half_time = time * 0.5; 
+	time = 0.5;
+	half_time = time * 0.5;
 
-	hud = self create_highlight_hud( x, y, value ); 
+	hud = self create_highlight_hud( x, y, value );
 
 	// Move the hud
-	hud MoveOverTime( time ); 
-	hud.x -= 20 + RandomInt( 40 ); 
-	hud.y -= ( -15 + RandomInt( 30 ) ); 
+	hud MoveOverTime( time );
+	hud.x -= 20 + RandomInt( 40 );
+	hud.y -= ( -15 + RandomInt( 30 ) );
 
-	wait( half_time ); 
+	wait( half_time );
 
 	// Fade half-way through the move
-	hud FadeOverTime( half_time ); 
-	hud.alpha = 0; 
+	hud FadeOverTime( half_time );
+	hud.alpha = 0;
 
-	wait( half_time ); 
+	wait( half_time );
 
-	hud Destroy(); 
-	level.hudelem_count--; 
+	hud Destroy();
+	level.hudelem_count--;
 }
 
 
@@ -661,7 +661,7 @@ team_score_init()
 		{
 			players = get_players();
 			num = players.size - 1;
-			pool.hud_y += (num+(num_pools-1 - i)) * -18;	// last number is a spacing gap from the player scores 
+			pool.hud_y += (num+(num_pools-1 - i)) * -18;	// last number is a spacing gap from the player scores
 		}
 
 		//MM (3/10/10)	Disable team points
@@ -676,48 +676,48 @@ team_score_init()
 create_team_hud( value, team_pool )
 {
 	AssertEx( IsDefined( team_pool ), "create_team_hud:  You must specify a team_pool when calling this function" );
-	font_size = 8.0; 
+	font_size = 8.0;
 
 	hud				= create_simple_hud();
-	hud.foreground	= true; 
-	hud.sort		= 10; 
-	hud.x			= team_pool.hud_x; 
-	hud.y			= team_pool.hud_y; 
-	hud.fontScale = font_size; 
-	hud.alignX		= "left"; 
-	hud.alignY		= "middle"; 
+	hud.foreground	= true;
+	hud.sort		= 10;
+	hud.x			= team_pool.hud_x;
+	hud.y			= team_pool.hud_y;
+	hud.fontScale = font_size;
+	hud.alignX		= "left";
+	hud.alignY		= "middle";
 	hud.horzAlign	= "user_right";
 	hud.vertAlign	= "user_bottom";
 	hud.color		= ( 0.9, 0.9, 0.0 );
-	hud.hidewheninmenu = false; 
+	hud.hidewheninmenu = false;
 
-	hud SetValue( value ); 
+	hud SetValue( value );
 
 	// Set score icon
 	bg_hud				= create_simple_hud();
-	bg_hud.alignX		= "right"; 
-	bg_hud.alignY		= "middle"; 
+	bg_hud.alignX		= "right";
+	bg_hud.alignY		= "middle";
 	bg_hud.horzAlign	= "user_right";
 	bg_hud.vertAlign	= "user_bottom";
 	bg_hud.color		= ( 1, 1, 1 );
-	bg_hud.sort			= 8; 
-	bg_hud.x			= team_pool.hud_x - 8; 
-	bg_hud.y			= team_pool.hud_y; 
+	bg_hud.sort			= 8;
+	bg_hud.x			= team_pool.hud_x - 8;
+	bg_hud.y			= team_pool.hud_y;
 	bg_hud.alpha		= 1;
 	bg_hud SetShader( "zom_icon_community_pot", 32, 32 );
 
 	// Set score highlight
 	bg_hud				= create_simple_hud();
-	bg_hud.alignX		= "left"; 
-	bg_hud.alignY		= "middle"; 
+	bg_hud.alignX		= "left";
+	bg_hud.alignY		= "middle";
 	bg_hud.horzAlign	= "user_right";
 	bg_hud.vertAlign	= "user_bottom";
 	bg_hud.color		= ( 0.0, 0.0, 0 );
-	bg_hud.sort			= 8; 
-	bg_hud.x			= team_pool.hud_x - 24; 
-	bg_hud.y			= team_pool.hud_y; 
+	bg_hud.sort			= 8;
+	bg_hud.x			= team_pool.hud_x - 24;
+	bg_hud.y			= team_pool.hud_y;
 	bg_hud.alpha		= 1;
 	bg_hud SetShader( "zom_icon_community_pot_strip", 128, 16 );
 
-	return hud; 	
+	return hud;
 }

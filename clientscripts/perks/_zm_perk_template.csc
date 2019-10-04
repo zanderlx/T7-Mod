@@ -6,7 +6,7 @@ include_perk_for_level()
 	clientscripts\_zm_perks::register_perk(
 		"template", // Internal name of this perk
 		undefined, // Function called when perk is obtained
-		undefined, // Function called when perk is lost 
+		undefined, // Function called when perk is lost
 		undefined, // Function called when perk is paused
 		undefined // Function called when perk is unpaused
 	);

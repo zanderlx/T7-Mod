@@ -49,7 +49,7 @@ check_for_insta_kill(player, mod, hit_location)
 			return;
 		if(is_magic_bullet_shield_enabled(self))
 			return;
-		
+
 		if(isdefined(self.instakill_func))
 		{
 			single_thread(self, self.instakill_func);
@@ -60,7 +60,7 @@ check_for_insta_kill(player, mod, hit_location)
 
 		if(!is_true(self.no_gib) && !is_true(self.isdog))
 			self maps\_zombiemode_spawner::zombie_head_gib();
-		
+
 		self DoDamage(self.health * 10, self.origin, player, undefined, modname, hit_location);
 		player notify("zombie_killed");
 	}

@@ -71,7 +71,7 @@ get_weapon_vox_type(weapon_name)
 {
 	if(!isdefined(self.entity_num))
 		return "crappy";
-	
+
 	if(is_weapon_upgraded(weapon_name))
 	{
 		if(isdefined(self.faviorite_weapons) && IsInArray(self.faviorite_weapons, weapon_name))
@@ -85,7 +85,7 @@ get_weapon_vox_type(weapon_name)
 	}
 
 	weapon_stats = get_weapon_stats(weapon_name);
-	
+
 	if(isdefined(weapon_stats.vox))
 		return weapon_stats.vox;
 	return "crappy";
@@ -114,12 +114,12 @@ weapon_give(weapon_name, switch_weapon)
 	{
 		if(is_ballistic_knife(weapon_name))
 			self notify("zmb_lost_knife");
-		
+
 		self GiveStartAmmo(weapon_name);
 
 		if(switch_weapon && !is_offhand_weapon(weapon_name))
 			self SwitchToWeapon(weapon_name);
-		
+
 		self notify("weapon_give", weapon_name);
 		return weapon_name;
 	}
@@ -147,13 +147,13 @@ weapon_give(weapon_name, switch_weapon)
 		self weapon_take(self get_player_placeable_mine());
 		self set_player_placeable_mine(weapon_name);
 	}
-	
+
 	// take current weapon if above weapon limit
 	if(primaryWeapons.size >= weapon_limit)
 	{
 		if(is_placeable_mine(current_weapon) || is_equipment(current_weapon))
 			current_weapon = undefined;
-		
+
 		if(isdefined(current_weapon))
 		{
 			if(!is_offhand_weapon(weapon_name))
@@ -188,13 +188,13 @@ weapon_give(weapon_name, switch_weapon)
 		self notify("weapon_give", weapon_name);
 		return weapon_name;
 	}
-	
+
 	self give_buildkit_weapon(weapon_name);
 	self GiveStartAmmo(weapon_name);
-	
+
 	if(switch_weapon && !is_offhand_weapon(weapon_name))
 		self SwitchToWeapon(weapon_name);
-	
+
 	self notify("weapon_give", weapon_name);
 	return weapon_name;
 }
@@ -224,7 +224,7 @@ give_weapon_or_ammo(weapon_name)
 	// check if weapon can be given ammo
 	if(is_offhand_weapon(weapon_name))
 		return false;
-	
+
 	// try give weapon ammo
 	return self ammo_give(weapon_name);
 }
@@ -233,18 +233,18 @@ ammo_give(weapon_name)
 {
 	if(!self has_any_weapon_variant(weapon_name))
 		return false;
-	
+
 	if(is_offhand_weapon(weapon_name))
 	{
 		if(!is_lethal_grenade(weapon_name) && !is_tactical_grenade(weapon_name))
 			return false;
 	}
-	
+
 	ammo_weapon = self get_player_weapon_with_same_base(weapon_name);
 
 	if(!isdefined(ammo_weapon))
 		ammo_weapon = weapon_name;
-	
+
 	if(is_offhand_weapon(ammo_weapon))
 	{
 		if(self GetAmmoCount(ammo_weapon) < WeaponMaxAmmo(ammo_weapon))
@@ -341,7 +341,7 @@ get_root_weapon(weapon_name)
 			return weapons_list[i];
 
 		weapon_stats = get_weapon_stats(weapons_list[i]);
-		
+
 		if(!isdefined(weapon_stats))
 			continue;
 
@@ -417,12 +417,12 @@ switch_back_primary_weapon(oldprimary)
 {
 	if(self maps\_laststand::player_is_in_laststand())
 		return;
-	
+
 	if(!isdefined(oldprimary) || oldprimary == "none" || is_offhand_weapon(oldprimary) || !self HasWeapon(oldprimary))
 		oldprimary = undefined;
 	else if(is_hero_weapon(oldprimary) && self get_player_hero_weapon_power() <= 0)
 		oldprimary = undefined;
-	
+
 	primaryWeapons = self GetWeaponsListPrimaries();
 
 	if(isdefined(oldprimary) && IsInArray(primaryWeapons, oldprimary))
@@ -471,11 +471,11 @@ has_weapon_upgrade(weapon_name)
 		return true;
 	if(is_weapon_upgraded(weapon_name) && self HasWeapon(weapon_name))
 		return true;
-	
+
 	if(can_upgrade_weapon(weapon_name))
 	{
 		upgrade_name = get_weapon_upgrade_name(weapon_name);
-		
+
 		if(self HasWeapon(upgrade_name))
 			return true;
 	}
@@ -627,7 +627,7 @@ get_weapon_options(weapon_name)
 		self._zm_weapon_options = [];
 	if(isdefined(self._zm_weapon_options[weapon_name]))
 		return self._zm_weapon_options[weapon_name];
-	
+
 	weapon_options = self calc_default_weapon_options(weapon_name);
 	self set_weapon_options(weapon_name, weapon_options);
 	return weapon_options;
@@ -658,11 +658,11 @@ calc_default_weapon_options(weapon_name)
 			rci = 6; // pink color | 255 105 180
 		if(ri == 7) // letter e | weapon_reticle_zom_e
 			rci = 1; // green color | 0 255 0
-		
+
 		// Famas always has smiley face
 		if(weapon_name == "famas_upgraded_zm")
 			ri = 21;
-		
+
 		return self CalcWeaponOptions(ci, li, ri, rci);
 	}
 	else
@@ -685,7 +685,7 @@ limited_weapon_below_quota(weapon_name, ignore_player)
 	// limit not set or below 0, all players can have this weapon
 	if(!isdefined(limit) || limit <= -1)
 		return true;
-	
+
 	count = 0;
 
 	for(i = 0; i < level.custom_limited_weapon_checks.size; i++)
@@ -694,7 +694,7 @@ limited_weapon_below_quota(weapon_name, ignore_player)
 
 		if(!isdefined(func))
 			continue;
-		
+
 		count += run_function(level, func, weapon_name, ignore_player);
 
 		// too many items have this weapon
@@ -727,7 +727,7 @@ is_weapon_available_in_player(weapon_name, ignore_player)
 	{
 		if(isdefined(ignore_player) && players[i] != ignore_player)
 			continue;
-		
+
 		if(players[i] has_any_weapon_variant(weapon_name))
 			count++;
 	}
@@ -797,7 +797,7 @@ get_player_weapondata(player, weapon_name)
 {
 	if(!isdefined(weapon_name))
 		weapon_name = player GetCurrentWeapon();
-	
+
 	dw_weapon = get_weapon_dual_wield_name(weapon_name);
 	alt_weapon = get_weapon_alt_name(weapon_name);
 
@@ -856,7 +856,7 @@ merge_weapons(oldweapondata, newweapondata)
 		weapondata["weapon"] = oldweapondata["weapon"];
 	else
 		weapondata["weapon"] = newweapondata["weapon"];
-	
+
 	weapon_name = weapondata["weapon"];
 	dw_weapon = get_weapon_dual_wield_name(weapon_name);
 	alt_weapon = get_weapon_alt_name(weapon_name);
@@ -985,7 +985,7 @@ player_give_loadout(loadout, replace_existing)
 {
 	if(is_true(replace_existing))
 		self TakeAllWeapons();
-	
+
 	for(i = 0; i < loadout.weapons.size; i++)
 	{
 		self weapondata_give(loadout.weapons[i]);
@@ -1032,7 +1032,7 @@ load_weapons_for_level(weapons_list_table, stats_table)
 		weapons_list_table = "weapons/" + mapname + ".csv";
 	if(!isdefined(stats_table))
 		stats_table = "weapons/stats.csv";
-	
+
 	/# PrintLn("Loading weapons for level '" + mapname + "' (" + weapons_list_table + ")"); #/
 	weapons_list = load_weapons_list_for_level(weapons_list_table);
 
@@ -1049,7 +1049,7 @@ load_weapon_for_level(weapon_name, stats_table)
 
 	if(!isdefined(stats_table))
 		stats_table = "weapons/stats.csv";
-	
+
 	/# PrintLn("Loading weapon '" + weapon_name + "' (" + stats_table + ")"); #/
 
 	// 0           1            2            3    4      5     6   7                8
@@ -1086,7 +1086,7 @@ load_weapon_for_level(weapon_name, stats_table)
 
 	if(isdefined(limit) && limit >= 0)
 		struct.limit = limit;
-	
+
 	PrecacheItem(weapon_name);
 	PrecacheString(display_name);
 
@@ -1101,12 +1101,12 @@ load_weapon_for_level(weapon_name, stats_table)
 		case "tactical":
 			level.zombie_tactical_grenade_list[level.zombie_tactical_grenade_list.size] = weapon_name;
 			break;
-		
+
 		case "mine":
 			level.zombie_placeable_mine_list[level.zombie_placeable_mine_list.size] = weapon_name;
 			maps\_zm_placeable_mine::load_mine_for_level(weapon_name);
 			break;
-		
+
 		case "ballistic":
 			struct.is_ballistic_knife = true;
 			// maps\_zm_melee_weapon::load_ballistic_knife(weapon_name);
@@ -1116,7 +1116,7 @@ load_weapon_for_level(weapon_name, stats_table)
 			level.zombie_melee_weapon_list[level.zombie_melee_weapon_list.size] = weapon_name;
 			maps\_zm_melee_weapon::load_melee_weapon(weapon_name);
 			break;
-		
+
 		case "equipment":
 			level.zombie_equipment_list[level.zombie_equipment_list.size] = weapon_name;
 			break;

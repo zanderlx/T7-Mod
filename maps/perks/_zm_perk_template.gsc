@@ -17,7 +17,7 @@ include_perk_for_level()
 		"template", // Internal name of this perk
 		"specialty_" // Engine perk name to be set / unset with this perk
 	);
-	
+
 	maps\_zm_perks::register_perk_machine(
 		"template", // Internal name of this perk
 		500, // The cost of this perk
@@ -28,15 +28,15 @@ include_perk_for_level()
 		"mus_perks_template_sting", // This perks sting sound
 		"mus_perks_template_jingle" // This perks jingle sound
 	);
-	
+
 	maps\_zm_perks::register_perk_threads(
 		"template", // Internal name of this perk
 		undefined, // Function called when perk is obtained
-		undefined, // Function called when perk is lost 
+		undefined, // Function called when perk is lost
 		undefined, // Function called when perk is paused
 		undefined // Function called when perk is unpaused
 	);
-	
+
 	maps\_zm_perks::register_perk_flash_audio(
 		"template", // Internal name of this perk
 		undefined // Sound played when perk hud is flashing

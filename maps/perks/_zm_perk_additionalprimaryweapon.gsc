@@ -22,6 +22,6 @@ place_additionalprimaryweapon_machine()
 {
 	if(!isdefined(level.zombie_additionalprimaryweapon_machine_origin))
 		return;
-	
+
 	struct = maps\_zm_perks::generate_machine_location("additionalprimaryweapon", level.zombie_additionalprimaryweapon_machine_origin, level.zombie_additionalprimaryweapon_machine_angles);
 }

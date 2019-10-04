@@ -6,7 +6,7 @@
 init()
 {
 	flag_init("pack_machine_in_use", false);
-	
+
 	PrecacheItem("zombie_knuckle_crack");
 	// PrecacheModel("zombie_vending_packapunch");
 	// PrecacheModel("zombie_vending_packapunch_on");
@@ -16,7 +16,7 @@ init()
 	PrecacheModel("p7_zm_vending_packapunch_weapon");
 	PrecacheString(&"ZOMBIE_PERK_PACKAPUNCH");
 	PrecacheString(&"ZOMBIE_GET_UPGRADED");
-	
+
 	level._effect["packapunch_fx"] = LoadFX("maps/zombie/fx_zombie_packapunch");
 	level.zombiemode_using_pack_a_punch = true;
 
@@ -38,7 +38,7 @@ third_person_weapon_upgrade(weapon, origin, angles, packa_rollers, perk_machine,
 
 	if(isdefined(perk_machine.wait_flag))
 		perk_machine.wait_flag RotateTo(perk_machine.wait_flag.angles + (179, 0, 0), .25, 0, 0);
-	
+
 	wait .35;
 	model maps\_zm_weapons::model_use_weapon_options(upgrade_name, player);
 	model maps\_zm_weapons::model_hide_weapon();
@@ -48,7 +48,7 @@ third_person_weapon_upgrade(weapon, origin, angles, packa_rollers, perk_machine,
 
 	if(isdefined(perk_machine.wait_flag))
 		perk_machine.wait_flag RotateTo(perk_machine.wait_flag.angles - (179, 0, 0), .25, 0, 0);
-	
+
 	wait .5;
 	model MoveTo(origin, 15, 0, 0);
 	return model;
@@ -69,7 +69,7 @@ player_use_can_pack_now()
 {
 	if(!vending_trigger_can_player_use(self))
 		return false;
-	
+
 	weapon = self GetCurrentWeapon();
 
 	if(!self can_pack_weapon(weapon))
@@ -110,7 +110,7 @@ vending_weapon_upgrade()
 		perk_machine.wait_flag = GetEnt(perk_machine.target, "targetname");
 	if(isdefined(perk_machine.wait_flag))
 		perk_machine.wait_flag SetModel("p7_zm_vending_packapunch_sign_wait");
-	
+
 	self UseTriggerRequireLookAt();
 	self SetHintString(&"ZOMBIE_NEED_POWER");
 	self SetCursorHint("HINT_NOICON");
@@ -133,7 +133,7 @@ vending_weapon_upgrade()
 
 		if(is_true(level.pap_moving))
 			continue;
-		
+
 		if(!player can_player_purchase(self.cost))
 		{
 			self PlaySound("deny");
@@ -227,7 +227,7 @@ upgrade_knuckle_crack_begin()
 		self maps\_zm_weapons::weapon_take(gun);
 	else
 		return;
-	
+
 	self GiveWeapon("zombie_knuckle_crack");
 	self SwitchToWeapon("zombie_knuckle_crack");
 }
@@ -239,7 +239,7 @@ upgrade_knuckle_crack_end()
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
-	
+
 	self decrement_is_drinking();
 	primaries = self GetWeaponsListPrimaries();
 
