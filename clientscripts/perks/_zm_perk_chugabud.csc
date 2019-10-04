@@ -17,7 +17,7 @@ include_perk_for_level()
 
 	add_level_notify_callback("chugabud_effects_enable", ::whoswhoaudio, true);
 	add_level_notify_callback("chugabud_effects_disable", ::whoswhoaudio, false);
-	clientscripts\_visionset_mgr::visionset_register("_xS78_whoswho", 50, 0);
+	clientscripts\_visionset_mgr::visionset_register_info("whoswho_vision", "_xS78_whoswho", 51, 0, 0, false);
 }
 
 whoswhoaudio(clientnum, enabled)
@@ -30,7 +30,7 @@ whoswhoaudio(clientnum, enabled)
 		PlaySound(0, "evt_ww_activate", (0, 0, 0));
 		level.sndwwent PlayLoopSound("evt_ww_looper");
 		clientscripts\_audio::snd_set_snapshot("zmb_duck_ww");
-		clientscripts\_visionset_mgr::visionset_apply(clientnum, "_xS78_whoswho");
+		clientscripts\_visionset_mgr::visionset_activate(clientnum, "whoswho_vision");
 	}
 	else
 	{
@@ -42,6 +42,6 @@ whoswhoaudio(clientnum, enabled)
 
 		PlaySound(0, "evt_ww_deactivate", (0, 0, 0));
 		clientscripts\_audio::snd_set_snapshot("default");
-		clientscripts\_visionset_mgr::visionset_remove(clientnum, "_xS78_whoswho");
+		clientscripts\_visionset_mgr::visionset_deactivate(clientnum, "whoswho_vision");
 	}
 }

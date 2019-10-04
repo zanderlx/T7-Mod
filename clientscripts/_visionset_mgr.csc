@@ -3,111 +3,114 @@
 
 init()
 {
+	level.active_visionsets = [];
+	level.current_visionset = [];
+
 	register_client_system("_visionset_mgr", ::visionset_system_monitor);
+	OnPlayerConnect_Callback(::visionset_onplayerconnect);
+}
+
+visionset_onplayerconnect(clientnum)
+{
+	level.active_visionsets[clientnum] = [];
+	keys = GetArrayKeys(level.vision_list);
+
+	for(i = 0; i < keys.size; i++)
+	{
+		if(is_true(level.vision_list[keys[i]].always_on))
+			visionset_activate(clientnum, keys[i]);
+	}
 }
 
 visionset_system_monitor(clientnum, state, oldState)
 {
-	if(state == "apply_highest")
-		visionset_apply_highest(clientnum);
-	else
+	tokens = StrTok(state, ":");
+
+	switch(tokens[0])
 	{
-		tokens = StrTok(state, ":");
+		default:
+			break;
 
-		switch(tokens[0])
-		{
-			case "apply_highest":
-			default:
-				visionset_apply_highest(clientnum);
-				break;
+		case "activate":
+			visionset_activate(clientnum, tokens[1]);
+			break;
 
-			case "apply":
-				visionset_apply(clientnum, tokens[1]);
-				break;
-
-			case "remove":
-				visionset_remove(clientnum, tokens[1]);
-				break;
-		}
+		case "deactivate":
+			visionset_deactivate(clientnum, tokens[1]);
+			break;
 	}
 }
 
-visionset_register(visionset_name, priority, transition_time)
+visionset_register_info(identifier, vision, priority, trans_in, trans_out, always_on)
 {
-	if(!isdefined(level._visionset_mgr))
-		level._visionset_mgr = [];
-	if(isdefined(level._visionset_mgr[visionset_name]))
+	if(!isdefined(level.vision_list))
+		level.vision_list = [];
+	if(isdefined(level.vision_list[identifier]))
 		return;
 
 	struct = SpawnStruct();
-	struct.visionset_name = visionset_name;
+	struct.identifier = identifier;
+	struct.vision = vision;
 	struct.priority = priority;
-	struct.transition_time = transition_time;
+	struct.trans_in = trans_in;
+	struct.trans_out = trans_out;
+	struct.always_on = always_on;
 
-	level._visionset_mgr[visionset_name] = struct;
+	level.vision_list[identifier] = struct;
 }
 
-visionset_apply(clientnum, visionset_name)
+visionset_activate(clientnum, vision)
 {
-	player = GetLocalPlayer(clientnum);
+	level.active_visionsets[clientnum][vision] = true;
+	active_visionsets = get_active_vision_array(level.active_visionsets[clientnum]);
+	highest_vision = get_highest_prority_vision(active_visionsets);
 
-	if(!isdefined(visionset_name) || visionset_name == "")
-		return;
-	if(!isdefined(level._visionset_mgr) || !isdefined(level._visionset_mgr[visionset_name]))
-		return;
-	if(!isdefined(player._visionset_list))
-		player._visionset_list = [];
-	if(!IsInArray(player._visionset_list, visionset_name))
-		player._visionset_list[player._visionset_list.size] = visionset_name;
-
-	visionset_apply_highest(clientnum);
-}
-
-visionset_apply_highest(clientnum)
-{
-	visionset_name = visionset_find_highest(clientnum);
-	VisionSetNaked(clientnum, visionset_name, level._visionset_mgr[visionset_name].transition_time);
-}
-
-visionset_remove(clientnum, visionset_name)
-{
-	player = GetLocalPlayer(clientnum);
-
-	if(!isdefined(visionset_name) || visionset_name == "")
-		return;
-	if(!isdefined(level._visionset_mgr) || !isdefined(level._visionset_mgr[visionset_name]))
-		return;
-	if(!isdefined(player._visionset_list))
-		player._visionset_list = [];
-
-	if(IsInArray(player._visionset_list, visionset_name))
+	if(highest_vision == vision)
 	{
-		player._visionset_list = array_remove(player._visionset_list, visionset_name);
-		visionset_apply_highest(clientnum);
+		trans_time = level.vision_list[highest_vision].trans_in;
+		VisionSetNaked(clientnum, level.vision_list[highest_vision].vision, trans_time);
+		level.current_visionset[clientnum] = highest_vision;
 	}
 }
 
-visionset_find_highest(clientnum)
+visionset_deactivate(clientnum, vision)
 {
-	player = GetLocalPlayer(clientnum);
+	level.active_visionsets[clientnum][vision] = false;
+	active_visionsets = get_active_vision_array(level.active_visionsets[clientnum]);
+	highest_vision = get_highest_prority_vision(active_visionsets);
 
-	if(!isdefined(player._visionset_list))
-		player._visionset_list = [];
-
-	visionset_name = undefined;
-
-	for(i = 0; i < player._visionset_list.size; i++)
+	if(isdefined(level.current_visionset[clientnum]) && level.current_visionset[clientnum] == vision)
 	{
-		new_visionset_name = player._visionset_list[i];
+		trans_time = level.vision_list[vision].trans_out;
+		VisionSetNaked(clientnum, level.vision_list[highest_vision].vision, trans_time);
+		level.current_visionset[clientnum] = highest_vision;
+	}
+}
 
-		if(isdefined(visionset_name))
+get_active_vision_array(active_visionsets)
+{
+	result = [];
+	keys = GetArrayKeys(active_visionsets);
+
+	for(i = 0; i < keys.size; i++)
+	{
+		if(is_true(active_visionsets[keys[i]]))
 		{
-			if(level._visionset_mgr[new_visionset_name].priority > level._visionset_mgr[visionset_name].priority)
-				visionset_name = new_visionset_name;
+			if(isdefined(level.vision_list) && isdefined(level.vision_list[keys[i]]))
+				result[result.size] = keys[i];
 		}
-		else
-			visionset_name = new_visionset_name;
 	}
+	return result;
+}
 
-	return visionset_name;
+get_highest_prority_vision(active_visionsets)
+{
+	highest_vision = active_visionsets[0];
+
+	for(i = 1; i < active_visionsets.size; i++)
+	{
+		if(level.vision_list[active_visionsets[i]].priority > level.vision_list[highest_vision].priority)
+			highest_vision = active_visionsets[i];
+	}
+	return highest_vision;
 }

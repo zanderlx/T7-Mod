@@ -16,7 +16,7 @@ main()
 	level thread theatre_ZPO_listener();
 	array_thread(GetEntArray(0, "trigger_eeroom_visionset", "targetname"), ::theater_player_in_eeroom);
 	register_zombie_types();
-	OnPlayerConnect_Callback(::on_player_connect);
+	OnPlayerConnect_Callback(::init_board_lights);
 }
 
 register_zombie_types()
@@ -28,32 +28,15 @@ register_zombie_types()
 register_visionset_types()
 {
 	// clientscripts\_visionset_mgr::visionset_register(visionset_name, priority, transition_time);
-	clientscripts\_visionset_mgr::visionset_register("zombie_theater", 1, 0);
-	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_asylum", 100, 0);
-	clientscripts\_visionset_mgr::visionset_register("zombie_theater_erooms_pentagon", 100, 0);
-	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_girlnew", 100, 0);
-	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_girlold", 100, 0);
-}
 
-on_player_connect(clientnum)
-{
-	self endon("disconnect");
-	init_board_lights(clientnum);
+	// Default Visions
+	clientscripts\_visionset_mgr::visionset_register_info("theater_vision", "zombie_theater", 0, 0, 0, true);
 
-	while(!ClientHasSnapshot(clientnum))
-	{
-		wait 1/60;
-	}
-
-	if(clientnum != 0)
-		return;
-
-	players = GetLocalPlayers();
-
-	for(i = 0; i < players.size; i++)
-	{
-		clientscripts\_visionset_mgr::visionset_apply(i, "zombie_theater");
-	}
+	// EE Rooms
+	clientscripts\_visionset_mgr::visionset_register_info("asylum_room", "zombie_theater_eroom_asylum", 100, 0, 0, false);
+	clientscripts\_visionset_mgr::visionset_register_info("pentagon_room", "zombie_theater_erooms_pentagon", 100, 0, 0, false);
+	clientscripts\_visionset_mgr::visionset_register_info("girls_new_room", "zombie_theater_eroom_girlnew", 100, 0, 0, false);
+	clientscripts\_visionset_mgr::visionset_register_info("girls_old_room", "zombie_theater_eroom_girlold", 100, 0, 0, false);
 }
 
 theatre_ZPO_listener()
@@ -257,56 +240,12 @@ eeroom_visionset_on(player)
 
 	RealWait(1);
 
-	switch(self.script_string)
-	{
-		case "asylum_room":
-			visionset_name = "zombie_theater_eroom_asylum";
-			break;
-
-		case "pentagon_room":
-			visionset_name = "zombie_theater_erooms_pentagon";
-			break;
-
-		case "girls_new_room":
-			visionset_name = "zombie_theater_eroom_girlnew";
-			break;
-
-		case "girls_old_room":
-			visionset_name = "zombie_theater_eroom_girlold";
-			break;
-
-		default:
-			return;
-	}
-
 	clientnum = player GetLocalClientNumber();
-	clientscripts\_visionset_mgr::visionset_apply(clientnum, visionset_name);
+	clientscripts\_visionset_mgr::visionset_activate(clientnum, self.script_string);
 }
 
 eeroom_visionset_off(player)
 {
-	switch(self.script_string)
-	{
-		case "asylum_room":
-			visionset_name = "zombie_theater_eroom_asylum";
-			break;
-
-		case "pentagon_room":
-			visionset_name = "zombie_theater_erooms_pentagon";
-			break;
-
-		case "girls_new_room":
-			visionset_name = "zombie_theater_eroom_girlnew";
-			break;
-
-		case "girls_old_room":
-			visionset_name = "zombie_theater_eroom_girlold";
-			break;
-
-		default:
-			return;
-	}
-
 	clientnum = player GetLocalClientNumber();
-	clientscripts\_visionset_mgr::visionset_remove(clientnum, visionset_name);
+	clientscripts\_visionset_mgr::visionset_deactivate(clientnum, self.script_string);
 }

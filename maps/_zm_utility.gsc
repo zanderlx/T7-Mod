@@ -391,19 +391,14 @@ play_oneshot_sound_to_player(player, alias, origin)
 }
 
 // Visionset MGR
-visionset_apply(visionset_name)
+visionset_activate(visionset_name)
 {
-	set_client_system_state("_visionset_mgr", "apply:" + visionset_name, self);
+	set_client_system_state("_visionset_mgr", "activate:" + visionset_name, self);
 }
 
-visionset_apply_highest()
+visionset_deactivate(visionset_name)
 {
-	set_client_system_state("_visionset_mgr", "apply_highest", self);
-}
-
-visionset_remove(visionset_name)
-{
-	set_client_system_state("_visionset_mgr", "remove:" + visionset_name, self);
+	set_client_system_state("_visionset_mgr", "deactivate:" + visionset_name, self);
 }
 
 // Common
