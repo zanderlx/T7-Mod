@@ -56,12 +56,12 @@ give_random_perk()
 
 	if(!isdefined(perks) || perks.size == 0)
 		return undefined;
-	
+
 	perk = random(perks);
 
 	if(!isdefined(perk))
 		return undefined;
-	
+
 	self give_perk(perk, false);
 	return perk;
 }
@@ -77,7 +77,7 @@ lose_random_perk()
 
 	if(!isdefined(perks) || perks.size == 0)
 		return undefined;
-	
+
 	perks = array_randomize(perks);
 
 	for(i = 0; i < perks.size; i++)
@@ -119,7 +119,7 @@ register_player_health(func_qualifier, amount)
 {
 	if(!isdefined(level._zm_player_health_types))
 		level._zm_player_health_types = [];
-	
+
 	struct = SpawnStruct();
 	struct.func_qualifier = func_qualifier;
 	struct.amount = amount;
@@ -142,7 +142,7 @@ set_player_max_health(set_preMaxHealth, clamp_health_to_max_health)
 
 			if(isdefined(level._zm_player_health_types[i].func_qualifier))
 				can_apply = run_function(self, level._zm_player_health_types[i].func_qualifier);
-			
+
 			if(can_apply)
 			{
 				if(IsInt(level._zm_player_health_types[i].amount))
@@ -157,7 +157,7 @@ set_player_max_health(set_preMaxHealth, clamp_health_to_max_health)
 
 	if(is_true(set_preMaxHealth))
 		self.preMaxHealth = self.maxhealth;
-	
+
 	self.maxhealth = n_total_health;
 	self SetmaxHealth(n_total_health);
 
@@ -185,7 +185,7 @@ register_playertrigger(struct, trigger_func)
 {
 	if(!isdefined(level.trigger_per_player))
 		level.trigger_per_player = [];
-	
+
 	struct.trigger_pool = [];
 	struct.trigger_func = trigger_func;
 
@@ -196,7 +196,7 @@ unregister_playertrigger(struct)
 {
 	if(!isdefined(level.trigger_per_player))
 		level.trigger_per_player = [];
-	
+
 	level.trigger_per_player = array_remove_nokeys(level.trigger_per_player, struct);
 
 	if(isdefined(struct.trigger_pool))
@@ -311,7 +311,7 @@ _AddCallback(type, func)
 		level._callbacks = [];
 	if(!isdefined(level._callbacks[type]))
 		level._callbacks[type] = [];
-	
+
 	maps\_callbackglobal::AddCallback(type, func);
 }
 
@@ -329,7 +329,7 @@ _Callback(type)
 		return;
 	if(level._callbacks[type].size == 0)
 		return;
-	
+
 	self maps\_callbackglobal::Callback(type);
 }
 
@@ -390,6 +390,22 @@ play_oneshot_sound_to_player(player, alias, origin)
 	set_client_system_state("client_side_fx", str_clientstate, player);
 }
 
+// Visionset MGR
+visionset_apply(visionset_name)
+{
+	set_client_system_state("_visionset_mgr", "apply:" + visionset_name, self);
+}
+
+visionset_apply_highest()
+{
+	set_client_system_state("_visionset_mgr", "apply_highest", self);
+}
+
+visionset_remove(visionset_name)
+{
+	set_client_system_state("_visionset_mgr", "remove:" + visionset_name, self);
+}
+
 // Common
 run_function(self_ent, func, arg1, arg2, arg3, arg4, arg5, arg6)
 {
@@ -397,7 +413,7 @@ run_function(self_ent, func, arg1, arg2, arg3, arg4, arg5, arg6)
 		return undefined;
 	if(!isdefined(self_ent))
 		self_ent = level;
-	
+
 	if(isdefined(arg6))
 		return self_ent [[func]](arg1, arg2, arg3, arg4, arg5, arg6);
 	else if(isdefined(arg5))
@@ -448,7 +464,7 @@ set_client_system_state(system, state, player)
 		return;
 	if(!isdefined(system))
 		return;
-	
+
 	setClientSysState("apex_client_sys", system + "|" + state, player);
 }
 
@@ -456,7 +472,7 @@ wait_network_frame_multi(n_count)
 {
 	if(!isdefined(n_count))
 		n_count = 1;
-	
+
 	if(NumRemoteClients())
 	{
 		for(i = 0; i < n_count; i++)
@@ -481,7 +497,7 @@ can_buy_weapon()
 		return false;
 	if(self hacker_active())
 		return false;
-	
+
 	weapon = self GetCurrentWeapon();
 
 	if(weapon == "none" || weapon == "syerette_sp")
@@ -536,7 +552,7 @@ is_internal_map()
 		case "zombie_cod5_sumpf":
 		case "zombie_cod5_factory":
 			return true;
-		
+
 		default:
 			return false;
 	}
@@ -585,7 +601,7 @@ array_run(a_ents, func, arg1, arg2, arg3, arg4, arg5, arg6)
 		return;
 	if(!isdefined(a_ents) || a_ents.size == 0)
 		return;
-	
+
 	keys = GetArrayKeys(a_ents);
 
 	for(i = 0; i < keys.size; i++)

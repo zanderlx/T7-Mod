@@ -8,7 +8,8 @@ init()
 
 	registerSystem("apex_client_sys", ::system_monitor);
 	register_client_system("client_side_fx", ::handle_client_side_fx);
-	
+
+	clientscripts\_visionset_mgr::init();
 	clientscripts\_zm_perks::init();
 	clientscripts\_zm_magicbox::init();
 	clientscripts\_zm_weapons::init();
@@ -26,10 +27,10 @@ system_monitor(clientnum, state, oldState)
 
 		if(isdefined(level._apex_client_systems[system].old_message))
 			old_message = level._apex_client_systems[system].old_message;
-		
+
 		if(isdefined(level._apex_client_systems[system].func))
 			single_thread(level, level._apex_client_systems[system].func, clientnum, message, old_message);
-		
+
 		level._apex_client_systems[system].old_message = message;
 	}
 }
@@ -104,7 +105,7 @@ handle_client_side_fx(clientnum, state, oldState)
 
 				if(!isdefined(level.client_side_sound[clientnum]))
 					level.client_side_sound[clientnum] = [];
-				
+
 				if(!isdefined(level.client_side_sound[clientnum][identifier]))
 				{
 					info = [];

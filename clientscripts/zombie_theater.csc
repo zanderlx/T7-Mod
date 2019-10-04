@@ -4,6 +4,7 @@
 main()
 {
 	level._uses_crossbow = true;
+	register_visionset_types();
 	clientscripts\_zombiemode::main();
 	clientscripts\zombie_theater_teleporter::main();
 	clientscripts\zombie_theater_fx::main();
@@ -24,6 +25,16 @@ register_zombie_types()
 	character\clientscripts\c_zom_quad::register_gibs();
 }
 
+register_visionset_types()
+{
+	// clientscripts\_visionset_mgr::visionset_register(visionset_name, priority, transition_time);
+	clientscripts\_visionset_mgr::visionset_register("zombie_theater", 1, 0);
+	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_asylum", 100, 0);
+	clientscripts\_visionset_mgr::visionset_register("zombie_theater_erooms_pentagon", 100, 0);
+	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_girlnew", 100, 0);
+	clientscripts\_visionset_mgr::visionset_register("zombie_theater_eroom_girlold", 100, 0);
+}
+
 on_player_connect(clientnum)
 {
 	self endon("disconnect");
@@ -41,7 +52,7 @@ on_player_connect(clientnum)
 
 	for(i = 0; i < players.size; i++)
 	{
-		players[i] clientscripts\_zombiemode::zombie_vision_set_apply("zombie_theater", 0, 0, i);
+		clientscripts\_visionset_mgr::visionset_apply(i, "zombie_theater");
 	}
 }
 
@@ -269,7 +280,7 @@ eeroom_visionset_on(player)
 	}
 
 	clientnum = player GetLocalClientNumber();
-	player clientscripts\_zombiemode::zombie_vision_set_apply(visionset_name, 100, 0, clientnum);
+	clientscripts\_visionset_mgr::visionset_apply(clientnum, visionset_name);
 }
 
 eeroom_visionset_off(player)
@@ -297,5 +308,5 @@ eeroom_visionset_off(player)
 	}
 
 	clientnum = player GetLocalClientNumber();
-	player clientscripts\_zombiemode::zombie_vision_set_remove(visionset_name, 0, clientnum);
+	clientscripts\_visionset_mgr::visionset_remove(clientnum, visionset_name);
 }
