@@ -61,6 +61,7 @@ default_include_powerups()
 	maps\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
 	// maps\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
 	maps\powerups\_zm_powerup_minigun::include_powerup_for_level();
+	maps\powerups\_zm_powerup_free_perk::include_powerup_for_level();
 }
 
 init_zombie_vars()

@@ -70,22 +70,22 @@ set_player_perk_state(clientnum, perk, state)
 		{
 			case 0: // Unobtained
 				if(isdefined(level._custom_perks[perk].thread_take))
-					single_thread(level._custom_perks[perk].thread_take, clientnum);
+					single_thread(level, level._custom_perks[perk].thread_take, clientnum);
 				break;
 
 			case 1: // Obtained
 				if(isdefined(level._custom_perks[perk].thread_give))
-					single_thread(level._custom_perks[perk].thread_give, clientnum);
+					single_thread(level, level._custom_perks[perk].thread_give, clientnum);
 				break;
 
 			case 2: // Paused
 				if(isdefined(level._custom_perks[perk].thread_pause))
-					single_thread(level._custom_perks[perk].thread_pause, clientnum);
+					single_thread(level, level._custom_perks[perk].thread_pause, clientnum);
 				break;
 			
 			case 3: // Unpaused
 				if(isdefined(level._custom_perks[perk].thread_unpause))
-					single_thread(level._custom_perks[perk].thread_unpause, clientnum);
+					single_thread(level, level._custom_perks[perk].thread_unpause, clientnum);
 				break;
 		}
 	}

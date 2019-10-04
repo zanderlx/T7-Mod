@@ -27,6 +27,7 @@ include,apex\zm_powerup_zblood
 include,apex\zm_powerup_minigun
 include,apex\zm_powerup_insta_kill
 include,apex\zm_powerup_full_ammo
+include,apex\zm_powerup_free_perk
 include,apex\zm_powerup_fire_sale
 include,apex\zm_powerup_double_points
 include,apex\zm_powerup_bonfire_sale

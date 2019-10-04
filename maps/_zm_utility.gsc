@@ -50,7 +50,9 @@ give_perk(perk, bought)
 
 give_random_perk()
 {
-	perks = self get_perk_array();
+	perks = maps\_zm_perks::get_valid_perk_array();
+	obtained_perks = self get_perk_array();
+	perks = array_exclude(perks, obtained_perks);
 
 	if(!isdefined(perks) || perks.size == 0)
 		return undefined;
