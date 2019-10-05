@@ -332,11 +332,12 @@ place_theater_spawn_structs()
 	// struct = maps\_zm_perks::generate_machine_location(perk, origin, angles);
 
 	perks = array(
-		maps\_zm_perks::generate_machine_location("divetonuke", (-1130.9, 1261.31, -15.875), (0, 0, 0)),
-		maps\_zm_perks::generate_machine_location("marathon", (823.653, 1020.54, -15.875), (0, 0, 0)),
-		maps\_zm_perks::generate_machine_location("deadshot", (630.073, 1239.64, -15.875), (0, 90, 0)),
-		maps\_zm_perks::generate_machine_location("cherry", (600, -1012.48, 320.125), (0, 0, 0)),
-		maps\_zm_perks::generate_machine_location("vulture", (136.293, -462.601, 320.125), (0, 135, 0))
+		maps\_zm_perks::generate_machine_location("divetonuke", (-1130.9, 1261.31, -15.875), (0, 0, 0)), // xSanchez78 - Kino Mod Divetonuk Location
+		maps\_zm_perks::generate_machine_location("marathon", (823.653, 1020.54, -15.875), (0, 0, 0)), // xSanchez78 - Kino Mod Marathon Location
+		maps\_zm_perks::generate_machine_location("deadshot", (630.073, 1239.64, -15.875), (0, 90, 0)), // xSanchez78 - Kino Mod Deadshot Location
+		// maps\_zm_perks::generate_machine_location("cherry", (600, -1012.48, 320.125), (0, 0, 0)), // xSanchez78 - Kino Mod Cherry Location
+		maps\_zm_perks::generate_machine_location("cherry", (-846.159, -1042.2, 80.125), (0, 180, 0)), // xSanchez78 - Kino Mod - Chugabud Location
+		maps\_zm_perks::generate_machine_location("vulture", (136.293, -462.601, 320.125), (0, 135, 0)) // xSanchez78 - Kino Mod Vulture Location
 	);
 
 	for(i = 0; i < perks.size; i++)

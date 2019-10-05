@@ -8,7 +8,7 @@
 include_perk_for_level()
 {
 	maps\_zm_perks::register_perk("cherry", "uie_moto_perk_cherry", "zombie_perk_bottle_cherry_t7");
-	maps\_zm_perks::register_perk_machine("cherry", 2000, &"ZOMBIE_PERK_ELECTRICCHERRY", "p6_zm_vending_electric_cherry_off", "p6_zm_vending_electric_cherry_on", "cherry_light", "mus_perks_cherry_sting", "mus_perks_cherry_jingle");
+	maps\_zm_perks::register_perk_machine("cherry", 2000, &"ZOMBIE_PERK_ELECTRICCHERRY", "jb_zm_vending_electric_cherry", "jb_zm_vending_electric_cherry_on", "cherry_light", "mus_perks_cherry_sting", "mus_perks_cherry_jingle");
 	maps\_zm_perks::register_perk_threads("cherry", ::give_cherry, ::take_chery, ::take_chery, ::give_cherry);
 
 	level._effect["cherry_light"] = LoadFX("misc/fx_zombie_cola_on");
