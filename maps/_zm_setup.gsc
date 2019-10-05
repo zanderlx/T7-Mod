@@ -54,6 +54,7 @@ player_solo_init()
 player_connect()
 {
 	self thread onPlayerSpawned();
+	self thread debug_update_dvars();
 }
 
 onPlayerSpawned()
@@ -64,5 +65,28 @@ onPlayerSpawned()
 	{
 		self waittill("spawned_player");
 		self _Callback("on_player_spawned");
+	}
+}
+
+// Debug
+debug_update_dvars()
+{
+	self endon("disconnect");
+
+	self SetClientDvars(
+		"ui_dbg_x", 0,
+		"ui_dbg_y", 0,
+		"ui_dbg_player_origin", self.origin,
+		"ui_dbg_player_angles", self.angles
+	);
+
+	for(;;)
+	{
+		self SetClientDvars(
+			"ui_dbg_player_origin", self.origin,
+			"ui_dbg_player_angles", self.angles
+		);
+
+		wait .05;
 	}
 }
