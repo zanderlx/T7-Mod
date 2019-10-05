@@ -3,6 +3,7 @@
 
 main()
 {
+	custom_mod_setup();
 	level._uses_crossbow = true;
 	register_visionset_types();
 	clientscripts\_zombiemode::main();
@@ -248,4 +249,35 @@ eeroom_visionset_off(player)
 {
 	clientnum = player GetLocalClientNumber();
 	clientscripts\_visionset_mgr::visionset_deactivate(clientnum, self.script_string);
+}
+
+// Custom Mod Setups
+custom_mod_setup()
+{
+	level._zm_include_perks = ::include_theater_perks;
+}
+
+// Perks
+include_theater_perks()
+{
+	// T4
+	clientscripts\perks\_zm_perk_juggernog::include_perk_for_level();
+	clientscripts\perks\_zm_perk_double_tap::include_perk_for_level();
+	clientscripts\perks\_zm_perk_quick_revive::include_perk_for_level();
+	clientscripts\perks\_zm_perk_sleight_of_hand::include_perk_for_level();
+
+	// T5
+	clientscripts\perks\_zm_perk_divetonuke::include_perk_for_level();
+	clientscripts\perks\_zm_perk_marathon::include_perk_for_level();
+	clientscripts\perks\_zm_perk_deadshot::include_perk_for_level();
+	clientscripts\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
+
+	// T6
+	// clientscripts\perks\_zm_perk_tombstone::include_perk_for_level();
+	// clientscripts\perks\_zm_perk_chugabud::include_perk_for_level();
+	clientscripts\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	clientscripts\perks\_zm_perk_vulture_aid::include_perk_for_level();
+
+	// T7
+	// clientscripts\perks\_zm_perk_widows_wine::include_perk_for_level();
 }

@@ -124,7 +124,7 @@ generate_magicbox_location(origin, angles)
 {
 	struct = SpawnStruct();
 	struct.origin = origin;
-	struct.angles = angles;
+	struct.angles = angles + (0, 90, 0);
 
 	if(!isdefined(level._zm_extra_magicbox_locations))
 		level._zm_extra_magicbox_locations = [];

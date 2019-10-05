@@ -834,7 +834,7 @@ generate_machine_location(perk, origin, angles)
 {
 	struct = SpawnStruct();
 	struct.origin = origin;
-	struct.angles = angles;
+	struct.angles = angles + (0, 90, 0);
 	struct.script_noteworthy = perk;
 
 	if(!isdefined(level._zm_extra_perk_machines))

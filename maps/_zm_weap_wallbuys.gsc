@@ -309,7 +309,7 @@ generate_wallbuy(weapon, origin, angles)
 	struct = SpawnStruct();
 	struct.zombie_weapon_upgrade = weapon;
 	struct.origin = origin;
-	struct.angles = angles;
+	struct.angles = angles + (0, 90, 0);
 
 	if(!isdefined(level._zm_extra_weapon_wallbuys))
 		level._zm_extra_weapon_wallbuys = [];

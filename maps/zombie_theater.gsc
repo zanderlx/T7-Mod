@@ -37,6 +37,7 @@ main()
 	if(GetDvarInt( #"artist") > 0)
 		return;
 
+	custom_mod_setup();
 	level.dogs_enabled = true;
 	level.random_pandora_box_start = true;
 	level.zombie_anim_override = maps\zombie_theater::anim_override_func;
@@ -289,5 +290,59 @@ spawn_theater_collisions()
 	for(i = 0; i < ents.size; i++)
 	{
 		ents[i] Hide();
+	}
+}
+
+// Custom Mod Setups
+custom_mod_setup()
+{
+	level.zm_scr_gameloc_default = "theater";
+	level._zm_include_perks = ::include_theater_perks;
+}
+
+// Perks
+include_theater_perks()
+{
+	// T4
+	maps\perks\_zm_perk_juggernog::include_perk_for_level();
+	maps\perks\_zm_perk_double_tap::include_perk_for_level();
+	maps\perks\_zm_perk_quick_revive::include_perk_for_level();
+	maps\perks\_zm_perk_sleight_of_hand::include_perk_for_level();
+
+	// T5
+	maps\perks\_zm_perk_divetonuke::include_perk_for_level();
+	maps\perks\_zm_perk_marathon::include_perk_for_level();
+	maps\perks\_zm_perk_deadshot::include_perk_for_level();
+	maps\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
+
+	// T6
+	// maps\perks\_zm_perk_tombstone::include_perk_for_level();
+	// maps\perks\_zm_perk_chugabud::include_perk_for_level();
+	maps\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	maps\perks\_zm_perk_vulture_aid::include_perk_for_level();
+
+	// T7
+	// maps\perks\_zm_perk_widows_wine::include_perk_for_level();
+
+	place_theater_spawn_structs();
+}
+
+place_theater_spawn_structs()
+{
+	// struct = maps\_zm_perks::generate_machine_location(perk, origin, angles);
+
+	perks = array(
+		maps\_zm_perks::generate_machine_location("divetonuke", (-1130.9, 1261.31, -15.875), (0, 0, 0)),
+		maps\_zm_perks::generate_machine_location("marathon", (823.653, 1020.54, -15.875), (0, 0, 0)),
+		maps\_zm_perks::generate_machine_location("deadshot", (630.073, 1239.64, -15.875), (0, 90, 0)),
+		maps\_zm_perks::generate_machine_location("cherry", (600, -1012.48, 320.125), (0, 0, 0)),
+		maps\_zm_perks::generate_machine_location("vulture", (136.293, -462.601, 320.125), (0, 135, 0))
+	);
+
+	for(i = 0; i < perks.size; i++)
+	{
+		// only spawns for `classic` gametype
+		// only spawns for `theater` gameloc
+		perks[i].script_string = "classic_perks_theater";
 	}
 }
