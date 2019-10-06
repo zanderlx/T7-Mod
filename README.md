@@ -1,6 +1,8 @@
 # T7-Mod
 Black Ops 1 mod, Rescripting and Downporting alot of features from newer games
 
+See here for current mod [TODO](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true) list
+
 ## Credits
 - **_ApexModder_** - Mod Owner
 - **_xSanchez78_** - Ported **Black Ops 3** models and anims to **Black Ops 1**, Various scripting help
