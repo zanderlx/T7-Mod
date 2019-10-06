@@ -87,6 +87,54 @@ run_function(entity, func, arg1, arg2, arg3, arg4, arg5) // the same as single_f
 //============================================================================================
 // Engine Functions / Wrappers
 //============================================================================================
+GetDvarString(dvar_name, default_value)
+{
+	val = GetDvar(dvar_name);
+
+	if(isdefined(default_value))
+	{
+		if(!isdefined(val) || val == "")
+			return default_value;
+	}
+
+	return val;
+}
+
+GetDvarBool(dvar_name, default_value)
+{
+	return string_to_bool(GetDvarString(dvar_name, default_value));
+}
+
+/#
+GetDebugDvarString(dvar_name, default_value)
+{
+	val = GetDebugDvar(dvar_name);
+
+	if(isdefined(default_value))
+	{
+		if(!isdefined(val) || val == "")
+			return default_value;
+	}
+
+	return val;
+}
+
+GetDebugDvarBool(dvar_name, default_value)
+{
+	return string_to_bool(GetDebugDvarString(dvar_name, default_value));
+}
+#/
+
+SetInvisibleToAll()
+{
+	players = GetPlayers();
+
+	for(i = 0; i < players.size; i++)
+	{
+		self SetInvisibleToPlayer(players[i], true);
+	}
+}
+
 IsInArray(array, value)
 {
 	return is_in_array(array, value);
@@ -115,6 +163,39 @@ GetNodesInRadiusSorted(origin, max_radius, min_radius, max_height/*, node_type, 
 		return [];
 
 	return get_array_of_closest(origin, valid_nodes);
+}
+
+//============================================================================================
+// PlayerTrigger - xSanchez78
+//============================================================================================
+register_playertrigger(struct, trigger_func)
+{
+	if(!isdefined(level.trigger_per_player))
+		level.trigger_per_player = [];
+
+	struct.trigger_pool = [];
+	struct.trigger_func = trigger_func;
+	level.trigger_per_player[level.trigger_per_player.size] = struct;
+}
+
+unregister_playertrigger(struct)
+{
+	if(!isdefined(level.trigger_per_player))
+		level.trigger_per_player = [];
+
+	level.trigger_per_player = array_remove_nokeys(level.trigger_per_player, struct);
+	keys = GetArrayKeys(struct.trigger_pool);
+
+	for(i = 0; i < keys.size; i++)
+	{
+		if(isdefined(struct.trigger_pool[keys[i]]))
+		{
+			struct.trigger_pool[keys[i]] notify("kill_trigger");
+			struct.trigger_pool[keys[i]] Delete();
+			struct.trigger_pool[keys[i]] = undefined;
+		}
+	}
+	struct.trigger_pool = [];
 }
 
 //============================================================================================

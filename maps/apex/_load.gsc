@@ -6,4 +6,5 @@
 main()
 {
 	maps\apex\_utility_code::init_apex_utility();
+	/# maps\apex\_debug::debug_init(); #/
 }

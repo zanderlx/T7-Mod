@@ -5,6 +5,7 @@ rawfile,clientscripts\apex\_load.csc
 rawfile,clientscripts\apex\_utility.csc
 rawfile,clientscripts\apex\_utility_code.csc
 
+rawfile,maps\apex\_debug.gsc
 rawfile,maps\apex\_load.gsc
 rawfile,maps\apex\_utility.gsc
 rawfile,maps\apex\_utility_code.gsc
