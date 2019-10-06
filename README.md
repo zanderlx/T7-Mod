@@ -1,9 +1,9 @@
 # T7-Mod
+[![Discord](https://img.shields.io/badge/chat-Discord-blue.svg?label=Discord)](https://discord.gg/rTTb3uB)
+
 Black Ops 1 mod, Rescripting and Downporting alot of features from newer games
-
-See here for current mod [TODO](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true) list
-
-All development for this mod will and has been streamed live over at [**__ApexModder's__** Twitch](https://www.twitch.tv/apexmdr/)
+See here for current mod [TODO list](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true)
+All development for this mod will and has been streamed live over at [**_ApexModder's_** Twitch](https://www.twitch.tv/apexmdr/)
 
 ## Credits
 - **_ApexModder_** - Mod Owner
