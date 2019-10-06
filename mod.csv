@@ -1,0 +1,22 @@
+//============================================================================================
+// Common Assets
+//============================================================================================
+rawfile,clientscripts\apex\_load.csc
+rawfile,clientscripts\apex\_utility.csc
+rawfile,clientscripts\apex\_utility_code.csc
+
+rawfile,maps\apex\_load.gsc
+rawfile,maps\apex\_utility.gsc
+rawfile,maps\apex\_utility_code.gsc
+
+//============================================================================================
+// Overriden Zombiemode Assets
+//============================================================================================
+rawfile,clientscripts\_zombiemode.csc
+
+rawfile,maps\_zombiemode.gsc
+
+//============================================================================================
+// Overriden zombie_theater Assets
+//============================================================================================
+rawfile,clientscripts\zombie_theater.csc
