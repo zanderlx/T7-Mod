@@ -46,6 +46,7 @@ rawfile,maps\_zombiemode.gsc
 
 menufile,ui\hud_zombie.txt
 localize,zombie
+stringtable,weaponOptions.csv
 
 //============================================================================================
 // Overriden zombie_theater Assets
