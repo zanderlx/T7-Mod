@@ -1,0 +1,19 @@
+VERSION				"1"
+CONFIG				"C:\projects\cod\t5\bin\StringEd.cfg"
+FILENOTES			""
+
+// Beta
+REFERENCE			BETA
+LANG_ENGLISH		"You are playing an early ^3Beta-Build^7"
+
+REFERENCE			ALPHA
+LANG_ENGLISH		"You are playing an early ^3Alpha-Build^7"
+
+// Debug
+REFERENCE			DBG_ORIGIN
+LANG_ENGLISH		"Origin:"
+
+REFERENCE			DBG_ANGLES
+LANG_ENGLISH		"Angles:"
+
+ENDMARKER

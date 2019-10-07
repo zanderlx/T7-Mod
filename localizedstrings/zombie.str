@@ -1,0 +1,44 @@
+VERSION				"1"
+CONFIG				"C:\projects\cod\t5\bin\StringEd.cfg"
+FILENOTES			""
+
+// Perks
+REFERENCE			PERK_TOMBSTONE
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy Tombstone [Cost: &&1]"
+
+REFERENCE			PERK_CHUGABUD
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Who's Who [Cost: &&1]"
+
+REFERENCE			PERK_ELECTRICCHERRY
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Electric Cherry [Cost: &&1]"
+
+REFERENCE			PERK_VULTURE
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Vulture-Aid [Cost: &&1]"
+
+REFERENCE			PERK_WIDOWSWINE
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Widow's Wine [Cost: &&1]"
+
+// Weapons
+REFERENCE			DYN_WEAPONCOST
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy &&1 [Cost: &&2]"
+
+REFERENCE			DYN_WEAPONCOSTAMMO
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy &&1 [Cost: &&2, Ammo: &&3]"
+
+REFERENCE			DYN_WEAPONCOSTAMMO_UPGRADE
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy &&1 [Cost: &&2, Ammo: &&3]   \n             [Upgraded Ammo: &&4]"
+
+REFERENCE			WEAPON_BOWIE_KNIFE
+LANG_ENGLISH		"Bowie Knife"
+
+REFERENCE			WEAPON_SICKLE_KNIFE
+LANG_ENGLISH		"Sickle Knife"
+
+// Magic Box
+REFERENCE			MAGICBOX_BUY
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for Mystery Box [Cost: &&1]"
+
+REFERENCE			MAGICBOX_TRADE
+LANG_ENGLISH		"Hold ^3[{+activate}]^7 for &&1"
+
+ENDMARKER
