@@ -6,6 +6,86 @@
 //============================================================================================
 // Common Utility Functions
 //============================================================================================
+increment_downed_stat()
+{
+	self.downs++;
+	self.stats["downs"] = self.downs;
+	SetDvar("player" + self GetEntityNumber() + "downs", self.downs);
+}
+
+enable_player_move_states()
+{
+	self AllowCrouch(true);
+	self AllowLean(true);
+	self AllowAds(true);
+	self AllowSprint(true);
+	self AllowProne(true);
+	self AllowMelee(true);
+}
+
+disable_player_move_states(forceStanceChange)
+{
+	self AllowCrouch(true);
+	self AllowLean(false);
+	self AllowAds(false);
+	self AllowSprint(false);
+	self AllowProne(false);
+	self AllowMelee(false);
+
+	if(is_true(forceStanceChange))
+	{
+		if(self GetStance() == "prone")
+			self SetStance("crouch");
+	}
+}
+
+is_internal_map()
+{
+	switch(get_mapname())
+	{
+		case "zombie_theater":
+		case "zombie_pentagon":
+		case "zombie_cosmodrome":
+		case "zombie_coast":
+		case "zombie_temple":
+		case "zombie_moon":
+		case "zombie_cod5_prototype":
+		case "zombie_cod5_asylum":
+		case "zombie_cod5_sumpf":
+		case "zombie_cod5_factory":
+			return true;
+
+		default:
+			return false;
+	}
+}
+
+is_custom_map()
+{
+	return !is_internal_map();
+}
+
+is_solo_game()
+{
+	if(flag_exists("all_players_connected") && flag("all_players_connected"))
+		return GetPlayers().size < 2;
+	else
+		return GetNumExpectedPlayers() < 2;
+}
+
+get_mapname()
+{
+	if(isdefined(level.script))
+		return level.script;
+	else
+		return ToLower(GetDvarString(#"mapname"));
+}
+
+getHostPlayer()
+{
+	return get_host();
+}
+
 is_equal(a, b)
 {
 	if(!isdefined(a) && !isdefined(b))
