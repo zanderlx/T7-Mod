@@ -11,6 +11,31 @@ debug_init()
 }
 
 //============================================================================================
+// Trigger
+//============================================================================================
+DrawTrigger(color)
+{
+	if(!isdefined(color))
+		color = (1, 1, 1);
+
+	radius = 16;
+	height = 16;
+	angles = (0, 0, 0);
+
+	if(isdefined(self.radius))
+		radius = self.radius;
+	if(isdefined(self.height))
+		height = self.height;
+	if(isdefined(self.angles))
+		angles = self.angles;
+
+	mins = (0 - radius, 0 - radius, 0 - height);
+	maxs = (radius, radius, height);
+
+	Box(self.origin, mins, maxs, angles[1], color);
+}
+
+//============================================================================================
 // Strings
 //============================================================================================
 DrawStringList(origin, strings, color, offset_z)
@@ -44,7 +69,11 @@ playertrigger_debug(player)
 	height = self.height;
 
 	if(isdefined(trigger))
-		Box(trigger.origin, (0 - radius, 0 - radius, 0 - height), (radius, radius, height), trigger.angles[1], (0, 1, 0));
+	{
+		trigger.radius = radius;
+		trigger.height = height;
+		trigger DrawTrigger((0, 1, 0));
+	}
 
 	DrawCylinder(origin, radius/2, height/2);
 	DrawStringList(origin, array(
