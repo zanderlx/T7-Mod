@@ -4,6 +4,36 @@
 #include maps\apex\_utility_code;
 
 //============================================================================================
+// Perk Utility Functions
+//============================================================================================
+has_perk(perk)
+{
+	if(!maps\apex\_zm_perks::is_perk_valid(perk))
+		return false;
+	return IsInArray(self._obtained_perks, perk);
+}
+
+get_player_perk_purchase_limit()
+{
+	perk_limit = level.zombie_vars["zombie_perk_limit"];
+
+	if(isdefined(self.get_player_perk_purchase_limit))
+		return run_function(self, self.get_player_perk_purchase_limit);
+	return perk_limit;
+}
+
+get_player_obtained_perks()
+{
+	return self._obtained_perks;
+}
+
+get_player_unobtained_perks()
+{
+	perks = maps\apex\_zm_perks::get_valid_perks_array();
+	return array_exclude(perks, self get_player_obtained_perks());
+}
+
+//============================================================================================
 // Common Utility Functions
 //============================================================================================
 increment_downed_stat()

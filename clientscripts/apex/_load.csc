@@ -4,4 +4,6 @@
 main()
 {
 	clientscripts\apex\_utility_code::init_utility();
+
+	clientscripts\apex\_zm_perks::init();
 }

@@ -11,6 +11,20 @@ rawfile,maps\apex\_utility.gsc
 rawfile,maps\apex\_utility_code.gsc
 
 //============================================================================================
+// New Perk System
+//============================================================================================
+rawfile,clientscripts\apex\_zm_perks.csc
+rawfile,maps\apex\_zm_perks.gsc
+
+// Juggernog
+rawfile,clientscripts\apex\perks\_zm_perk_juggernog.csc
+rawfile,maps\apex\perks\_zm_perk_juggernog.gsc
+material,specialty_juggernaut_zombies
+weapon,sp\zombie_perk_bottle_jugg
+xmodel,zombie_vending_jugg
+xmodel,zombie_vending_jugg_on
+
+//============================================================================================
 // Overriden Zombiemode Assets
 //============================================================================================
 rawfile,clientscripts\_zombiemode.csc

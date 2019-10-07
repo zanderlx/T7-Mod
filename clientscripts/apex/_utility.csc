@@ -2,6 +2,16 @@
 #include clientscripts\apex\_utility_code;
 
 //============================================================================================
+// Perk Utility Functions
+//============================================================================================
+has_perk(clientnum, perk)
+{
+	if(!clientscripts\apex\_zm_perks::is_perk_valid(perk))
+		return false;
+	return IsInArray(level._client_perks[clientnum], perk);
+}
+
+//============================================================================================
 // Common Utility Functions
 //============================================================================================
 get_player_id(clientnum)
