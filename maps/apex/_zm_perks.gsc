@@ -15,6 +15,20 @@ player_connect()
 {
 	self.num_perks = 0;
 	self._obtained_perks = [];
+
+	if(is_true(level.zombie_vars["zombie_perk_use_menu_hud"]))
+	{
+		perks = get_valid_perks_array();
+
+		for(i = 0; i < perks.size; i++)
+		{
+			self SetClientDvars(
+				"ui_zm_perk_" + perks[i] + "_x", 0,
+				"ui_zm_perk_" + perks[i] + "_image", level._custom_perks[perks[i]].shader,
+				"ui_zm_perk_" + perks[i] + "_alpha", 0
+			);
+		}
+	}
 }
 
 include_perks()
@@ -26,6 +40,7 @@ include_perks()
 	set_zombie_var("zombie_perk_bottle", "zombie_perk_juggernaut");
 	set_zombie_var("zombie_perk_hint", &"ZOMBIE_PERK_GENERIC");
 	set_zombie_var("zombie_perk_limit", 4);
+	set_zombie_var("zombie_perk_use_menu_hud", true);
 
 	run_function(level, level._zm_perk_includes);
 }
@@ -601,17 +616,70 @@ do_perk_bottle_drink_end(bottle, gun)
 //============================================================================================
 perk_hud_create(perk)
 {
-	self perk_hud_create_legacy(perk);
+	if(is_true(level.zombie_vars["zombie_perk_use_menu_hud"]))
+		self perk_hud_create_menu(perk);
+	else
+		self perk_hud_create_legacy(perk);
 }
 
 perk_hud_destroy(perk)
 {
-	self perk_hud_destroy_legacy(perk);
+	if(is_true(level.zombie_vars["zombie_perk_use_menu_hud"]))
+		self perk_hud_destroy_menu(perk);
+	else
+		self perk_hud_destroy_legacy(perk);
 }
 
 update_perk_hud()
 {
-	self update_perk_hud_legacy();
+	if(is_true(level.zombie_vars["zombie_perk_use_menu_hud"]))
+		self update_perk_hud_menu();
+	else
+		self update_perk_hud_legacy();
+}
+
+// Menu Hud
+perk_hud_create_menu(perk)
+{
+	if(!isdefined(self.perk_hud))
+		self.perk_hud = [];
+	if(isdefined(self.perk_hud[perk]))
+		return;
+
+	x = self.perk_hud.size * 30;
+
+	self SetClientDvars(
+		"ui_zm_perk_" + perk + "_x", x,
+		"ui_zm_perk_" + perk + "_alpha", 1
+	);
+
+	self.perk_hud[perk] = x;
+}
+
+perk_hud_destroy_menu(perk)
+{
+	if(!isdefined(self.perk_hud))
+		return;
+	if(!isdefined(self.perk_hud[perk]))
+		return;
+
+	self SetClientDvars(
+		"ui_zm_perk_" + perk + "_x", 0,
+		"ui_zm_perk_" + perk + "_alpha", 0
+	);
+}
+
+update_perk_hud_menu()
+{
+	if(isdefined(self.perk_hud))
+	{
+		keys = GetArrayKeys(self.perk_hud);
+
+		for(i = 0; i < keys.size; i++)
+		{
+			self SetClientDvar("ui_zm_perk_" + keys[i] + "_x", i * 30);
+		}
+	}
 }
 
 // Legacy Hud
