@@ -22,4 +22,5 @@ rawfile,maps\_zombiemode.gsc
 //============================================================================================
 // Overriden zombie_theater Assets
 //============================================================================================
+rawfile,clientscripts\zombie_theater_fx.csc
 rawfile,clientscripts\zombie_theater.csc
