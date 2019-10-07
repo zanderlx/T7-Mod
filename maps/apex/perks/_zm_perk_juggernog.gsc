@@ -5,9 +5,9 @@
 
 include_perk_for_level()
 {
-	maps\apex\_zm_perks::register_perk("jugg", "specialty_juggernaut_zombies");
-	maps\apex\_zm_perks::register_perk_bottle("jugg", "zombie_perk_bottle_jugg");
-	maps\apex\_zm_perks::register_perk_machine("jugg", &"ZOMBIE_PERK_JUGGERNAUT", 2500, "zombie_vending_jugg", "zombie_vending_jugg_on", "perk_light_red");
+	maps\apex\_zm_perks::register_perk("jugg", "uie_moto_perk_juggernog");
+	maps\apex\_zm_perks::register_perk_bottle("jugg", "zombie_perk_bottle_jugg_t7");
+	maps\apex\_zm_perks::register_perk_machine("jugg", &"ZOMBIE_PERK_JUGGERNAUT", 2500, "p7_zm_vending_jugg", "p7_zm_vending_jugg_on", "perk_light_red");
 	maps\apex\_zm_perks::register_perk_threads("jugg", ::give_jugg, ::take_jugg);
 	maps\apex\_zm_perks::register_perk_sounds("jugg", "mus_perks_jugganog_sting", "mus_perks_jugganog_jingle", "zmb_hud_flash_jugga");
 
