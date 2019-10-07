@@ -8,6 +8,30 @@ debug_init()
 {
 	if(GetDebugDvarString("scr_zm_playerTrigger_debug", "") == "")
 		SetDvar("scr_zm_playerTrigger_debug", "0");
+
+	OnPlayerConnect_Callback(::debug_update_dvars);
+}
+
+debug_update_dvars()
+{
+	self endon("disconnect");
+
+	self SetClientDvars(
+		"ui_dbg_x", 0,
+		"ui_dbg_y", 0,
+		"ui_dbg_player_origin", self.origin,
+		"ui_dbg_player_angles", self.angles
+	);
+
+	for(;;)
+	{
+		self SetClientDvars(
+			"ui_dbg_player_origin", self.origin,
+			"ui_dbg_player_angles", self.angles
+		);
+
+		wait .05;
+	}
 }
 
 //============================================================================================
