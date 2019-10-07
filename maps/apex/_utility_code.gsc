@@ -121,6 +121,8 @@ check_visibility(trigger, player)
 
 		if(is_true(is_visible))
 		{
+			trigger playertrigger_set_hintstring();
+
 			if(!is_true(trigger.thread_running))
 			{
 				trigger.thread_running = true;
