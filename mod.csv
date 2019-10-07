@@ -15,6 +15,7 @@ rawfile,maps\apex\_utility_code.gsc
 //============================================================================================
 rawfile,clientscripts\_zombiemode.csc
 
+rawfile,maps\_zombiemode_perks.gsc
 rawfile,maps\_zombiemode.gsc
 
 //============================================================================================
