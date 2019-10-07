@@ -15,6 +15,10 @@ rawfile,maps\apex\_utility_code.gsc
 //============================================================================================
 rawfile,clientscripts\apex\_zm_perks.csc
 rawfile,maps\apex\_zm_perks.gsc
+fx,misc\fx_zombie_cola_dtap_on
+fx,misc\fx_zombie_cola_jugg_on
+fx,misc\fx_zombie_cola_revive_on
+fx,misc\fx_zombie_cola_on
 
 // Juggernog
 rawfile,clientscripts\apex\perks\_zm_perk_juggernog.csc
