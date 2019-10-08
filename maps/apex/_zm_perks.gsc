@@ -204,6 +204,7 @@ spawn_perk_machines()
 		{
 			struct.machine = struct.machine_override;
 			model = struct.machine.model;
+			angles = struct.machine.angles;
 		}
 		else
 			struct.machine = spawn_model("tag_origin", origin, angles);
