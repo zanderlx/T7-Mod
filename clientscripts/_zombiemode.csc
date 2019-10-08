@@ -125,7 +125,6 @@ init_client_flags()
 	// Client flags for the player
 
 	level._ZOMBIE_PLAYER_FLAG_CLOAK_WEAPON = 14;
-	level._ZOMBIE_PLAYER_FLAG_DIVE2NUKE_VISION = 13;
 
 	if(isDefined(level.riser_fx_on_client) && level.riser_fx_on_client)
 	{
@@ -160,7 +159,6 @@ init_client_flag_callback_funcs()
 
 
 	// Callbacks for players
-	register_clientflag_callback( "player", level._ZOMBIE_PLAYER_FLAG_DIVE2NUKE_VISION, ::zombie_dive2nuke_visionset );
 	register_clientflag_callback("player", level._ZOMBIE_PLAYER_FLAG_CLOAK_WEAPON, ::player_toggle_cloak_handler);
 
 	if(isDefined(level.riser_fx_on_client) && level.riser_fx_on_client)
@@ -768,50 +766,6 @@ on_gib_event( localClientNum, type, locations )
 
 	self.gibbed = true;
 }
-
-// WW (01/12/11): Adding watcher function for dive to nuke's visionset and visual cues. Clientnotify will come from _zombiemode_perks
-// for Acension, the watcher is started in zombie_cosmodrome OnPlayConnect & OnPlayerSpawned. Self will be player
-zombie_dive2nuke_visionset( local_client_num, set, newEnt )
-{
-	self endon( "disconnect" );
-
-	if( local_client_num != 0 )
-	{
-		return;
-	}
-
-	if( set )
-	{
-		if( !IsDefined( self._zombie_visionset_list ) )
-		{
-			PrintLn( "********************* zombie visionset array is not defined *******************************" );
-		}
-
-		// get players
-		player = GetLocalPlayers()[ local_client_num ];
-		if ( player GetEntityNumber() != self GetEntityNumber() )
-		{
-			return;
-		}
-
-		time_to_apply_vision = 0;
-		time_to_remove_vision = 0.5;
-
-		// start the vision set
-		// WW (01/12/11): Breaking the priority rule here because this came after the black hole bomb. Greater than 10 is needed to trump the black hole
-		// TODO: Move this function to divetonuke perk script
-		clientscripts\apex\_utility::visionset_activate(local_client_num, "divetonuke_vision");
-
-		// wait before restoring it
-		wait( 0.5 );
-
-		// remove vision set
-		clientscripts\apex\_utility::visionset_deactivate(local_client_num, "divetonuke_vision");
-
-	}
-
-}
-
 
 sidequest_solo_completed_watcher()
 {
