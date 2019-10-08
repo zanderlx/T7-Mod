@@ -126,3 +126,5 @@ stringtable,weaponOptions.csv
 //============================================================================================
 rawfile,clientscripts\zombie_theater_fx.csc
 rawfile,clientscripts\zombie_theater.csc
+
+rawfile,maps\zombie_theater.gsc
