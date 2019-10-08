@@ -309,6 +309,59 @@ unregister_playertrigger(struct)
 }
 
 //============================================================================================
+// Player Health
+//============================================================================================
+register_player_health(func_qualifier, amount)
+{
+	if(!isdefined(level._zm_player_health_types))
+		level._zm_player_health_types = [];
+
+	struct = SpawnStruct();
+	struct.func_qualifier = func_qualifier;
+	struct.amount = amount;
+
+	level._zm_player_health_types[level._zm_player_health_types.size] = struct;
+}
+
+set_player_max_health(set_preMaxHealth, clamp_health_to_max_health)
+{
+	n_total_health = level.zombie_vars["player_base_health"];
+
+	if(isdefined(level._zm_player_health_types))
+	{
+		for(i = 0; i < level._zm_player_health_types.size; i++)
+		{
+			if(!isdefined(level._zm_player_health_types[i].amount))
+				continue;
+
+			can_apply = true;
+
+			if(isdefined(level._zm_player_health_types[i].func_qualifier))
+				can_apply = run_function(self, level._zm_player_health_types[i].func_qualifier);
+
+			if(can_apply)
+			{
+				if(IsInt(level._zm_player_health_types[i].amount))
+					n_total_health += level._zm_player_health_types[i].amount;
+				else
+					n_total_health += run_function(self, level._zm_player_health_types[i].amount);
+			}
+		}
+	}
+
+	n_total_health = Int(n_total_health); // health requires ints not floats
+
+	if(is_true(set_preMaxHealth))
+		self.preMaxHealth = self.maxhealth;
+
+	self.maxhealth = n_total_health;
+	self SetmaxHealth(n_total_health);
+
+	if(is_true(clamp_health_to_max_health))
+		self.health = Int(Min(self.health, n_total_health)); // .health only takes ints not floats
+}
+
+//============================================================================================
 // Fake Client Systems - xSanchez78
 //============================================================================================
 set_client_system_state(system_name, system_state, player)

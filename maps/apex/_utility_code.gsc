@@ -8,6 +8,8 @@
 //============================================================================================
 init_apex_utility()
 {
+	set_zombie_var("player_base_health", 100);
+
 	// Fake Client Systems - xSanchez78
 	registerClientSys("fake_client_systems");
 	playertrigger_init();

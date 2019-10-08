@@ -17,12 +17,22 @@ include_perk_for_level()
 	set_zombie_var("zombie_perk_juggernaut_health_upgrade", 190);
 
 	level.zombiemode_using_juggernaut_perk = true;
+	register_player_health(::playerhealth_can_give_juggernog_health, level.zombie_vars["zombie_perk_juggernaut_health"]);
+}
+
+playerhealth_can_give_juggernog_health()
+{
+	return self has_perk("jugg");
 }
 
 give_jugg()
 {
+	self set_player_max_health(true, false);
+	wait 3;
+	self notify("jugg_stop");
 }
 
 take_jugg(reason)
 {
+	self set_player_max_health(true, true);
 }
