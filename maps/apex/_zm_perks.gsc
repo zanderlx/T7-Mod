@@ -37,7 +37,7 @@ include_perks()
 		level._zm_perk_includes = ::default_include_perks;
 
 	set_zombie_var("zombie_perk_cost", 2000);
-	set_zombie_var("zombie_perk_bottle", "zombie_perk_juggernaut");
+	set_zombie_var("zombie_perk_bottle", "zombie_perk_bottle");
 	set_zombie_var("zombie_perk_hint", &"ZOMBIE_PERK_GENERIC");
 	set_zombie_var("zombie_perk_limit", 4);
 	set_zombie_var("zombie_perk_use_menu_hud", true);
@@ -556,26 +556,32 @@ should_ratain_perk(perk)
 //============================================================================================
 drink_from_perk_bottle(perk)
 {
-	bottle = get_perk_bottle(perk);
-	gun = self do_perk_bottle_drink_start(bottle);
+	gun = self do_perk_bottle_drink_start(perk);
 	result = self waittill_any("fake_death", "death", "player_downed", "weapon_change_complete");
-	self do_perk_bottle_drink_end(bottle, gun);
+	self do_perk_bottle_drink_end(perk, gun);
 }
 
-do_perk_bottle_drink_start(bottle)
+do_perk_bottle_drink_start(perk)
 {
 	self increment_is_drinking();
 	self disable_player_move_states(true);
+	bottle = get_perk_bottle(perk);
+	weapon_options = self get_perk_bottle_weapon_options(perk);
+	model_index = 0;
 	gun = self GetCurrentWeapon();
-	self GiveWeapon(bottle);
+
+	if(isdefined(level._custom_perks[perk].model_index))
+		model_index = level._custom_perks[perk].model_index;
+
+	self GiveWeapon(bottle, model_index, weapon_options);
 	self SwitchToWeapon(bottle);
 	return gun;
 }
 
-do_perk_bottle_drink_end(bottle, gun)
+do_perk_bottle_drink_end(perk, gun)
 {
 	self enable_player_move_states();
-	self TakeWeapon(bottle);
+	self TakeWeapon(get_perk_bottle(perk));
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;
@@ -877,6 +883,22 @@ get_perk_bottle(perk)
 	return bottle;
 }
 
+get_perk_bottle_weapon_options(perk)
+{
+	if(!isdefined(self._perk_bottle_weapon_options))
+		self._perk_bottle_weapon_options = [];
+	if(isdefined(self._perk_bottle_weapon_options[perk]))
+		return self._perk_bottle_weapon_options[perk];
+
+	camo_index = 0;
+
+	if(is_perk_valid(perk) && isdefined(level._custom_perks[perk].camo_index))
+		camo_index = level._custom_perks[perk].camo_index;
+
+	self._perk_bottle_weapon_options[perk] = self CalcWeaponOptions(camo_index);
+	return self._perk_bottle_weapon_options[perk];
+}
+
 //============================================================================================
 // Registry
 //============================================================================================
@@ -917,10 +939,12 @@ add_perk_specialty(perk, specialty)
 		level._custom_perks[perk].specialties[level._custom_perks[perk].specialties.size] = specialty;
 }
 
-register_perk_bottle(perk, bottle)
+register_perk_bottle(perk, bottle, model_index, camo_index)
 {
 	_register_undefined_perk(perk);
 	level._custom_perks[perk].bottle = bottle;
+	level._custom_perks[perk].model_index = model_index;
+	level._custom_perks[perk].camo_index = camo_index;
 }
 
 register_perk_machine(perk, hint, cost, machine_off, machine_on, light_fx)

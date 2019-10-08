@@ -22,18 +22,38 @@ fx,misc\fx_zombie_cola_dtap_on
 fx,misc\fx_zombie_cola_jugg_on
 fx,misc\fx_zombie_cola_revive_on
 fx,misc\fx_zombie_cola_on
+weapon,sp\zombie_perk_bottle
 
 // Juggernog
 rawfile,clientscripts\apex\perks\_zm_perk_juggernog.csc
 rawfile,maps\apex\perks\_zm_perk_juggernog.gsc
-// material,specialty_juggernaut_zombies
-material,uie_moto_perk_juggernog
-// weapon,sp\zombie_perk_bottle_jugg
-weapon,sp\zombie_perk_bottle_jugg_t7
+material,specialty_juggernaut_zombies
+material,mtl_zombie_perk_bottle_jugg
 // xmodel,zombie_vending_jugg
 // xmodel,zombie_vending_jugg_on
 xmodel,p7_zm_vending_jugg
 xmodel,p7_zm_vending_jugg_on
+
+// Double Tap
+material,mtl_zombie_perk_bottle_dbltap
+
+// Speed Cola
+material,mtl_zombie_perk_bottle_sleight
+
+// Quick Revive
+material,mtl_zombie_perk_bottle_revive
+
+// PHD Flopper
+material,mtl_zombie_perk_bottle_nuke
+
+// Stamin Up
+material,mtl_zombie_perk_bottle_marathon
+
+// Deadshot
+material,mtl_zombie_perk_bottle_deadshot
+
+// Mule Kick
+material,mtl_zombie_perk_bottle_three_gun
 
 //============================================================================================
 // Overriden Zombiemode Assets
