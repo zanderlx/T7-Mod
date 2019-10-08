@@ -119,6 +119,7 @@ rawfile,maps\_zombiemode_auto_turret.gsc
 rawfile,maps\_zombiemode_blockers.gsc
 rawfile,maps\_zombiemode_perks.gsc
 rawfile,maps\_zombiemode_powerups.gsc
+rawfile,maps\_zombiemode_traps.gsc
 rawfile,maps\_zombiemode.gsc
 
 menufile,ui\hud_zombie.txt
