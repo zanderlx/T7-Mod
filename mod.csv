@@ -9,6 +9,7 @@ rawfile,maps\apex\_debug.gsc
 rawfile,maps\apex\_load.gsc
 rawfile,maps\apex\_utility.gsc
 rawfile,maps\apex\_utility_code.gsc
+rawfile,maps\apex\_zm_power.gsc
 
 menufile,ui\hud_test.menu
 localize,mod
@@ -114,6 +115,7 @@ fx,apex\misc\fx_zombie_cola_arsenal_on
 //============================================================================================
 rawfile,clientscripts\_zombiemode.csc
 
+rawfile,maps\_zombiemode_blockers.gsc
 rawfile,maps\_zombiemode_perks.gsc
 rawfile,maps\_zombiemode_powerups.gsc
 rawfile,maps\_zombiemode.gsc
