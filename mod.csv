@@ -133,6 +133,7 @@ rawfile,clientscripts\zombie_theater_fx.csc
 rawfile,clientscripts\zombie_theater.csc
 
 rawfile,maps\zombie_theater_movie_screen.gsc
+rawfile,maps\zombie_theater_teleporter.gsc
 rawfile,maps\zombie_theater.gsc
 rawfile,animtrees\zombie_theater.atr
 xanim,o_zombie_theatre_curtain_close
