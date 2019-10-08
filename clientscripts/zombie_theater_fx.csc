@@ -273,48 +273,55 @@ light_model_swap( name, model )
 // Plays the fx set on the script string of the struct
 projector_screen_fx()
 {
-	projector_struct = getstruct( "struct_theater_projector_beam", "targetname" );
-	projector_ang = projector_struct.angles;
-	projector_up = AnglesToUp( projector_ang );
-	projector_forward = AnglesToForward( projector_ang );
-
-	screen_struct = getstruct( "struct_theater_screen", "targetname" );
-	screen_ang = screen_struct.angles;
-	screen_up = AnglesToUp( screen_ang );
-	screen_forward = AnglesToForward( screen_ang );
-
+	projector_struct = GetStruct("struct_theater_projector_beam", "targetname");
+	screen_struct = GetStruct("struct_theater_screen", "targetname");
 	projector_struct.screen_beam = [];
 	projector_struct.vid = [];
 
-	if( !IsDefined( screen_struct.script_string ) )
+	clientscripts\apex\_utility::add_level_notify_callback("sip", ::projector_screen_in_place, true, projector_struct, screen_struct);
+	clientscripts\apex\_utility::add_level_notify_callback("sipOff", ::projector_screen_in_place, false, projector_struct, screen_struct);
+
+	projector_reel_change_init(projector_struct);
+}
+
+projector_screen_in_place(clientnum, power_on, projector_struct, screen_struct)
+{
+	if(clientscripts\apex\_utility::is_true(power_on))
 	{
-		screen_struct.script_string = "ps0";
+		if(!isdefined(projector_struct.screen_beam[clientnum]))
+		{
+			beam = Spawn(clientnum, projector_struct.origin, "script_model");
+			beam.angles = projector_struct.angles;
+			beam SetModel("tag_origin");
+			beam.fx_id = PlayFXOnTag(clientnum, level._effect["theater_projector_beam"], beam, "tag_origin");
+
+			projector_struct.screen_beam[clientnum] = beam;
+		}
+
+		if(!isdefined(projector_struct.vid[clientnum]))
+		{
+			vid = Spawn(clientnum, screen_struct.origin, "script_model");
+			vid.angles = screen_struct.angles;
+			vid SetModel("tag_origin");
+			vid.fx_id = PlayFXOnTag(clientnum, level._effect["projector_screen_0"], vid, "tag_origin");
+
+			projector_struct.vid[clientnum] = vid;
+		}
 	}
-
-	// wait for the screen to get in place
-	level waittill( "sip" ); // "screen in place"
-
-	// start the projector beam
-	players = getlocalplayers();
-	for( i = 0; i < players.size; i++ )
+	else
 	{
-		projector_struct.screen_beam[i] = Spawn( i, projector_struct.origin, "script_model" );
-		projector_struct.screen_beam[i].angles = projector_struct.angles;
-		projector_struct.screen_beam[i] SetModel( "tag_origin" );
-		PlayFXOnTag( i, level._effect[ "theater_projector_beam" ], projector_struct.screen_beam[i], "tag_origin" );
-	}
+		if(isdefined(projector_struct.screen_beam[clientnum]))
+		{
+			projector_struct.screen_beam[clientnum] Delete();
+			projector_struct.screen_beam[clientnum] = undefined;
+		}
 
-	for( i = 0; i < players.size; i++ )
-	{
-		//projector_struct.vid[i] = undefined;
-		projector_struct.vid[i] = Spawn( i, screen_struct.origin, "script_model" );
-		projector_struct.vid[i].angles = screen_struct.angles;
-		projector_struct.vid[i] SetModel( "tag_origin" );
-		PlayFXOnTag( i, level._effect[ "projector_screen_0" ], projector_struct.vid[i], "tag_origin" );
+		if(isdefined(projector_struct.vid[clientnum]))
+		{
+			projector_struct.vid[clientnum] Delete();
+			projector_struct.vid[clientnum] = undefined;
+		}
 	}
-
-	// watch for reel notifies init
-	projector_reel_change_init( projector_struct );
 }
 
 // ww: play the new screen fx based on which one was dropped off

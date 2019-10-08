@@ -104,28 +104,48 @@ setupCurtains()
 	stub.curtains_clip = GetEnt("theater_curtains_clip", "targetname");
 	stub.curtains_clip Solid();
 	stub.curtains_clip DisconnectPaths();
+	stub.movie_screen = GetEnt("movie_screen", "targetname");
+	stub.movie_screen NotSolid();
+	stub.movie_screen Hide();
+	stub.movie_screen.up_origin = stub.movie_screen.origin;
+	stub.movie_screen.down_origin = stub.movie_screen.up_origin - (0, 0, 466);
 }
 
 curtains_power_on()
 {
+	self.movie_screen Solid();
+	self.movie_screen Show();
+	self.movie_screen MoveTo(self.movie_screen.down_origin, 6);
+	self.movie_screen PlaySound("evt_screen_lower");
+	self.movie_screen thread enable_movie_images();
 	self.curtains NotSolid();
 	self.curtains_clip NotSolid();
 	self.curtains_clip ConnectPaths();
 	self.curtains maps\zombie_theater::theater_playanim("curtains_move");
 	self.curtains waittill("curtains_move_done");
 	flag_set("curtains_done");
-	level thread lower_movie_screen();
+}
+
+enable_movie_images()
+{
+	self notify("enable_movie_images");
+	self endon("enable_movie_images");
+	self endon("power_off");
+	self waittill("movedone");
+	level maps\apex\_utility::levelNotify("sip");
 }
 
 curtains_power_off()
 {
+	level maps\apex\_utility::levelNotify("sipOff");
+	self.movie_screen MoveTo(self.movie_screen.up_origin, 6);
+	self.movie_screen notify("power_off");
 	self.curtains Solid();
 	self.curtains_clip Solid();
 	self.curtains maps\zombie_theater::theater_playanim("curtains_move_close");
 	self.curtains waittill("curtains_move_close_done");
 	self.curtains_clip DisconnectPaths();
 	flag_clear("curtains_done");
-	// TODO: Raise movie screen
 }
 
 moveCurtains(curtent)
