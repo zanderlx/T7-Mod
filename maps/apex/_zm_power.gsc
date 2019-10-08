@@ -50,6 +50,7 @@ electric_switch_think()
 	trigger.script_string = "allow_power_off";
 	trigger.power_on = false;
 	trigger thread electric_switch_watch_power_state();
+	ent = spawn_model("tag_origin", fx_pos, (0, 0, 0));
 
 	for(;;)
 	{
@@ -64,7 +65,8 @@ electric_switch_think()
 			handle waittill("rotatedone");
 		}
 
-		PlayFX(level._effect["switch_sparks"], fx_pos);
+		// PlayFX(level._effect["switch_sparks"], fx_pos);
+		PlayFXOnTag(level._effect["switch_sparks"], ent, "tag_origin");
 
 		if(isdefined(handle))
 			handle PlaySound("zmb_turn_on");
@@ -78,6 +80,8 @@ electric_switch_think()
 		trigger SetHintString(&"ZOMBIE_ELECTRIC_SWITCH_OFF");
 		trigger waittill("trigger", player);
 		trigger.power_on = false;
+		ent Delete();
+		ent = spawn_model("tag_origin", fx_pos, (0, 0, 0));
 
 		if(isdefined(handle))
 		{
