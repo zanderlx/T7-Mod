@@ -259,7 +259,10 @@ spawn_perk_machines()
 		struct.power_on = false;
 
 		if(isdefined(level._custom_perks[perk].jingle))
+		{
 			struct thread perk_machine_jingle_timer();
+			struct thread play_random_broken_sounds();
+		}
 
 		register_playertrigger(struct, ::playertrigger_think);
 		level._zm_perk_machines[perk][level._zm_perk_machines[perk].size] = struct;
@@ -468,18 +471,23 @@ delete_perk_machines_think()
 {
 	unregister_playertrigger(self);
 
+	if(is_true(self.hidden))
+		return;
+
 	self.power_on = false;
+	self.hidden = true;
 	self.machine notify("stop_perk_power_effects");
 
+	origin = self.machine.origin;
 	self.machine PlaySound("zmb_box_move");
-	PlaySoundAtPosition("zmb_whoosh", self.origin);
-	self.machine MoveTo(self.origin + (0, 0, 40), 3);
+	PlaySoundAtPosition("zmb_whoosh", origin);
+	self.machine MoveTo(origin + (0, 0, 40), 3);
 
 	if(isdefined(level.custom_vibrate_func))
 		run_function(self.machine, level.custom_vibrate_func, self.machine);
 	else
 	{
-		dir = self.origin;
+		dir = origin;
 		dir = (dir[1], dir[0], 0);
 
 		if(dir[1] < 0 || (dir[0] > 0 && dir[1] > 0))
@@ -491,33 +499,76 @@ delete_perk_machines_think()
 	}
 
 	self.machine waittill("movedone");
-	PlayFX(level._effect["poltergeist"], self.origin);
-	PlaySoundAtPosition("zmb_box_poof", self.origin);
+	PlayFX(level._effect["poltergeist"], origin);
+	PlaySoundAtPosition("zmb_box_poof", origin);
 	self.machine Hide();
 	self.machine NotSolid();
 	self.clip ConnectPaths();
 	self.clip trigger_off();
 	self.bump trigger_off();
+	self.machine.origin = origin;
+}
+
+reenable_perk_machines(perk)
+{
+	machines = get_perk_machines(perk);
+	array_thread(machines, ::reenable_perk_machines_think);
+}
+
+reenable_perk_machines_think()
+{
+	if(!is_true(self.hidden))
+		return;
+
+	self.clip trigger_on();
+	self.clip DisconnectPaths();
+	self.machine Show();
+	self.machine Solid();
+	self.bump trigger_on();
+	PlayFX(level._effect["poltergeist"], self.origin);
+	PlaySoundAtPosition("zmb_box_poof", self.origin);
+	self.hidden = false;
+
+	if(flag("power_on") || is_true(level._custom_perks[self.script_noteworthy].ignore_power))
+		self perk_power_on();
+	else
+		self perk_power_off();
+
+	register_playertrigger(self, ::playertrigger_think);
 }
 
 // custom function to allow
 // power on / off
 perk_machine_jingle_timer()
 {
-	// zombiemode audio uses this
-	// to determine which broken
-	// sound logic to use
-	self.machine.script_sound = level._custom_perks[self.script_noteworthy].jingle;
-	self.machine thread maps\_zombiemode_audio::play_random_broken_sounds();
-
 	for(;;)
 	{
 		wait RandomFloatRange(31, 45);
 
 		if(!is_true(self.power_on))
 			continue;
+		if(is_true(self.hidden))
+			continue;
 		if(RandomInt(100) < 15)
-			self.machine thread maps\_zombiemode_audio::play_jingle_or_stinger(self.machine.script_sound);
+			self.machine thread maps\_zombiemode_audio::play_jingle_or_stinger(level._custom_perks[self.script_noteworthy].jingle);
+	}
+}
+
+play_random_broken_sounds()
+{
+	for(;;)
+	{
+		wait RandomFloatRange(7, 18);
+
+		if(!is_true(self.power_on))
+			continue;
+		if(is_true(self.hidden))
+			continue;
+
+		PlaySoundAtPosition("evt_electrical_surge", self.origin);
+
+		if(self.script_noteworthy == "revive")
+			PlaySoundAtPosition("zmb_perks_broken_jingle", self.origin);
 	}
 }
 
