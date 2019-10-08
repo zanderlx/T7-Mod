@@ -28,8 +28,6 @@ playerhealth_can_give_juggernog_health()
 give_jugg()
 {
 	self set_player_max_health(true, false);
-	wait 3;
-	self notify("jugg_stop");
 }
 
 take_jugg(reason)

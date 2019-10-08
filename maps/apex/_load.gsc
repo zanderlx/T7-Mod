@@ -193,7 +193,6 @@ disable_zone(zone_name)
 	if(!is_true(level.zones[zone_name].is_enabled))
 		return;
 
-	IPrintLnBold("deactivating &&1 zone", zone_name);
 	spawn_points = GetStructArray("player_respawn_point", "targetname");
 	entry_points = GetStructArray(zone_name + "_barriers", "targetname");
 	players = GetPlayers(); // maps\_zombiemode_zone_manager::get_players_in_zone(zone_name); // returns amount of players not array of players
@@ -214,21 +213,12 @@ disable_zone(zone_name)
 	for(i = 0; i < zombies.size; i++)
 	{
 		if(!isdefined(zombies[i]) || !IsAlive(zombies[i]))
-		{
-			IPrintLnBold("zombie died");
 			continue;
-		}
-
 		if(!zombies[i] maps\_zombiemode_zone_manager::entity_in_zone(zone_name))
-		{
-			IPrintLnBold("zombie not in zone &&1", zone_name);
 			continue;
-		}
 
 		// zombie in disabled zone
 		// kill and respawn the zombie
-		IPrintLnBold("zombie in disabled zone, killing and respawning (&&1)", zombies[i].origin);
-
 		if(is_true(level.put_timed_out_zombies_back_in_queue) && !flag("dog_round"))
 		{
 			if(!zombies[i].ignoreall && !is_true(zombies[i].nuked) && !is_true(zombies[i].marked_for_death))
@@ -247,8 +237,6 @@ disable_zone(zone_name)
 				continue;
 			if(!players[i] maps\_zombiemode_zone_manager::entity_in_zone(zone_name))
 				continue;
-
-			IPrintLnBold("player in disabled zone, moving to nearest respawn point");
 
 			origin = players[i].spectator_respawn.origin;
 			angles = players[i].spectator_respawn.angles;
