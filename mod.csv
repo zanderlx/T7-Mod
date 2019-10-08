@@ -116,6 +116,7 @@ fx,apex\misc\fx_zombie_cola_arsenal_on
 rawfile,clientscripts\_zombiemode.csc
 
 rawfile,maps\_zombiemode_auto_turret.gsc
+rawfile,maps\_zombiemode_devgui.gsc
 rawfile,maps\_zombiemode_blockers.gsc
 rawfile,maps\_zombiemode_perks.gsc
 rawfile,maps\_zombiemode_powerups.gsc
