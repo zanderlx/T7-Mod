@@ -41,6 +41,7 @@ include_perks()
 	set_zombie_var("zombie_perk_hint", &"ZOMBIE_PERK_GENERIC");
 	set_zombie_var("zombie_perk_limit", 4);
 	set_zombie_var("zombie_perk_use_menu_hud", true);
+	set_zombie_var("zombie_perk_collision_model", "collision_geo_64x64x256");
 
 	run_function(level, level._zm_perk_includes);
 }
@@ -70,6 +71,7 @@ precache_perks()
 	perks = get_valid_perks_array();
 	PrecacheItem(level.zombie_vars["zombie_perk_bottle"]);
 	PrecacheString(level.zombie_vars["zombie_perk_hint"]);
+	PrecacheModel(level.zombie_vars["zombie_perk_collision_model"]);
 
 	level._effect["perk_light_yellow"]= LoadFX("misc/fx_zombie_cola_dtap_on");
 	level._effect["perk_light_red"]= LoadFX("misc/fx_zombie_cola_jugg_on");
@@ -182,6 +184,8 @@ spawn_perk_machines()
 
 		if(!isdefined(struct.origin) || !isdefined(struct.script_noteworthy))
 			continue;
+		if(!is_perk_valid(struct.script_noteworthy))
+			continue;
 
 		origin = struct.origin;
 		perk = struct.script_noteworthy;
@@ -217,6 +221,9 @@ spawn_perk_machines()
 		struct.clip.angles = angles;
 		struct.clip DisconnectPaths();
 		struct.clip Hide();
+
+		if(struct.clip.classname == "script_model")
+			struct.clip SetModel(level.zombie_vars["zombie_perk_collision_model"]);
 
 		// Spawn perk bump trigger
 		struct.bump = Spawn("trigger_radius", origin, 0, 40, 50);
