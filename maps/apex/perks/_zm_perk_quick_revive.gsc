@@ -31,7 +31,7 @@ include_perk_for_level()
 	maps\apex\_zm_perks::add_perk_specialty("revive", "specialty_quickrevive");
 
 	level.zombiemode_using_revive_perk = true;
-	level._effect["revive_light_flicker"] = LoadFX("maps/zombie/fx_zmb_cola_revive_flicker");
+	level._effect["revive_light_flicker"] = LoadFX("misc/fx_zmb_cola_revive_flicker");
 }
 
 give_revive()
