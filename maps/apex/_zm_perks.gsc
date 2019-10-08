@@ -159,8 +159,12 @@ generate_perk_spawn_struct(perk, origin, angles)
 {
 	struct = SpawnStruct();
 	struct.origin = origin;
-	struct.angles = angles;
 	struct.script_noteworthy = perk;
+
+	if(isdefined(angles))
+		struct.angles = angles + (0, 90, 0);
+	else
+		struct.angles = (0, 0, 0);
 
 	if(!isdefined(level._generated_perk_machines))
 		level._generated_perk_machines = [];
