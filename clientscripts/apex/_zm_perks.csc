@@ -33,14 +33,14 @@ player_connect(clientnum)
 default_include_perks()
 {
 	clientscripts\apex\perks\_zm_perk_juggernog::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_doubletap::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_sleight_of_hand::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_quick_revive::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_double_tap::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_sleight_of_hand::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_quick_revive::include_perk_for_level();
 
-	// clientscripts\apex\perks\_zm_perk_divetonuke::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_marathon::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_deadshot::include_perk_for_level();
-	// clientscripts\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_divetonuke::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_marathon::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_deadshot::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
 
 	// clientscripts\apex\perks\_zm_perk_tombstone::include_perk_for_level();
 	// clientscripts\apex\perks\_zm_perk_chugabud::include_perk_for_level();

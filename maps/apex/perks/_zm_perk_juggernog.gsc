@@ -16,7 +16,7 @@ include_perk_for_level()
 	set_zombie_var("zombie_perk_juggernaut_health", 160);
 	set_zombie_var("zombie_perk_juggernaut_health_upgrade", 190);
 
-	level.zombiemode_using_juggernog_perk = true;
+	level.zombiemode_using_juggernaut_perk = true;
 }
 
 give_jugg()

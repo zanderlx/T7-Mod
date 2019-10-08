@@ -26,7 +26,7 @@
 DRAW_PERK_SLOT("jugg")
 DRAW_PERK_SLOT("doubletap")
 DRAW_PERK_SLOT("revive")
-DRAW_PERK_SLOT("sleight")
+DRAW_PERK_SLOT("speed_cola")
 
 // Black Ops 1
 DRAW_PERK_SLOT("divetonuke")
