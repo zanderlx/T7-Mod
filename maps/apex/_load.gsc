@@ -45,6 +45,12 @@ solo_game_init()
 power_off_zones_init()
 {
 	maps\apex\_zm_power::add_powerable(false, undefined, ::zones_power_off);
+
+	while(!flag_exists("zones_initialized"))
+	{
+		wait .05;
+	}
+
 	flag_wait("zones_initialized");
 
 	zone_names = GetArrayKeys(level.zones);
