@@ -14,6 +14,7 @@ include_perk_for_level()
 	maps\apex\_zm_perks::add_perk_specialty("doubletap", "specialty_rof");
 
 	level.zombiemode_using_doubletap_perk = true;
+	OnPlayerConnect_Callback(::set_doubletap2_dvar);
 }
 
 give_doubletap()
@@ -22,4 +23,9 @@ give_doubletap()
 
 take_doubletap(reason)
 {
+}
+
+set_doubletap2_dvar()
+{
+	self SetClientDvar("perk_weapRateEnhanced", "1");
 }
