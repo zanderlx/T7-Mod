@@ -113,10 +113,6 @@ main()
 	level thread barricade_glitch_fix();
 
 	visionsetnaked( "zombie_theater", 0 );
-	// DSM: Setting chandelier Scale
-	chandelier = getentarray("theater_chandelier","targetname");
-	array_thread( chandelier, ::theater_chandelier_model_scale );
-
 	maps\zombie_theater_teleporter::teleport_pad_hide_use();
 
 	level thread maps\zombie_theater_ffotd::main_end();
@@ -139,6 +135,7 @@ anim_override_func()
 curtain_anim_init()
 {
 	level.scr_anim["curtains_move"] = %o_zombie_theatre_curtain;
+	level.scr_anim["curtains_move_close"] = %o_zombie_theatre_curtain_close;
 }
 
 theater_playanim( animname )
@@ -308,9 +305,6 @@ init_zombie_theater()
 	flag_init( "dining_occupied" );
 	flag_init( "special_quad_round" );
 
-
-	level thread electric_switch();
-
 	// Setup the magic box map
 	thread maps\zombie_theater_magic_box::magic_box_init();
 
@@ -339,82 +333,6 @@ teleporter_intro()
 	playsoundatposition( "evt_beam_fx_2d", (0,0,0) );
     playsoundatposition( "evt_pad_cooldown_2d", (0,0,0) );
 }
-
-//*****************************************************************************
-// ELECTRIC SWITCH
-// once this is used, it activates other objects in the map
-// and makes them available to use
-//*****************************************************************************
-electric_switch()
-{
-	trig = getent("use_elec_switch","targetname");
-	trig sethintstring(&"ZOMBIE_ELECTRIC_SWITCH");
-	trig setcursorhint( "HINT_NOICON" );
-
-
-	level thread wait_for_power();
-
-	trig waittill("trigger",user);
-
-	trig delete();
-	flag_set( "power_on" );
-	Objective_State(8,"done");
-}
-
-
-//
-//	Wait for the power_on flag to be set.  This is needed to work in conjunction with
-//		the devgui cheat.
-//
-wait_for_power()
-{
-	master_switch = getent("elec_switch","targetname");
-	master_switch notsolid();
-
-	flag_wait( "power_on" );
-
-	master_switch rotateroll(-90,.3);
-	master_switch playsound("zmb_switch_flip");
-
-	clientnotify( "ZPO" );		// Zombie power on.
-
-	master_switch waittill("rotatedone");
-	playfx(level._effect["switch_sparks"] ,getstruct("elec_switch_fx","targetname").origin);
-
-	//Sound - Shawn J  - adding temp sound to looping sparks & turning on power sources
-	master_switch playsound("zmb_turn_on");
-
-	//get the teleporter ready
-	maps\zombie_theater_teleporter::teleporter_init();
-	wait_network_frame();
-	// Set Perk Machine Notifys
-	level notify("revive_on");
-	wait_network_frame();
-	level notify("juggernog_on");
-	wait_network_frame();
-	level notify("sleight_on");
-	wait_network_frame();
-	level notify("doubletap_on");
-	wait_network_frame();
-	level notify("Pack_A_Punch_on" );
-	wait_network_frame();
-
-	// start quad round
-	// Set number of quads per round
-	players = get_players();
-	level.quads_per_round = 4 * players.size;	// initial setting
-
-	level notify("quad_round_can_end");
-	level.delay_spawners = undefined;
-
-	//maps\zombie_theater_quad::begin_quad_introduction("theater_round");
-	//level.round_spawn_func = maps\zombie_theater_quad::Intro_Quad_Spawn;;
-	//maps\zombie_theater_quad::Theater_Quad_Round();
-
-	// DCS: start check for potential quad waves after power turns on.
-	level thread quad_wave_init();
-}
-
 //AUDIO
 
 init_sounds()
@@ -590,22 +508,6 @@ time_for_quad_wave(zone_name)
 	}
 	level thread time_for_quad_wave(zone_name);
 }
-// DSM: Setting Chandelier Model Scale
-
-theater_chandelier_model_scale()
-{
-	flag_wait( "power_on" );
-
-	if( self.model == "zombie_theater_chandelier1arm_off")
-	{
-		self SetModel("zombie_theater_chandelier1arm_on");
-	}
-	else if( self.model == "zombie_theater_chandelier1_off")
-	{
-		self SetModel("zombie_theater_chandelier1_on");
-	}
-
-}
 
 set_rope_collision()
 {
@@ -698,6 +600,41 @@ barricade_glitch_fix()
 setup_t7_mod()
 {
 	level._zm_perk_includes = ::theater_include_perks;
+	setup_extra_powerables();
+}
+
+//============================================================================================
+// Extra Powerable
+//============================================================================================
+setup_extra_powerables()
+{
+	flag_init("theater_powered_on", false);
+
+	maps\apex\_zm_power::add_powerable(false, ::theater_power_on, undefined);
+}
+
+theater_power_on()
+{
+	if(flag("theater_powered_on"))
+		return;
+
+	flag_set("theater_powered_on");
+	chandelier = GetEntArray("theater_chandelier", "targetname");
+
+	level notify("Pack_A_Punch_on");
+	maps\zombie_theater_teleporter::teleporter_init();
+	level.quads_per_round = 4 * GetPlayers().size;
+	level notify("quad_round_can_end");
+	level.delay_spawners = undefined;
+	level thread quad_wave_init();
+
+	for(i = 0; i < chandelier.size; i++)
+	{
+		if(chandelier[i].model == "zombie_theater_chandelier1arm_off")
+			chandelier[i] SetModel("zombie_theater_chandelier1arm_on");
+		else if(chandelier[i].model == "zombie_theater_chandelier1_off")
+			chandelier[i] SetModel("zombie_theater_chandelier1_on");
+	}
 }
 
 //============================================================================================

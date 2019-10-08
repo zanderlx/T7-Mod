@@ -2,6 +2,10 @@ VERSION				"1"
 CONFIG				"C:\projects\cod\t5\bin\StringEd.cfg"
 FILENOTES			""
 
+// Power
+REFERENCE			ELECTRIC_SWITCH_OFF
+LANG_ENGLISH		"Hold ^3&&1^7 to Turn Off the Power"
+
 // Perks
 REFERENCE			PERK_TOMBSTONE
 LANG_ENGLISH		"Hold ^3[{+activate}]^7 to buy Tombstone [Cost: &&1]"

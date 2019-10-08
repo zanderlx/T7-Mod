@@ -99,49 +99,31 @@ precache_perks()
 //============================================================================================
 // Power
 //============================================================================================
-perk_power_think()
-{
-	// flag_wait("begin_spawning");
-	level waittill("fade_introblack");
-
-	if(is_true(level._custom_perks[self.script_noteworthy].ignore_power))
-	{
-		self perk_power_on();
-		return;
-	}
-
-	for(;;)
-	{
-		flag_wait("power_on");
-		self perk_power_on();
-		flag_waitopen("power_on");
-		self perk_power_off();
-	}
-}
-
 perk_power_on()
 {
-	perk = self.script_noteworthy;
+	stub = self.playertrigger;
+	perk = stub.script_noteworthy;
 
 	if(isdefined(level._custom_perks[perk].machine_on))
-		self.machine SetModel(level._custom_perks[perk].machine_on);
+		stub.machine SetModel(level._custom_perks[perk].machine_on);
 
-	self.machine Vibrate((0, -100, 0), .3, .4, 3);
-	self.machine PlaySound("zmb_perks_power_on");
-	self.machine thread perk_power_effects_think(perk);
-	self.power_on = true;
+	stub.machine Vibrate((0, -100, 0), .3, .4, 3);
+	stub.machine PlaySound("zmb_perks_power_on");
+	stub.machine thread perk_power_effects_think(perk);
+	stub.power_on = true;
 }
 
 perk_power_off()
 {
-	self.power_on = false;
-	perk = self.script_noteworthy;
+	stub = self.playertrigger;
+	stub.power_on = false;
+	perk = stub.script_noteworthy;
 
 	if(isdefined(level._custom_perks[perk].machine_off))
-		self.machine SetModel(level._custom_perks[perk].machine_off);
+		stub.machine SetModel(level._custom_perks[perk].machine_off);
 
-	self.machine notify("stop_perk_power_effects");
-	self.machine Vibrate((0, -100, 0), .3, .4, 3);
+	stub.machine notify("stop_perk_power_effects");
+	stub.machine Vibrate((0, -100, 0), .3, .4, 3);
 }
 
 perk_power_effects_think(perk)
@@ -247,8 +229,10 @@ spawn_perk_machines()
 		struct.bump.angles = angles;
 		struct.bump thread perk_audio_bump_trigger_think();
 
-		// power
-		struct thread perk_power_think();
+		// powerable
+		struct.powerable = maps\apex\_zm_power::add_powerable(level._custom_perks[perk].ignore_power, ::perk_power_on, ::perk_power_off);
+		struct.powerable.ignore_power = level._custom_perks[perk].ignore_power;
+		struct.powerable.playertrigger = struct;
 
 		// Setup spawn struct as a playertrigger stub
 		struct.origin = origin + (0, 0, 60);
@@ -476,6 +460,7 @@ delete_perk_machines_think()
 
 	self.power_on = false;
 	self.hidden = true;
+	self.powerable.ignore_power = true;
 	self.machine notify("stop_perk_power_effects");
 
 	origin = self.machine.origin;
@@ -529,10 +514,19 @@ reenable_perk_machines_think()
 	PlaySoundAtPosition("zmb_box_poof", self.origin);
 	self.hidden = false;
 
-	if(flag("power_on") || is_true(level._custom_perks[self.script_noteworthy].ignore_power))
-		self perk_power_on();
+	if(maps\apex\_zm_power::is_power_on() || is_true(level._custom_perks[self.script_noteworthy].ignore_power))
+	{
+		self.powerable.power_on = true;
+		self.powerable perk_power_on();
+	}
 	else
-		self perk_power_off();
+	{
+		self.powerable.power_on = false;
+		self.powerable perk_power_off();
+	}
+
+	if(!is_true(level._custom_perks[self.script_noteworthy].ignore_power))
+		self.powerable.ignore_power = false;
 
 	register_playertrigger(self, ::playertrigger_think);
 }

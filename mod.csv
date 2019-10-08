@@ -125,9 +125,12 @@ localize,zombie
 stringtable,weaponOptions.csv
 
 //============================================================================================
-// Overriden zombie_theater Assets
+// Custom / Overriden zombie_theater Assets
 //============================================================================================
 rawfile,clientscripts\zombie_theater_fx.csc
 rawfile,clientscripts\zombie_theater.csc
 
+rawfile,maps\zombie_theater_movie_screen.gsc
 rawfile,maps\zombie_theater.gsc
+rawfile,animtrees\zombie_theater.atr
+xanim,o_zombie_theatre_curtain_close
