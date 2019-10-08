@@ -93,9 +93,11 @@ disable_zone(zone_name)
 	if(!is_true(level.zones[zone_name].is_enabled))
 		return;
 
-	level.zones[zone_name].is_enabled = false;
+	IPrintLnBold("deactivating &&1 zone", zone_name);
 	spawn_points = GetStructArray("player_respawn_point", "targetname");
 	entry_points = GetStructArray(zone_name + "_barriers", "targetname");
+	players = GetPlayers(); // maps\_zombiemode_zone_manager::get_players_in_zone(zone_name); // returns amount of players not array of players
+	zombies = GetAISpeciesArray("axis", "all");
 
 	for(i = 0; i < spawn_points.size; i++)
 	{
@@ -108,4 +110,74 @@ disable_zone(zone_name)
 		entry_points[i].is_active = false;
 		entry_points[i] trigger_off();
 	}
+
+	for(i = 0; i < zombies.size; i++)
+	{
+		if(!isdefined(zombies[i]) || !IsAlive(zombies[i]))
+		{
+			IPrintLnBold("zombie died");
+			continue;
+		}
+
+		if(!zombies[i] maps\_zombiemode_zone_manager::entity_in_zone(zone_name))
+		{
+			IPrintLnBold("zombie not in zone &&1", zone_name);
+			continue;
+		}
+
+		// zombie in disabled zone
+		// kill and respawn the zombie
+		IPrintLnBold("zombie in disabled zone, killing and respawning (&&1)", zombies[i].origin);
+
+		if(is_true(level.put_timed_out_zombies_back_in_queue) && !flag("dog_round"))
+		{
+			if(!zombies[i].ignoreall && !is_true(zombies[i].nuked) && !is_true(zombies[i].marked_for_death))
+				level.zombie_total++;
+		}
+
+		level.zombies_timeout_playspace++;
+		zombies[i] DoDamage(zombies[i].maxhealth + 1, (0, 0, 0));
+	}
+
+	if(isdefined(players) && players.size > 0)
+	{
+		for(i = 0; i < players.size; i++)
+		{
+			if(!isdefined(players[i]) || players[i].sessionstate == "spectator")
+				continue;
+			if(!players[i] maps\_zombiemode_zone_manager::entity_in_zone(zone_name))
+				continue;
+
+			IPrintLnBold("player in disabled zone, moving to nearest respawn point");
+
+			origin = players[i].spectator_respawn.origin;
+			angles = players[i].spectator_respawn.angles;
+
+			new_origin = undefined;
+
+			if(isdefined(level.check_valid_spawn_override))
+				new_origin = run_function(players[i], level.check_valid_spawn_override, players[i]);
+			if(!isdefined(new_origin))
+				new_origin = players[i] maps\_zombiemode::check_for_valid_spawn_near_team(players[i]);
+			if(isdefined(new_origin))
+				origin = new_origin;
+
+			players[i] DontInterpolate();
+			players[i] SetOrigin(origin);
+			players[i] SetPlayerAngles(angles);
+			players[i] thread short_god_mode();
+		}
+	}
+
+	level.zones[zone_name].is_enabled = false; // disable last so entity_in_zone can return true
+}
+
+short_god_mode()
+{
+	self endon("disconnect");
+	self endon("death");
+	self endon("fake_death");
+	self EnableInvulnerability();
+	wait 3.5;
+	self DisableInvulnerability();
 }
