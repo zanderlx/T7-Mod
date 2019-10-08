@@ -40,7 +40,10 @@ solo_game_init()
 //============================================================================================
 // Zone Powerable
 //
-// Disables any zones with the 'power_on' flag when power is disabled
+// Disables zones when power is turned off
+// if the only flag for the zone is 'power_on'
+// if zone has more than 1 activation flag
+// we assume it can be accesed by other means then just the power activating
 //===========================================================================================
 power_off_zones_init()
 {
@@ -55,11 +58,13 @@ power_off_zones_init()
 
 	zone_names = GetArrayKeys(level.zones);
 	level._zm_power_off_zone_names = [];
+	flags = []; // array for flags seperated by zone name, built from all ajacent zones
 
 	for(i = 0; i < zone_names.size; i++)
 	{
 		zone_name = zone_names[i];
 		zone = level.zones[zone_name];
+		// /# level thread zone_debug(zone_name); #/
 
 		if(!isdefined(zone.adjacent_zones) || zone.adjacent_zones.size == 0)
 			continue;
@@ -71,13 +76,108 @@ power_off_zones_init()
 			adjacent_zone_name = adjacent_zone_names[j];
 			adjacent_zone = zone.adjacent_zones[adjacent_zone_name];
 
-			if(IsInArray(adjacent_zone.flags, "power_on"))
+			if(!isdefined(flags[adjacent_zone_name]))
+				flags[adjacent_zone_name] = [];
+			if(isdefined(adjacent_zone.flags) && adjacent_zone.flags.size > 0)
+				flags[adjacent_zone_name] = array_merge(flags[adjacent_zone_name], adjacent_zone.flags);
+		}
+	}
+
+	for(i = 0; i < zone_names.size; i++)
+	{
+		zone_name = zone_names[i];
+
+		if(isdefined(flags[zone_name]) && flags[zone_name].size == 1 && flags[zone_name][0] == "power_on")
+			level._zm_power_off_zone_names[level._zm_power_off_zone_names.size] = zone_name;
+	}
+
+	// level thread power_zone_debug();
+}
+
+power_zone_debug()
+{
+	/#
+	flag_wait("begin_spawning");
+
+	for(;;)
+	{
+		maps\apex\_debug::DrawStringList((0, 0, 100), level._zm_power_off_zone_names, (1, 1, 1));
+		wait .05;
+	}
+	#/
+}
+
+zone_debug(zone_name)
+{
+	/#
+	flag_wait("begin_spawning");
+
+	mins = (-16, -16, -16);
+	maxs = (16, 16, 16);
+
+	zone = level.zones[zone_name];
+
+	list = array("Zone: " + zone_name);
+
+	if(IsInArray(level._zm_power_off_zone_names, zone_name))
+		list[list.size] = "Power Off Zone: TRUE";
+	else
+		list[list.size] = "Power Off Zone: FALSE";
+
+	if(isdefined(zone.adjacent_zones) && zone.adjacent_zones.size > 0)
+	{
+		list[list.size] = "";
+		list[list.size] = "Adjacent Zones:";
+		adjacent_zone_names = GetArrayKeys(zone.adjacent_zones);
+
+		for(i = 0; i < adjacent_zone_names.size; i++)
+		{
+			adjacent_zone_name = adjacent_zone_names[i];
+			adjacent_zone = zone.adjacent_zones[adjacent_zone_name];
+			list[list.size] = "    " + adjacent_zone_name;
+
+			if(isdefined(adjacent_zone.flags) && adjacent_zone.flags.size > 0)
 			{
-				level._zm_power_off_zone_names[level._zm_power_off_zone_names.size] = zone_name;
-				break;
+				str = "        flags: ";
+
+				for(j = 0; j < adjacent_zone.flags.size; j++)
+				{
+					str += adjacent_zone.flags[j];
+
+					if(j + 1 < adjacent_zone.flags.size)
+						str += ", ";
+				}
+
+				list[list.size] = str;
 			}
 		}
 	}
+
+	for(;;)
+	{
+		wait .05;
+		player = GetPlayers()[0];
+
+		if(!isdefined(player))
+			continue;
+
+		zone = level.zones[zone_name];
+
+		if(isdefined(zone.volumes))
+		{
+			for(i = 0; i < zone.volumes.size; i++)
+			{
+				origin = zone.volumes[i].origin;
+
+				if(!within_fov(player.origin, player.angles, origin, Cos(65)))
+					continue;
+
+				Box(origin, mins, maxs, 0, (1, 1, 1));
+				maps\apex\_debug::DrawStringList(origin, list, (1, 1, 1));
+			}
+		}
+	}
+	#/
 }
 
 zones_power_off()
