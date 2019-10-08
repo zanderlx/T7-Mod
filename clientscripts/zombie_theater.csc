@@ -507,8 +507,12 @@ theater_light_model_swap()
 setup_t7_mod()
 {
 	level._custom_visionset_registration = ::custom_visionset_registration;
+	level._zm_perk_includes = ::theater_include_perks;
 }
 
+//============================================================================================
+// T7 Mod Setup - VisionSets
+//============================================================================================
 custom_visionset_registration()
 {
 	// 													identifier			vision								priority	trans_in	trans_out	always_on
@@ -518,4 +522,27 @@ custom_visionset_registration()
 	clientscripts\apex\_utility::visionset_register_info("girls_old_room",	"zombie_theater_eroom_girlold",		1, 			0, 			0, 			false);
 	clientscripts\apex\_utility::visionset_register_info("girls_new_room",	"zombie_theater_eroom_girlnew",		1, 			0, 			0, 			false);
 	// 													identifier			vision								priority	trans_in	trans_out	always_on
+}
+
+//============================================================================================
+// T7 Mod Setup - Perks
+//============================================================================================
+theater_include_perks()
+{
+	clientscripts\apex\perks\_zm_perk_juggernog::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_double_tap::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_sleight_of_hand::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_quick_revive::include_perk_for_level();
+
+	clientscripts\apex\perks\_zm_perk_divetonuke::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_marathon::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_deadshot::include_perk_for_level();
+	clientscripts\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
+
+	// clientscripts\apex\perks\_zm_perk_tombstone::include_perk_for_level();
+	// clientscripts\apex\perks\_zm_perk_chugabud::include_perk_for_level();
+	// clientscripts\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	// clientscripts\apex\perks\_zm_perk_vulture::include_perk_for_level();
+
+	// clientscripts\apex\perks\_zm_perk_widows_wine::include_perk_for_level();
 }
