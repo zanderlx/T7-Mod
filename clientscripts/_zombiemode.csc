@@ -126,7 +126,6 @@ init_client_flags()
 
 	level._ZOMBIE_PLAYER_FLAG_CLOAK_WEAPON = 14;
 	level._ZOMBIE_PLAYER_FLAG_DIVE2NUKE_VISION = 13;
-	level._ZOMBIE_PLAYER_FLAG_DEADSHOT_PERK = 12;
 
 	if(isDefined(level.riser_fx_on_client) && level.riser_fx_on_client)
 	{
@@ -163,7 +162,6 @@ init_client_flag_callback_funcs()
 	// Callbacks for players
 	register_clientflag_callback( "player", level._ZOMBIE_PLAYER_FLAG_DIVE2NUKE_VISION, ::zombie_dive2nuke_visionset );
 	register_clientflag_callback("player", level._ZOMBIE_PLAYER_FLAG_CLOAK_WEAPON, ::player_toggle_cloak_handler);
-	register_clientflag_callback("player", level._ZOMBIE_PLAYER_FLAG_DEADSHOT_PERK, ::player_deadshot_perk_handler);
 
 	if(isDefined(level.riser_fx_on_client) && level.riser_fx_on_client)
 	{
@@ -387,21 +385,6 @@ ZPO_listener()
 		level notify("marathon_on");
 		level notify("jugger_on");
 		level notify("additionalprimaryweapon_on");
-	}
-}
-
-player_deadshot_perk_handler(localClientNum, set, newEnt)
-{
-	if ( !self IsLocalPlayer() || self IsSpectating() || self GetEntityNumber() != GetLocalPlayers()[localClientNum] GetEntityNumber() )
-		return;
-
-	if(set)
-	{
-		self UseAlternateAimParams();
-	}
-	else
-	{
-		self ClearAlternateAimParams();
 	}
 }
 

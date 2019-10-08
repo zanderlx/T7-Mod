@@ -999,7 +999,6 @@ init_client_flags()
 
 	level._ZOMBIE_PLAYER_FLAG_CLOAK_WEAPON = 14;
 	level._ZOMBIE_PLAYER_FLAG_DIVE2NUKE_VISION = 13;
-	level._ZOMBIE_PLAYER_FLAG_DEADSHOT_PERK = 12;
 
 	if(is_true(level.riser_fx_on_client))
 	{

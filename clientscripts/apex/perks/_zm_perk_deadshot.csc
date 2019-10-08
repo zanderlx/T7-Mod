@@ -12,8 +12,10 @@ include_perk_for_level()
 
 give_deadshot(clientnum)
 {
+	self UseAlternateAimParams();
 }
 
 take_deadshot(clientnum)
 {
+	self ClearAlternateAimParams();
 }
