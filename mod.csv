@@ -63,6 +63,7 @@ material,mtl_zombie_perk_bottle_revive
 // xmodel,zombie_vending_revive_on
 xmodel,p7_zm_vending_revive
 xmodel,p7_zm_vending_revive_on
+fx,maps\zombie\fx_zmb_cola_revive_flicker
 
 // PHD Flopper
 rawfile,clientscripts\apex\perks\_zm_perk_divetonuke.csc

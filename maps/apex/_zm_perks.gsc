@@ -101,6 +101,15 @@ precache_perks()
 //============================================================================================
 perk_power_think()
 {
+	// flag_wait("begin_spawning");
+	level waittill("fade_introblack");
+
+	if(is_true(level._custom_perks[self.script_noteworthy].ignore_power))
+	{
+		self perk_power_on();
+		return;
+	}
+
 	for(;;)
 	{
 		flag_wait("power_on");
@@ -174,6 +183,7 @@ generate_perk_spawn_struct(perk, origin, angles)
 
 spawn_perk_machines()
 {
+	level._zm_perk_machines = [];
 	structs = GetStructArray("zm_perk_machine", "targetname");
 	convert_legacy_perk_machines();
 
@@ -196,6 +206,8 @@ spawn_perk_machines()
 		angles = struct.angles;
 		model = "zombie_vending_jugg";
 
+		if(!isdefined(level._zm_perk_machines[perk]))
+			level._zm_perk_machines[perk] = [];
 		if(!isdefined(angles))
 			angles = struct.angles;
 
@@ -222,7 +234,7 @@ spawn_perk_machines()
 		else
 			struct.clip = Spawn("script_model", origin, 1);
 
-		struct.clip.origin = origin;
+		// struct.clip.origin = origin;
 		struct.clip.angles = angles;
 		struct.clip DisconnectPaths();
 		struct.clip Hide();
@@ -250,6 +262,7 @@ spawn_perk_machines()
 			struct thread perk_machine_jingle_timer();
 
 		register_playertrigger(struct, ::playertrigger_think);
+		level._zm_perk_machines[perk][level._zm_perk_machines[perk].size] = struct;
 	}
 }
 
@@ -432,6 +445,59 @@ vending_trigger_give_perk(stub)
 
 	self.perk_purchased = undefined;
 	self give_perk(perk, true);
+}
+
+get_perk_machines(perk)
+{
+	if(!is_perk_valid(perk))
+		return undefined;
+	if(!isdefined(level._zm_perk_machines))
+		return undefined;
+	if(!isdefined(level._zm_perk_machines[perk]))
+		return undefined;
+	return level._zm_perk_machines[perk];
+}
+
+delete_perk_machines(perk)
+{
+	machines = get_perk_machines(perk);
+	array_thread(machines, ::delete_perk_machines_think);
+}
+
+delete_perk_machines_think()
+{
+	unregister_playertrigger(self);
+
+	self.power_on = false;
+	self.machine notify("stop_perk_power_effects");
+
+	self.machine PlaySound("zmb_box_move");
+	PlaySoundAtPosition("zmb_whoosh", self.origin);
+	self.machine MoveTo(self.origin + (0, 0, 40), 3);
+
+	if(isdefined(level.custom_vibrate_func))
+		run_function(self.machine, level.custom_vibrate_func, self.machine);
+	else
+	{
+		dir = self.origin;
+		dir = (dir[1], dir[0], 0);
+
+		if(dir[1] < 0 || (dir[0] > 0 && dir[1] > 0))
+			dir = (dir[0], dir[1] * -1, 0);
+		else if(dir[0] < 0)
+			dir = (dir[0] * -1, dir[1], 0);
+
+		self.machine Vibrate(dir, 10, .5, 5);
+	}
+
+	self.machine waittill("movedone");
+	PlayFX(level._effect["poltergeist"], self.origin);
+	PlaySoundAtPosition("zmb_box_poof", self.origin);
+	self.machine Hide();
+	self.machine NotSolid();
+	self.clip ConnectPaths();
+	self.clip trigger_off();
+	self.bump trigger_off();
 }
 
 // custom function to allow
@@ -911,6 +977,13 @@ get_perk_bottle_weapon_options(perk)
 	return self._perk_bottle_weapon_options[perk];
 }
 
+award_free_solo_revive()
+{
+	if(!isdefined(level.solo_game_free_player_quickrevive))
+		level.solo_game_free_player_quickrevive = 0;
+	level.solo_game_free_player_quickrevive++;
+}
+
 //============================================================================================
 // Registry
 //============================================================================================
@@ -959,9 +1032,10 @@ register_perk_bottle(perk, bottle, model_index, camo_index)
 	level._custom_perks[perk].camo_index = camo_index;
 }
 
-register_perk_machine(perk, hint, cost, machine_off, machine_on, light_fx)
+register_perk_machine(perk, ignore_power, hint, cost, machine_off, machine_on, light_fx)
 {
 	_register_undefined_perk(perk);
+	level._custom_perks[perk].ignore_power = ignore_power;
 	level._custom_perks[perk].hint = hint;
 	level._custom_perks[perk].cost = cost;
 	level._custom_perks[perk].machine_off = machine_off;
