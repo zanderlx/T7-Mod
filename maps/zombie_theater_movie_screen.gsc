@@ -1,4 +1,4 @@
-#include common_scripts\utility; 
+#include common_scripts\utility;
 #include maps\_utility;
 #include maps\_zombiemode_utility;
 
@@ -7,7 +7,7 @@ initMovieScreen()
 	//level thread set_up_images();
 	//level thread lower_movie_screen();
 	level thread setupCurtains();
-	
+
 	level thread movie_reels_init();
 }
 
@@ -25,31 +25,31 @@ mergeSort(current_list)
 {
 	if (current_list.size <= 1)
 		return current_list;
-		
+
 	left = [];
 	right = [];
-	
+
 	middle = current_list.size / 2;
 	for (x = 0; x < middle; x++)
 		left = add_to_array(left, current_list[x]);
 	for (; x < current_list.size; x++)
 		right = add_to_array(right, current_list[x]);
-	
+
 	left = mergeSort(left);
 	right = mergeSort(right);
-	
+
 	if (left[left.size - 1].script_int > right[right.size - 1].script_int)
 		result = merge(left, right);
 	else
 		result = append(left, right);
-	return result;	
+	return result;
 }
 
 //merge the two arrays
 merge(left, right)
 {
 	result = [];
-	
+
 	while (left.size > 0 && right.size > 0)
 	{
 		if (left[0] <= right[0])
@@ -67,7 +67,7 @@ merge(left, right)
 		result = append(result, left);
 	while (right.size > 0)
 		result = append(result, right);
-		
+
 	return result;
 }
 
@@ -81,31 +81,58 @@ append(left, right)
 
 setupCurtains()
 {
-	flag_wait( "power_on" );
+	// flag_wait( "power_on" );
 	//wait(2);
 	//level thread moveCurtains("left_curtain");
 	//level thread moveCurtains("right_curtain");
-	
-	curtains = getent("theater_curtains", "targetname");
-	curtains_clip = getent("theater_curtains_clip", "targetname");
-	
-	curtains_clip notsolid();
-	curtains_clip connectpaths();
-	curtains maps\zombie_theater::theater_playanim("curtains_move" );
-	
-	curtains waittill ("curtains_move_done");
 
-	flag_set( "curtains_done" );
-	
+	// curtains = getent("theater_curtains", "targetname");
+	// curtains_clip = getent("theater_curtains_clip", "targetname");
+
+	// curtains_clip notsolid();
+	// curtains_clip connectpaths();
+	// curtains maps\zombie_theater::theater_playanim("curtains_move" );
+
+	// curtains waittill ("curtains_move_done");
+
+	// flag_set( "curtains_done" );
+
+	// level thread lower_movie_screen();
+	stub = maps\apex\_zm_power::add_powerable(false, ::curtains_power_on, ::curtains_power_off);
+	stub.curtains = GetEnt("theater_curtains", "targetname");
+	stub.curtains Solid();
+	stub.curtains_clip = GetEnt("theater_curtains_clip", "targetname");
+	stub.curtains_clip Solid();
+	stub.curtains_clip DisconnectPaths();
+}
+
+curtains_power_on()
+{
+	self.curtains NotSolid();
+	self.curtains_clip NotSolid();
+	self.curtains_clip ConnectPaths();
+	self.curtains maps\zombie_theater::theater_playanim("curtains_move");
+	self.curtains waittill("curtains_move_done");
+	flag_set("curtains_done");
 	level thread lower_movie_screen();
-	
+}
+
+curtains_power_off()
+{
+	self.curtains Solid();
+	self.curtains_clip Solid();
+	self.curtains maps\zombie_theater::theater_playanim("curtains_move_close");
+	self.curtains waittill("curtains_move_close_done");
+	self.curtains_clip DisconnectPaths();
+	flag_clear("curtains_done");
+	// TODO: Raise movie screen
 }
 
 moveCurtains(curtent)
 {
 	curtain = getent( curtent, "targetname");
 	curtorg = curtain.origin;
-	time = 2; 	
+	time = 2;
 
 	curtain thread monitorCurtain(curtorg);
 	curtain connectpaths();
@@ -116,11 +143,11 @@ moveCurtains(curtent)
 monitorCurtain(curtorg)
 {
 	clip = getent(self.target, "targetname");
-	
+
 	while (IsDefined(clip))
 	{
-		if ((abs(curtorg[0] - self.origin[0])) >= 38 ) 
-		{		
+		if ((abs(curtorg[0] - self.origin[0])) >= 38 )
+		{
 			clip connectpaths();
 			clip NotSolid();
 			if (IsDefined(clip.target))
@@ -128,71 +155,71 @@ monitorCurtain(curtorg)
 			else
 				clip = undefined;
 		}
-		
+
 		wait (0.1);
 	}
 }
-	
+
 open_left_curtain()
 {
 	flag_wait( "power_on" );
 	curtain = GetEnt("left_curtain", "targetname");
-	
+
 	if(isDefined(curtain))
 	{
 		wait(2);
-		//curtain waittill("movedone");	
+		//curtain waittill("movedone");
 		curtain_clip = getentarray("left_curtain_clip", "targetname");
 		for (i = 0; i < curtain_clip.size; i++)
 		{
 			curtain_clip[i] connectpaths();
 			curtain_clip[i] notsolid();
-		}		
+		}
 		curtain connectpaths();
 		curtain movex(-300, 2);
-	}	
+	}
 }
 
 open_right_curtain()
 {
 	flag_wait( "power_on" );
 	curtain = GetEnt("right_curtain", "targetname");
-	
+
 	if(isDefined(curtain))
 	{
-		wait(2);	
+		wait(2);
 		//curtain waittill("movedone");
 		curtain_clip = getentarray("right_curtain_clip", "targetname");
 		for (i = 0; i < curtain_clip.size; i++)
 		{
 			curtain_clip[i] connectpaths();
 			curtain_clip[i] notsolid();
-		}			
+		}
 		curtain connectpaths();
-		curtain movex(300, 2);	
-	}	
+		curtain movex(300, 2);
+	}
 }
 
 lower_movie_screen()
 {
 	//	flag_wait( "power_on" );
 	screen = GetEnt("movie_screen", "targetname");
-	
+
 	if(isDefined(screen))
 	{
 		screen movez(-466, 6);
-		screen playsound( "evt_screen_lower" );	
+		screen playsound( "evt_screen_lower" );
 	}
 	//for (x = 0; x < level.images.size; x++)
 	//	level.images[x] movez(-466, 6);
 	//wait (4);
 	screen waittill ("movedone");
-	
+
 	wait (2);
-	
-	// level notify( "sip" ); 
+
+	// level notify( "sip" );
 	clientnotify( "sip" );		// ww: notify talks to zombie_theater_fx.csc to start the projector fxs
-	// exploder(314);				// projection light on	
+	// exploder(314);				// projection light on
 	//level thread play_images();
 }
 
@@ -214,36 +241,36 @@ play_images()
 movie_reels_init()
 {
 	// active reel array
-	
+
 	// each room will have three places the reel could go
 	clean_bedroom_reels = GetEntArray( "trigger_movie_reel_clean_bedroom", "targetname" );
 	bear_bedroom_reels = GetEntArray( "trigger_movie_reel_bear_bedroom", "targetname" );
 	interrogation_reels = GetEntArray( "trigger_movie_reel_interrogation", "targetname" );
 	pentagon_reels = GetEntArray( "trigger_movie_reel_pentagon", "targetname" );
-	
+
 	// put all the arrays in to a master array
 	level.reel_trigger_array = [];
 	level.reel_trigger_array = add_to_array( level.reel_trigger_array, clean_bedroom_reels, false );
 	level.reel_trigger_array = add_to_array( level.reel_trigger_array, bear_bedroom_reels, false );
 	level.reel_trigger_array = add_to_array( level.reel_trigger_array, interrogation_reels, false );
 	level.reel_trigger_array = add_to_array( level.reel_trigger_array, pentagon_reels, false );
-	
+
 	// randomize the master array. the first three arrays will be chosen for reel placement
 	level.reel_trigger_array = array_randomize( level.reel_trigger_array );
-	
+
 	// now pick one reel out of each of the first three arrays
 	reel_0 = movie_reels_random( level.reel_trigger_array[0], "ps1" );
 	reel_1 = movie_reels_random( level.reel_trigger_array[1], "ps2" );
 	reel_2 = movie_reels_random( level.reel_trigger_array[2], "ps3" );
-	
-	// combine all the individual reels in to one array 
+
+	// combine all the individual reels in to one array
 	temp_reels_0 = array_merge( clean_bedroom_reels, bear_bedroom_reels );
 	temp_reels_1 = array_merge( interrogation_reels, pentagon_reels );
 	all_reels = array_merge( temp_reels_0, temp_reels_1 );
-	
+
 	// thread off the movie reel func on all reels. func will hide reels that were not chosen for display
 	array_thread( all_reels, ::movie_reels );
-	
+
 	level thread movie_projector_reel_change();
 }
 
@@ -262,9 +289,9 @@ movie_reels_random( array_reel_triggers, str_reel )
 	{
 		return;
 	}
-	
+
 	random_reels = array_randomize( array_reel_triggers );
-	
+
 	// grab the first one out of teh random array
 	random_reels[0].script_string = str_reel; // TODO: THIS WILL HAVE TO BE MADE INTO A SIDE FUNCTION IF WE GET 20-24 VIDEOS
 	random_reels[0].reel_active = true;
@@ -283,15 +310,15 @@ movie_reels()
 		#/
 		return;
 	}
-	
+
 	// define the model being used for the reel
 	self.reel_model = GetEnt( self.target, "targetname" );
-	
+
 	if( !IsDefined( self.reel_active ) )
 	{
 		self.reel_active = false;
 	}
-	
+
 	if( IsDefined( self.reel_active ) && self.reel_active == false )
 	{
 		// turn off the trigger and hide the model
@@ -299,7 +326,7 @@ movie_reels()
 		self SetCursorHint( "HINT_NOICON" );
 		self SetHintString( "" );
 		self trigger_off();
-		
+
 		// end the function
 		return;
 	}
@@ -307,19 +334,19 @@ movie_reels()
 	{
 		// set the reel model
 		self.reel_model SetModel( "zombie_theater_reelcase_obj" ); // TODO: SPECIAL MODELS WILL NEED TO BE INPUT AT SOME POINT
-		
+
 		// set hint string and cursor image
 		self SetCursorHint( "HINT_NOICON" );
 		// self SetHintString( &"ZOMBIE_THEATER_FILM_REEL" ); // ww:removing hing strings
 	}
-	
+
 	// wait for power
 	flag_wait( "power_on" );
-	
+
 	while( self.reel_active == true )
 	{
 		self waittill( "trigger", who );
-		
+
 		// make sure that the player doesn't already have a reel
 		if( is_true( who._has_reel ) )
 		{
@@ -328,18 +355,18 @@ movie_reels()
 		else
 		{
 			who PlaySound( "zmb_reel_pickup" );
-			
+
 			self.reel_model Hide();
 			self trigger_off();
-			
+
 			// put the reel string on the player that hit the trigger
 			who.reel = self.script_string;
 			who._has_reel = true;
 			self.reel_active = false;
-			
+
 			who thread theater_movie_reel_hud();
 		}
-		
+
 	}
 }
 
@@ -348,30 +375,30 @@ movie_projector_reel_change()
 {
 	screen_struct = getstruct( "struct_theater_screen", "targetname" );
 	projector_trigger = GetEnt( "trigger_change_projector_reels", "targetname" );
-	
+
 	projector_trigger SetCursorHint( "HINT_NOICON" );
 	//projector_trigger SetHintString( &"ZOMBIE_THEATER_REEL_PROJECTOR" ); // ww:removing hing strings
-	
+
 	// just in case the struct is missing the beginning string
 	if( !IsDefined( screen_struct.script_string ) )
 	{
 		screen_struct.script_string = "ps0";
 	}
-	
+
 	while( true )
 	{
 		projector_trigger waittill( "trigger", who );
-		
+
 		if( IsDefined( who.reel ) && IsString( who.reel ) )
 		{
 			clientnotify( who.reel ); // ww: this should be a three digit notify that is set on the reels above
-			
+
 			who notify( "reel_set" );
-			
+
 			who thread theater_remove_reel_hud();
 			who thread maps\zombie_theater_amb::play_radio_egg( 2 );
 			who PlaySound( "zmb_reel_place" );
-			
+
 			who.reel = undefined;
 			wait( 3 );
 		}
@@ -379,11 +406,11 @@ movie_projector_reel_change()
 		{
 			wait( 0.1 );
 		}
-		
+
 		wait( 0.1 );
-	
+
 	}
-	
+
 }
 
 // WW:add the hud element for the reel so a player knows they have it
@@ -403,7 +430,7 @@ theater_movie_reel_hud()
 
 	self.reelHud.alpha = 1;
 	self.reelHud setshader( "zom_icon_theater_reel", 32, 32 );
-	
+
 	self thread	theater_remove_reel_on_death();
 
 }
@@ -415,7 +442,7 @@ theater_remove_reel_hud()
 	{
 		self.reelHud Destroy();
 	}
-	
+
 	self._has_reel = false;
 }
 
@@ -423,9 +450,9 @@ theater_remove_reel_hud()
 theater_remove_reel_on_death()
 {
 	self endon( "reel_set" );
-	
+
 	self waittill_either( "death", "_zombie_game_over" );
-	
+
 	self thread theater_remove_reel_hud();
 
 }
