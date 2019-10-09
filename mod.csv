@@ -46,6 +46,12 @@ xmodel,zombie_carpenter
 // rawfile,clientscripts\apex\powerups\_zm_powerup_insta_kill.csc
 rawfile,maps\apex\powerups\_zm_powerup_insta_kill.gsc
 xmodel,zombie_skull
+material,specialty_instakill_zombies
+
+// Nuke
+// rawfile,clientscripts\apex\powerups\_zm_powerup_nuke.csc
+rawfile,maps\apex\powerups\_zm_powerup_nuke.gsc
+xmodel,zombie_bomb
 fx,misc\fx_zombie_mini_nuke
 
 // Double Points
@@ -58,6 +64,13 @@ material,specialty_2x_zombies
 // rawfile,clientscripts\apex\powerups\_zm_powerup_fire_sale.csc
 rawfile,maps\apex\powerups\_zm_powerup_fire_sale.gsc
 xmodel,zombie_firesale
+material,specialty_firesale_zombies
+
+// Bonfire Sale
+// rawfile,clientscripts\apex\powerups\_zm_powerup_bonfire_sale.csc
+rawfile,maps\apex\powerups\_zm_powerup_bonfire_sale.gsc
+xmodel,zombie_pickup_bonfire
+material,zom_icon_bonfire
 
 // MiniGun
 // rawfile,clientscripts\apex\powerups\_zm_powerup_minigun.csc

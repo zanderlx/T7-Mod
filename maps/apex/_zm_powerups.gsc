@@ -83,7 +83,7 @@ default_include_powerups()
 	// T5
 	maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_bonus_points::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_free_perk::include_powerup_for_level();
