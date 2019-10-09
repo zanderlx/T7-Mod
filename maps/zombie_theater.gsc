@@ -601,6 +601,7 @@ barricade_glitch_fix()
 setup_t7_mod()
 {
 	level._zm_perk_includes = ::theater_include_perks;
+	level._zm_powerup_includes = ::theater_include_powerups;
 	setup_extra_powerables();
 }
 
@@ -635,6 +636,31 @@ theater_power_on()
 		else if(chandelier[i].model == "zombie_theater_chandelier1_off")
 			chandelier[i] SetModel("zombie_theater_chandelier1_on");
 	}
+}
+
+//============================================================================================
+// T7 Mod Setup - Powerups
+//============================================================================================
+theater_include_powerups()
+{
+	// T4
+	maps\apex\powerups\_zm_powerup_full_ammo::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_insta_kill::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_double_points::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_carpenter::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
+
+	// T5
+	maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_bonus_points::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_free_perk::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_random_weapon::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_empty_clip::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_lose_perk::include_powerup_for_level();
+	// maps\apex\powerups\_zm_powerup_lose_points::include_powerup_for_level();
 }
 
 //============================================================================================
