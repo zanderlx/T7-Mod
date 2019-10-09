@@ -37,6 +37,11 @@ fx,misc\fx_zombie_powerup_solo_on
 rawfile,maps\apex\powerups\_zm_powerup_full_ammo.gsc
 xmodel,zombie_ammocan
 
+// Carpenter
+// rawfile,clientscripts\apex\powerups\_zm_powerup_carpenter.csc
+rawfile,maps\apex\powerups\_zm_powerup_carpenter.gsc
+xmodel,zombie_carpenter
+
 //============================================================================================
 // New Perk System
 //============================================================================================

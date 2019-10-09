@@ -76,7 +76,7 @@ default_include_powerups()
 	maps\apex\powerups\_zm_powerup_full_ammo::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_insta_kill::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_double_points::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_carpenter::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_carpenter::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
 
 	// T5
@@ -158,7 +158,7 @@ specific_powerup_drop(powerup_name, origin, powerup_player, can_timeout)
 powerup_drop_setup(powerup_name, powerup_player, can_timeout)
 {
 	if(!isdefined(powerup_name))
-		powerup_name = get_valid_powerup();
+		powerup_name = get_random_powerup_name();
 	if(!isdefined(powerup_player))
 		powerup_player = level;
 	if(!isdefined(can_timeout))
@@ -459,10 +459,7 @@ should_drop_with_regular_powerups(powerup_name)
 	if(isdefined(level.zombie_powerups[powerup_name].func_should_drop_with_regular_powerups))
 	{
 		result = run_function(level, level.zombie_powerups[powerup_name].func_should_drop_with_regular_powerups);
-
-		if(is_true(result))
-			return true;
-		return false;
+		return is_true(result);
 	}
 	return true;
 }
@@ -488,6 +485,7 @@ get_valid_powerup()
 	{
 		if(should_drop_with_regular_powerups(powerup_name))
 			return powerup_name;
+
 		powerup_name = get_next_powerup();
 	}
 }
@@ -626,9 +624,10 @@ powerup_drop(drop_point)
 	if(!check_point_in_playable_area(origin))
 		return;
 
+	powerup_name = get_valid_powerup();
 	powerup = maps\_zombiemode_net::network_safe_spawn("powerup", 1, "script_model", origin);
 	level.powerup_drop_count++;
-	powerup powerup_drop_setup();
+	powerup powerup_drop_setup(powerup_name);
 	level.zombie_vars["zombie_drop_item"] = false;
 }
 
@@ -753,7 +752,7 @@ set_clientdvars_powerup(powerup_name, x_pos, alpha)
 show_solo_hud(show_hide)
 {
 	amount_of_solo_powerups_active = 0;
-	powerup_names = get_valid_powerup();
+	powerup_names = get_valid_powerup_array();
 
 	for(i = 0; i < powerup_names.size; i++)
 	{
