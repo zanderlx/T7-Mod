@@ -73,6 +73,7 @@ zombie_devgui_think()
 		case "random_weapon":
 		case "bonus_points_player":
 		case "bonus_points_team":
+		case "lose_points_player":
 		case "lose_points_team":
 		case "lose_perk":
 		case "empty_clip":

@@ -84,8 +84,12 @@ default_include_powerups()
 	// maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_free_perk::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_bonus_points::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_free_perk::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_random_weapon::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_empty_clip::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_lose_perk::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_lose_points::include_powerup_for_level();
 }
 
 init_powerup_zombie_vars()
