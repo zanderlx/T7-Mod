@@ -80,6 +80,7 @@ main()
 
 	// DO ACTUAL ZOMBIEMODE INIT
 	maps\_zombiemode::main();
+	maps\zombie_theater_teleporter::teleporter_init();
 	// maps\_zombiemode_timer::init();
 
 	// Turn off generic battlechatter - Steve G
@@ -622,7 +623,6 @@ theater_power_on()
 	chandelier = GetEntArray("theater_chandelier", "targetname");
 
 	level notify("Pack_A_Punch_on");
-	maps\zombie_theater_teleporter::teleporter_init();
 	level.quads_per_round = 4 * GetPlayers().size;
 	level notify("quad_round_can_end");
 	level.delay_spawners = undefined;
