@@ -32,8 +32,6 @@ include_powerups()
 		level._zm_powerup_includes = ::default_include_powerups;
 
 	set_zombie_var("zombie_point_scalar", 1); // TODO: Move to score script
-	set_zombie_var("zombie_insta_kill", false); // TODO: Move to instakill script
-	set_zombie_var("zombie_powerup_insta_kill_on", false); // TODO: Move to instakill script
 	set_zombie_var("zombie_drop_item", false);
 	set_zombie_var("zombie_powerup_drop_increment", 2000);
 	set_zombie_var("zombie_powerup_drop_max_per_round", 4);
@@ -74,10 +72,10 @@ default_include_powerups()
 {
 	// T4
 	maps\apex\powerups\_zm_powerup_full_ammo::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_insta_kill::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_insta_kill::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_double_points::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_carpenter::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
 
 	// T5
 	// maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
@@ -805,7 +803,7 @@ set_powerup_hud_position(position, time)
 	if(self.previous_position != position)
 	{
 		self MoveOverTime(time);
-		self maps\_hud_util::setPoint("BOTTOM", undefined, -5, 0);
+		self maps\_hud_util::setPoint("BOTTOM", undefined, position, -5, 0);
 		self.previous_position = position;
 	}
 }
