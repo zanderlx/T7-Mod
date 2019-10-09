@@ -237,6 +237,8 @@ disable_zone(zone_name)
 				continue;
 			if(!players[i] maps\_zombiemode_zone_manager::entity_in_zone(zone_name))
 				continue;
+			if(is_true(players[i].inteleportation))
+				continue;
 
 			origin = players[i].spectator_respawn.origin;
 			angles = players[i].spectator_respawn.angles;

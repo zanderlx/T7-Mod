@@ -145,7 +145,7 @@ set_level_power_state(power_on_off)
 
 is_power_on()
 {
-	return is_true(level._zm_powerables);
+	return is_true(level._zm_power_state);
 }
 
 //============================================================================================
