@@ -54,6 +54,10 @@ rawfile,maps\apex\powerups\_zm_powerup_double_points.gsc
 xmodel,zombie_x2_icon
 material,specialty_2x_zombies
 
+// Random Weapon
+// rawfile,clientscripts\apex\powerups\_zm_powerup_random_weapon.csc
+rawfile,maps\apex\powerups\_zm_powerup_random_weapon.gsc
+
 // Bonus Points (Player / Team)
 // rawfile,clientscripts\apex\powerups\_zm_powerup_bonus_points.csc
 rawfile,maps\apex\powerups\_zm_powerup_bonus_points.gsc
