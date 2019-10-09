@@ -75,7 +75,7 @@ default_include_powerups()
 	// T4
 	maps\apex\powerups\_zm_powerup_full_ammo::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_insta_kill::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_double_points::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_double_points::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_carpenter::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
 
@@ -636,15 +636,13 @@ powerup_drop(drop_point)
 //============================================================================================
 powerup_hud_monitor(powerup_names)
 {
+	players = GetPlayers();
 	flashing_timers = [];
 	flashing_values = [];
 	flashing_timer = 10;
-	flashing_delta_time = 0;
 	flashing_is_on = false;
-	flashing_value = 3;
-	flashing_min_timer = .15;
 
-	while(flashing_timer >= flashing_min_timer)
+	while(flashing_timer >= .15)
 	{
 		if(flashing_timer < 5)
 			flashing_delta_time = .1;
@@ -653,18 +651,37 @@ powerup_hud_monitor(powerup_names)
 
 		if(flashing_is_on)
 		{
-			flashing_timer = flashing_timer - flashing_delta_time * .05;
-			flashing_value = 2;
+			flashing_timer = flashing_timer - flashing_delta_time - .05;
+			flashing_value = 1;
 		}
 		else
 		{
 			flashing_timer -= flashing_delta_time;
-			flashing_value = 3;
+			flashing_value = .2;
 		}
 
 		flashing_timers[flashing_timers.size] = flashing_timer;
 		flashing_values[flashing_values.size] = flashing_value;
 		flashing_is_on = !flashing_is_on;
+	}
+
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+		player.solo_powerup_hud = [];
+
+		for(j = 0; j < powerup_names.size; j++)
+		{
+			powerup_name = powerup_names[j];
+			hud = maps\_hud_util::createIcon(level.zombie_powerups[powerup_name].client_field_name, 32, 32, player);
+			hud maps\_hud_util::setPoint("BOTTOM", undefined, 0, -5);
+			hud.alpha = 0;
+			hud.previous_position = 0;
+			hud.previous_alpha = 0;
+			hud.is_active = false;
+			hud.powerup_name = powerup_name;
+			player.solo_powerup_hud[player.solo_powerup_hud.size] = hud;
+		}
 	}
 
 	for(;;)
@@ -676,6 +693,9 @@ powerup_hud_monitor(powerup_names)
 		for(i = 0; i < players.size; i++)
 		{
 			player = players[i];
+			active_powerups = [];
+			active_powerup_fade = [];
+			active_powerup_values = [];
 
 			for(j = 0; j < powerup_names.size; j++)
 			{
@@ -709,44 +729,97 @@ powerup_hud_monitor(powerup_names)
 				}
 
 				if(isdefined(powerup_timer) && isdefined(powerup_on))
-					player set_clientfield_powerups(powerup_name, powerup_timer, powerup_on, flashing_timers, flashing_values);
-			}
-		}
-	}
-}
-
-set_clientfield_powerups(powerup_name, powerup_timer, powerup_on, flashing_timers, flashing_values)
-{
-	if(is_true(powerup_on))
-	{
-		if(powerup_timer < 10)
-		{
-			flashing_value = 3;
-
-			for(i = flashing_timers.size - 1; i > 0; i--)
-			{
-				if(powerup_timer < flashing_timers[i])
 				{
-					flashing_value = flashing_values[i];
-					break;
+					if(is_true(powerup_on))
+					{
+						flashing_value = 1;
+						flashing_fade = .01;
+
+						if(powerup_timer < 10)
+						{
+							for(k = flashing_timers.size - 1; k > 0; k--)
+							{
+								if(powerup_timer < flashing_timers[k])
+								{
+									flashing_value = flashing_values[k];
+									break;
+								}
+							}
+
+							if(powerup_timer < 5)
+								flashing_fade = .1;
+							else
+								flashing_fade = .2;
+						}
+
+						index = active_powerups.size;
+						powerup_hud = undefined;
+
+						for(k = 0; k < player.solo_powerup_hud.size; k++)
+						{
+							if(player.solo_powerup_hud[k].powerup_name == powerup_name)
+							{
+								powerup_hud = player.solo_powerup_hud[k];
+								break;
+							}
+						}
+
+						Assert(isdefined(powerup_hud));
+						active_powerups[index] = powerup_hud;
+						active_powerup_values[index] = flashing_value;
+						active_powerup_fade[index] = flashing_fade;
+					}
 				}
 			}
-			self set_clientdvars_powerup(powerup_name, 0, flashing_value);
+
+			for(j = 0; j < active_powerups.size; j++)
+			{
+				active_powerup = active_powerups[j];
+				active_powerup.is_active = true;
+				active_powerup set_powerup_hud_position(j * 48 - (active_powerups.size - 1) * 24, .5);
+				active_powerup set_powerup_hud_alpha(active_powerup_values[j], active_powerup_fade[j]);
+			}
+
+			inactive_powerups = array_exclude(player.solo_powerup_hud, active_powerups);
+
+			for(j = 0; j < inactive_powerups.size; j++)
+			{
+				inactive_powerup = inactive_powerups[j];
+
+				if(is_true(inactive_powerup.is_active))
+				{
+					inactive_powerup set_powerup_hud_alpha(0, .5, 1);
+					inactive_powerup.is_active = false;
+				}
+			}
 		}
-		else
-			self set_clientdvars_powerup(powerup_name, 0, 1);
 	}
-	else
-		self set_clientdvars_powerup(powerup_name, 0, 0);
 }
 
-set_clientdvars_powerup(powerup_name, x_pos, alpha)
+set_powerup_hud_position(position, time)
 {
-	self SetClientDvars(
-		"ui_zm_powerup_" + powerup_name + "_image", level.zombie_powerups[powerup_name].client_field_name,
-		"ui_zm_powerup_" + powerup_name + "_x", x_pos,
-		"ui_zm_powerup_" + powerup_name + "_alpha", alpha
-	);
+	if(self.previous_position != position)
+	{
+		self MoveOverTime(time);
+		self maps\_hud_util::setPoint("BOTTOM", undefined, -5, 0);
+		self.previous_position = position;
+	}
+}
+
+set_powerup_hud_alpha(alpha, time, override_previous)
+{
+	if(isdefined(override_previous))
+	{
+		self.alpha = override_previous;
+		self.previous_alpha = override_previous;
+	}
+
+	if(self.previous_alpha != alpha)
+	{
+		self FadeOverTime(time);
+		self.alpha = alpha;
+		self.previous_alpha = alpha;
+	}
 }
 
 show_solo_hud(show_hide)
@@ -818,11 +891,20 @@ timed_powerup_player_think(powerup_name, time_name, on_name, str_sound_loop, str
 	self.zombie_vars[on_name] = true;
 	self.zombie_vars[time_name] = level.zombie_vars["zombie_powerup_active_time"];
 
+	if(isdefined(level.zombie_powerups[powerup_name].func_timed_start))
+		run_function(self, level.zombie_powerups[powerup_name].func_timed_start);
+
 	while(self.zombie_vars[time_name] >= 0)
 	{
 		wait .05;
 		self.zombie_vars[time_name] -= .05;
+
+		if(isdefined(level.zombie_powerups[powerup_name].func_timed_loop))
+			run_function(self, level.zombie_powerups[powerup_name].func_timed_loop);
 	}
+
+	if(isdefined(level.zombie_powerups[powerup_name].func_timed_stop))
+		run_function(self, level.zombie_powerups[powerup_name].func_timed_stop);
 
 	self.zombie_vars[time_name] = 0;
 	self.zombie_vars[on_name] = false;
@@ -846,11 +928,20 @@ timed_powerup_level_think(powerup_name, time_name, on_name, str_sound_loop, str_
 	level.zombie_vars[on_name] = true;
 	level.zombie_vars[time_name] = level.zombie_vars["zombie_powerup_active_time"];
 
+	if(isdefined(level.zombie_powerups[powerup_name].func_timed_start))
+		run_function(self, level.zombie_powerups[powerup_name].func_timed_start);
+
 	while(level.zombie_vars[time_name] >= 0)
 	{
 		wait .05;
 		level.zombie_vars[time_name] -= .05;
+
+		if(isdefined(level.zombie_powerups[powerup_name].func_timed_loop))
+			run_function(self, level.zombie_powerups[powerup_name].func_timed_loop);
 	}
+
+	if(isdefined(level.zombie_powerups[powerup_name].func_timed_stop))
+		run_function(self, level.zombie_powerups[powerup_name].func_timed_stop);
 
 	level.zombie_vars[time_name] = 0;
 	level.zombie_vars[on_name] = false;
@@ -962,4 +1053,13 @@ register_powerup_funcs(powerup_name, func_setup, func_grabbed, func_cleanup, fun
 	level.zombie_powerups[powerup_name].func_grabbed = func_grabbed;
 	level.zombie_powerups[powerup_name].func_cleanup = func_cleanup;
 	level.zombie_powerups[powerup_name].func_should_drop_with_regular_powerups = func_should_drop_with_regular_powerups;
+}
+
+register_timed_powerup_funcs(powerup_name, func_timed_start, func_timed_loop, func_timed_stop)
+{
+	_register_undefined_powerup(powerup_name);
+
+	level.zombie_powerups[powerup_name].func_timed_start = func_timed_start;
+	level.zombie_powerups[powerup_name].func_timed_loop = func_timed_loop;
+	level.zombie_powerups[powerup_name].func_timed_stop = func_timed_stop;
 }
