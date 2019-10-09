@@ -78,7 +78,7 @@ default_include_powerups()
 	maps\apex\powerups\_zm_powerup_nuke::include_powerup_for_level();
 
 	// T5
-	// maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
@@ -402,7 +402,13 @@ powerup_vo(powerup_name)
 	self endon("death");
 	self endon("disconnect");
 
-	level thread maps\_zombiemode_audio::do_announcer_playvox(level.devil_vox["powerup"][powerup_name]);
+	announcer_vox_type = powerup_name;
+
+	if(isdefined(level.zombie_powerups[powerup_name].announcer_vox_type))
+		announcer_vox_type = level.zombie_powerups[powerup_name].announcer_vox_type;
+	if(isdefined(level.devil_vox["powerup"][announcer_vox_type]))
+		level thread maps\_zombiemode_audio::do_announcer_playvox(level.devil_vox["powerup"][announcer_vox_type]);
+
 	wait RandomFloatRange(4.5, 5.5);
 	self maps\_zombiemode_audio::create_and_play_dialog("powerup", powerup_name);
 }
@@ -1005,6 +1011,13 @@ powerup_set_prevent_pick_up_if_drinking(powerup_name, b_prevent_pick_up)
 	level.zombie_powerups[powerup_name].prevent_pick_up_if_drinking = b_prevent_pick_up;
 }
 
+powerup_set_announcer_vox_type(powerup_name, announcer_vox_type)
+{
+	_register_undefined_powerup(powerup_name);
+
+	level.zombie_powerups[powerup_name].announcer_vox_type = announcer_vox_type;
+}
+
 powerup_remove_from_regular_drops(powerup_name)
 {
 	_register_undefined_powerup(powerup_name);
@@ -1025,6 +1038,7 @@ _register_undefined_powerup(powerup_name)
 	level.zombie_powerups[powerup_name].can_pick_up_in_last_stand = true;
 	level.zombie_powerups[powerup_name].prevent_pick_up_if_drinking = false;
 	level.zombie_powerups[powerup_name].can_pick_up_in_revive_trigger = true;
+	level.zombie_powerups[powerup_name].announcer_vox_type = powerup_name;
 }
 
 register_basic_powerup(powerup_name, model, powerup_fx)
