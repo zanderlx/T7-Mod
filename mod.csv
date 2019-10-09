@@ -59,6 +59,20 @@ material,specialty_2x_zombies
 rawfile,maps\apex\powerups\_zm_powerup_fire_sale.gsc
 xmodel,zombie_firesale
 
+// MiniGun
+// rawfile,clientscripts\apex\powerups\_zm_powerup_minigun.csc
+rawfile,maps\apex\powerups\_zm_powerup_minigun.gsc
+xmodel,zombie_pickup_minigun
+weapon,sp\minigun_zm
+material,zom_icon_minigun
+
+// Tesla
+// rawfile,clientscripts\apex\powerups\_zm_powerup_tesla.csc
+rawfile,maps\apex\powerups\_zm_powerup_tesla.gsc
+xmodel,zombie_pickup_minigun
+weapon,sp\tesla_gun_zm
+material,zom_icon_minigun
+
 // Random Weapon
 // rawfile,clientscripts\apex\powerups\_zm_powerup_random_weapon.csc
 rawfile,maps\apex\powerups\_zm_powerup_random_weapon.gsc

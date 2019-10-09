@@ -36,6 +36,7 @@ include_powerups()
 	set_zombie_var("zombie_powerup_drop_increment", 2000);
 	set_zombie_var("zombie_powerup_drop_max_per_round", 4);
 	set_zombie_var("zombie_powerup_active_time", 30);
+	set_zombie_var("zombie_powerup_weapons_allow_cycling", true);
 
 	run_function(level, level._zm_powerup_includes);
 }
@@ -65,6 +66,8 @@ precache_powerups()
 
 		if(is_timed_powerup(powerup_name))
 			PrecacheShader(level.zombie_powerups[powerup_name].client_field_name); // client_field_name is used to store the shader material
+		if(is_weapon_powerup(powerup_name))
+			PrecacheItem(level.zombie_powerup_weapon[powerup_name]);
 	}
 }
 
@@ -79,9 +82,9 @@ default_include_powerups()
 
 	// T5
 	maps\apex\powerups\_zm_powerup_fire_sale::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_minigun::include_powerup_for_level();
 	// maps\apex\powerups\_zm_powerup_bonfire_sale::include_powerup_for_level();
-	// maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
+	maps\apex\powerups\_zm_powerup_tesla::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_bonus_points::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_free_perk::include_powerup_for_level();
 	maps\apex\powerups\_zm_powerup_random_weapon::include_powerup_for_level();
@@ -98,36 +101,41 @@ init_powerup_zombie_vars()
 	powerup_names = get_valid_powerup_array();
 	timed_powerups = [];
 
-	for(i = 0; i < powerup_names.size; i++)
+	for(i = 0; i < players.size; i++)
 	{
-		powerup_name = powerup_names[i];
+		player = players[i];
 
-		if(!is_timed_powerup(powerup_name))
-			continue;
+		if(!isdefined(player.has_specific_powerup_weapon))
+			player.has_specific_powerup_weapon = [];
+		if(!isdefined(player.zombie_vars))
+			player.zombie_vars = [];
 
-		time_name = level.zombie_powerups[powerup_name].time_name;
-		on_name = level.zombie_powerups[powerup_name].on_name;
-
-		if(is_true(level.zombie_powerups[powerup_name].hud_per_player))
+		for(j = 0; j < powerup_names.size; j++)
 		{
-			for(j = 0; j < players.size; j++)
+			powerup_name = powerup_names[j];
+
+			if(!is_timed_powerup(powerup_name))
+				continue;
+
+			time_name = level.zombie_powerups[powerup_name].time_name;
+			on_name = level.zombie_powerups[powerup_name].on_name;
+
+			if(is_true(level.zombie_powerups[powerup_name].hud_per_player))
 			{
-				player = players[j];
-
-				if(!isdefined(player.zombie_vars))
-					player.zombie_vars = [];
-
 				player.zombie_vars[time_name] = 0;
 				player.zombie_vars[on_name] = false;
 			}
-		}
-		else
-		{
-			set_zombie_var(time_name, 0);
-			set_zombie_var(on_name, false);
-		}
+			else
+			{
+				if(!isdefined(level.zombie_vars[time_name]))
+					set_zombie_var(time_name, 0);
+				if(!isdefined(level.zombie_vars[on_name]))
+					set_zombie_var(on_name, false);
+			}
 
-		timed_powerups[timed_powerups.size] = powerup_name;
+			if(!IsInArray(timed_powerups, powerup_name))
+				timed_powerups[timed_powerups.size] = powerup_name;
+		}
 	}
 
 	level thread powerup_hud_monitor(timed_powerups);
@@ -281,6 +289,9 @@ powerup_grab_think()
 			// in laststand (revive trigger spawned as your downed player)
 			// revive trigger && UseButton pressed (attempting to revive downed player)
 			if((player maps\_laststand::player_is_in_laststand() || (player UseButtonPressed() && player in_revive_trigger())) && !is_true(level.zombie_powerups[self.powerup_name].can_pick_up_in_revive_trigger))
+				continue;
+			// dont pickup if powerup is weapon type and player has powerup weapon
+			if(is_weapon_powerup(self.powerup_name) && player has_powerup_weapon())
 				continue;
 
 			if(DistanceSquared(player.origin, self.origin) < 4096)
@@ -724,11 +735,8 @@ powerup_hud_monitor(powerup_names)
 
 				if(is_true(level.zombie_powerups[powerup_name].hud_per_player))
 				{
-					if(is_true(player._show_solo_hud))
-					{
-						powerup_timer = player.zombie_vars[time_name];
-						powerup_on = player.zombie_vars[on_name];
-					}
+					powerup_timer = player.zombie_vars[time_name];
+					powerup_on = player.zombie_vars[on_name];
 				}
 				else
 				{
@@ -830,39 +838,6 @@ set_powerup_hud_alpha(alpha, time, override_previous)
 	}
 }
 
-show_solo_hud(show_hide)
-{
-	amount_of_solo_powerups_active = 0;
-	powerup_names = get_valid_powerup_array();
-
-	for(i = 0; i < powerup_names.size; i++)
-	{
-		if(!is_timed_powerup(powerup_names[i]))
-			continue;
-
-		if(is_true(level.zombie_powerups[powerup_names[i]].hud_per_player))
-		{
-			on_name = level.zombie_powerups[powerup_names[i]].on_name;
-
-			if(is_true(self.zombie_vars[on_name]))
-				amount_of_solo_powerups_active++;
-		}
-	}
-
-	IPrintLnBold("amount of solo powerups: &&1", amount_of_solo_powerups_active);
-
-	if(is_true(show_hide))
-	{
-		if(amount_of_solo_powerups_active == 0)
-			self._show_solo_hud = true;
-	}
-	else
-	{
-		if(amount_of_solo_powerups_active == 0)
-			self._show_solo_hud = false;
-	}
-}
-
 //============================================================================================
 // Timed Powerups
 //============================================================================================
@@ -878,10 +853,16 @@ timed_powerup_think(powerup_name)
 	str_sound_loop = "zmb_" + powerup_name + "_loop";
 	str_sound_off = "zmb_" + powerup_name + "_loop_off";
 
+	if(is_weapon_powerup(powerup_name))
+		self thread weapon_powerup(powerup_name);
+
 	if(is_true(level.zombie_powerups[powerup_name].hud_per_player))
 		self timed_powerup_player_think(powerup_name, time_name, on_name, str_sound_loop, str_sound_off);
 	else
 		self timed_powerup_level_think(powerup_name, time_name, on_name, str_sound_loop, str_sound_off);
+
+	if(is_weapon_powerup(powerup_name))
+		self thread weapon_powerup_remove(powerup_name, true);
 }
 
 timed_powerup_player_think(powerup_name, time_name, on_name, str_sound_loop, str_sound_off)
@@ -895,7 +876,6 @@ timed_powerup_player_think(powerup_name, time_name, on_name, str_sound_loop, str
 	ent = Spawn("script_origin", (0, 0, 0));
 	ent PlayLoopSound(str_sound_loop);
 
-	self show_solo_hud(true);
 	self.zombie_vars[on_name] = true;
 	self.zombie_vars[time_name] = level.zombie_vars["zombie_powerup_active_time"];
 
@@ -916,7 +896,6 @@ timed_powerup_player_think(powerup_name, time_name, on_name, str_sound_loop, str
 
 	self.zombie_vars[time_name] = 0;
 	self.zombie_vars[on_name] = false;
-	self show_solo_hud(false);
 	self PlaySound(str_sound_off);
 	ent StopLoopSound();
 	ent Delete();
@@ -956,6 +935,101 @@ timed_powerup_level_think(powerup_name, time_name, on_name, str_sound_loop, str_
 	self PlaySound(str_sound_off);
 	ent StopLoopSound();
 	ent Delete();
+}
+
+//============================================================================================
+// Weapon Powerups
+//============================================================================================
+register_powerup_weapon(powerup_name, weapon_name)
+{
+	if(!isdefined(level.zombie_powerup_weapon))
+		level.zombie_powerup_weapon = [];
+	if(!isdefined(level.zombie_powerup_weapon[powerup_name]))
+		level.zombie_powerup_weapon[powerup_name] = weapon_name;
+}
+
+is_weapon_powerup(powerup_name)
+{
+	if(!is_powerup_valid(powerup_name))
+		return false;
+	if(!is_timed_powerup(powerup_name))
+		return false;
+	if(!isdefined(level.zombie_powerup_weapon))
+		return false;
+	if(!isdefined(level.zombie_powerup_weapon[powerup_name]))
+		return false;
+	return level.zombie_powerup_weapon[powerup_name] != "none";
+}
+
+weapon_powerup(powerup_name)
+{
+	self notify("replace_weapon_powerup");
+	self.has_specific_powerup_weapon[powerup_name] = true;
+	self.has_powerup_weapon = true;
+	self increment_is_drinking();
+
+	if(is_true(level.zombie_vars["zombie_powerup_weapons_allow_cycling"]))
+		self EnableWeaponCycling();
+
+	self._zombie_weapon_before_powerup[powerup_name] = self GetCurrentWeapon();
+	self GiveWeapon(level.zombie_powerup_weapon[powerup_name]);
+	self SwitchToWeapon(level.zombie_powerup_weapon[powerup_name]);
+	self thread weapon_powerup_replace(powerup_name);
+	self thread weapon_powerup_change(powerup_name);
+}
+
+weapon_powerup_change(powerup_name)
+{
+	self endon("death");
+	self endon("disconnect");
+	self endon("player_downed");
+	self endon("replace_weapon_powerup");
+	self endon(powerup_name + "_time_over");
+
+	for(;;)
+	{
+		self waittill("weapon_change", newWeapon, oldWeapon);
+
+		if(newWeapon != "none" && newWeapon != level.zombie_powerup_weapon[powerup_name])
+			break;
+	}
+
+	self thread weapon_powerup_remove(powerup_name, false);
+}
+
+weapon_powerup_replace(powerup_name)
+{
+	self endon("death");
+	self endon("disconnect");
+	self endon("player_downed");
+	self endon(powerup_name + "_time_over");
+	self waittill("replace_weapon_powerup");
+	self thread weapon_powerup_remove(powerup_name, false);
+}
+
+weapon_powerup_remove(powerup_name, switch_back_weapon)
+{
+	self endon("death");
+	self endon("player_downed");
+
+	if(!self has_powerup_weapon() || !is_true(self.has_specific_powerup_weapon[powerup_name]))
+		return;
+
+	self TakeWeapon(level.zombie_powerup_weapon[powerup_name]);
+	self.has_specific_powerup_weapon[powerup_name] = false;
+	self.has_powerup_weapon = false;
+	self notify(powerup_name + "_time_over");
+	self decrement_is_drinking();
+
+	time_name = level.zombie_powerups[powerup_name].time_name;
+
+	if(is_true(level.zombie_powerups[powerup_name].hud_per_player))
+		self.zombie_vars[time_name] = -1;
+	else
+		level.zombie_vars[time_name] = -1;
+
+	if(is_true(switch_back_weapon))
+		self SwitchToWeapon(self._zombie_weapon_before_powerup[powerup_name]);
 }
 
 //============================================================================================
