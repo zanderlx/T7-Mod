@@ -86,6 +86,23 @@ teleporter_power_off()
 
 	level.link_cable_on Hide();
 	level.link_cable_off Show();
+
+	hide_extracam_screen();
+}
+
+show_extracam_screen()
+{
+	if(!maps\apex\_zm_power::is_power_on())
+		return;
+
+	level.extracam_screen Show();
+	clientNotify("camera_start");
+}
+
+hide_extracam_screen()
+{
+	level.extracam_screen Hide();
+	clientNotify("camera_stop");
 }
 
 //-------------------------------------------------------------------------------
@@ -309,8 +326,7 @@ player_teleporting( index )
 	wait(30);
 
 	// DCS: extracam shut down.
-	level.extracam_screen Hide();
-	clientnotify("camera_stop");
+	hide_extracam_screen();
 
 	// only goto ee rooms if power is on
 	// if power was turned off during teleport
@@ -661,13 +677,7 @@ extra_cam_startup()
 {
 	// error drawing with teleporter effects, wait to turn on.
 	wait(2.0);
-	level.extracam_screen Show();
-
-	players = get_players();
-	for ( i = 0; i < players.size; i++ )
-	{
-		setClientSysState( "levelNotify", "camera_start", players[i] );
-	}
+	show_extracam_screen();
 }
 
 get_array_spots(sname, spots)
