@@ -596,21 +596,21 @@ zombie_devgui_give_powerup( powerup_name )
 
 	level.devcheater = 1;
 
-	for ( i = 0; i < level.zombie_powerup_array.size; i++ )
-	{
-		if ( level.zombie_powerup_array[i] == powerup_name )
-		{
-			level.zombie_powerup_index = i;
-			found = true;
-			break;
-		}
-	}
+	// for ( i = 0; i < level.zombie_powerup_array.size; i++ )
+	// {
+	// 	if ( level.zombie_powerup_array[i] == powerup_name )
+	// 	{
+	// 		level.zombie_powerup_index = i;
+	// 		found = true;
+	// 		break;
+	// 	}
+	// }
 
-	if ( !found )
-	{
-		//iprintln( "Powerup not found: " + powerup_name );
-		return;
-	}
+	// if ( !found )
+	// {
+	// 	//iprintln( "Powerup not found: " + powerup_name );
+	// 	return;
+	// }
 
 	// Trace to where the player is looking
 	direction = player GetPlayerAngles();
@@ -623,9 +623,9 @@ zombie_devgui_give_powerup( powerup_name )
 	// offset 2 units on the Z to fix the bug where it would drop through the ground sometimes
 	trace = bullettrace( eye, eye + direction_vec, 0, undefined );
 	level.zombie_devgui_power = 1;
-	level.zombie_vars["zombie_drop_item"] = 1;
-	level.powerup_drop_count = 0;
-	level thread maps\_zombiemode_powerups::powerup_drop( trace["position"] );
+	// level.zombie_vars["zombie_drop_item"] = 1;
+	// level.powerup_drop_count = 0;
+	maps\apex\_zm_powerups::specific_powerup_drop( powerup_name, trace["position"] + (0, 0, 40) );
 
 
 }

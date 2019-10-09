@@ -8,6 +8,7 @@ main()
 	maps\apex\_utility_code::init_apex_utility();
 	/# maps\apex\_debug::debug_init(); #/
 	level thread solo_game_init();
+	maps\apex\_zm_powerups::init();
 	maps\apex\_zm_power::init();
 	maps\apex\_zm_perks::init();
 	level thread power_off_zones_init();

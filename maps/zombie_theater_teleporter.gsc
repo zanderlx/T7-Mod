@@ -1052,7 +1052,7 @@ eeroom_powerup_drop()
 	powerup_array = array_randomize( powerup_array );
 
 
-	level thread maps\_zombiemode_powerups::specific_powerup_drop( powerup_array[0], struct_array[0].origin );
+	maps\apex\_zm_powerups::specific_powerup_drop( powerup_array[0], struct_array[0].origin );
 }
 
 theater_fly_me_to_the_moon_init()

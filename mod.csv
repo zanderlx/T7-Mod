@@ -15,6 +15,29 @@ menufile,ui\hud_test.menu
 localize,mod
 
 //============================================================================================
+// New Powerup System
+//============================================================================================
+// rawfile,clientscripts\apex\_zm_powerups.csc
+rawfile,maps\apex\_zm_powerups.gsc
+fx,misc\fx_zombie_powerup_on
+fx,misc\fx_zombie_powerup_grab
+fx,misc\fx_zombie_powerup_wave
+fx,misc\fx_zombie_powerup_on_red
+// fx,misc\fx_zombie_powerup_red_grab
+// fx,misc\fx_zombie_powerup_red_wave
+fx,misc\fx_zombie_powerup_solo_on
+// fx,misc\fx_zombie_powerup_solo_grab
+// fx,misc\fx_zombie_powerup_solo_wave
+// fx,misc\fx_zombie_powerup_caution_on
+// fx,misc\fx_zombie_powerup_caution_grab
+// fx,misc\fx_zombie_powerup_caution_wave
+
+// Max Ammo
+// rawfile,clientscripts\apex\powerups\_zm_powerup_full_ammo.csc
+rawfile,maps\apex\powerups\_zm_powerup_full_ammo.gsc
+xmodel,zombie_ammocan
+
+//============================================================================================
 // New Perk System
 //============================================================================================
 rawfile,clientscripts\apex\_zm_perks.csc

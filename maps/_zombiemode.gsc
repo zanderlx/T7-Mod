@@ -103,7 +103,6 @@ main()
 	maps\_zombiemode_equipment::init();
 	maps\_zombiemode_blockers::init();
 	maps\_zombiemode_spawner::init();
-	maps\_zombiemode_powerups::init();
 	maps\_zombiemode_perks::init();
 	maps\_zombiemode_user::init();
 	maps\_zombiemode_weap_cymbal_monkey::init();
@@ -3913,8 +3912,6 @@ round_think()
         level thread maps\_zombiemode_audio::change_zombie_music( "round_start" );
 		chalk_one_up();
 		//		round_text( &"ZOMBIE_ROUND_BEGIN" );
-
-		maps\_zombiemode_powerups::powerup_round_start();
 
 		players = get_players();
 		array_thread( players, maps\_zombiemode_blockers::rebuild_barrier_reward_reset );
