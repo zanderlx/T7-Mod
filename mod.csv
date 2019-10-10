@@ -15,6 +15,17 @@ menufile,ui\hud_test.menu
 localize,mod
 
 //============================================================================================
+// Pack-A-Punch
+//============================================================================================
+// rawfile,clientscripts\apex\_zm_packapunch.csc
+rawfile,maps\apex\_zm_packapunch.gsc
+xmodel,zombie_vending_packapunch
+xmodel,zombie_vending_packapunch_on
+xmodel,zombie_sign_please_wait
+weapon,sp\zombie_knuckle_crack
+fx,maps\zombie\fx_zombie_packapunch
+
+//============================================================================================
 // New Powerup System
 //============================================================================================
 // rawfile,clientscripts\apex\_zm_powerups.csc

@@ -103,7 +103,6 @@ main()
 	maps\_zombiemode_equipment::init();
 	maps\_zombiemode_blockers::init();
 	maps\_zombiemode_spawner::init();
-	maps\_zombiemode_perks::init();
 	maps\_zombiemode_user::init();
 	maps\_zombiemode_weap_cymbal_monkey::init();
 	maps\_zombiemode_weap_freezegun::init();

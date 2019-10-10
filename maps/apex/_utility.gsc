@@ -34,6 +34,27 @@ get_player_unobtained_perks()
 }
 
 //============================================================================================
+// Weapon Utility Functions
+//============================================================================================
+get_player_weapon_limit()
+{
+	if(isdefined(self.get_player_weapon_limit))
+		return run_function(self, self.get_player_weapon_limit);
+	if(isdefined(level.get_player_weapon_limit))
+		return run_function(level, level.get_player_weapon_limit);
+
+	weapon_limit = 2;
+
+	// TODO:
+	/*
+	if(player has_perk("mule_kick"))
+		weapon_limit = level.additionalprimaryweapon_limit;
+	*/
+
+	return weapon_limit;
+}
+
+//============================================================================================
 // Common Utility Functions
 //============================================================================================
 increment_downed_stat()

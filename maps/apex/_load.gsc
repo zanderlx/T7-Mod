@@ -11,6 +11,7 @@ main()
 	maps\apex\_zm_powerups::init();
 	maps\apex\_zm_power::init();
 	maps\apex\_zm_perks::init();
+	maps\apex\_zm_packapunch::init();
 	level thread power_off_zones_init();
 }
 
