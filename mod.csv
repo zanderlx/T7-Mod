@@ -15,6 +15,16 @@ menufile,ui\hud_test.menu
 localize,mod
 
 //============================================================================================
+// Weapons
+//============================================================================================
+rawfile,clientscripts\apex\_zm_weapons.csc
+rawfile,maps\apex\_zm_weapons.gsc
+stringtable,weapons\melee_weapons.csv
+stringtable,weapons\placeable_mines.csv
+stringtable,weapons\stats.csv
+stringtable,weapons\zombie_theater.csv
+
+//============================================================================================
 // MagicBox
 //============================================================================================
 rawfile,clientscripts\apex\_zm_magicbox.csc
@@ -269,6 +279,9 @@ fx,apex\misc\fx_zombie_cola_arsenal_on
 //============================================================================================
 // Overriden Zombiemode Assets
 //============================================================================================
+rawfile,clientscripts\_zombiemode_weap_freezegun.csc
+rawfile,clientscripts\_zombiemode_weap_tesla.csc
+rawfile,clientscripts\_zombiemode_weap_thundergun.csc
 rawfile,clientscripts\_zombiemode_weapons.csc
 rawfile,clientscripts\_zombiemode.csc
 
