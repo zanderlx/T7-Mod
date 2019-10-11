@@ -459,15 +459,9 @@ clean_up_hacked_box()
 	self endon("box_spin_done");
 	self waittill("box_hacked_repsin");
 
-	if(isdefined(self.weapon_model_dw))
-	{
-		self.weapon_model_dw Delete();
-		self.weapon_model_dw = undefined;
-	}
-
 	if(isdefined(self.weapon_model))
 	{
-		self.weapon_model Delete();
+		self.weapon_model maps\apex\_zm_weapons::delete_weapon_model();
 		self.weapon_model = undefined;
 	}
 }
@@ -482,15 +476,7 @@ treasure_chest_weapon_spawn(player, repsin)
 	self.weapon_string = treasure_chest_ChooseWeightedRandomWeapon(player);
 	self.chest ClearClientFlag(level._ZOMBIE_SCRIPTMOVER_FLAG_BOX_RANDOM);
 	wait_network_frame();
-	self.weapon_model = spawn_model(GetWeaponModel(self.weapon_string), self.chest.origin + (0, 0, 43), self.chest.angles + (0, 180, 0));
-	self.weapon_model UseWeaponHideTags(self.weapon_string);
-
-	if(maps\apex\_zm_weapons::weapon_is_dual_wield(self.weapon_string))
-	{
-		self.weapon_model_dw = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(self.weapon_string), self.weapon_model.origin - (3, 3, 3), self.weapon_model.angles);
-		self.weapon_model_dw UseWeaponHideTags(self.weapon_string);
-		self.weapon_model_dw LinkTo(self.weapon_model);
-	}
+	self.weapon_model = maps\apex\_zm_weapons::spawn_weapon_model(self.weapon_string, self.chest.origin + (0, 0, 43), self.chest.angles + (0, 180, 0));
 
 	if(!is_true(self._box_opened_by_fire_sale) && !(is_true(level.zombie_vars["zombie_powerup_fire_sale_on"]) && run_function(self, level._zombiemode_check_firesale_loc_valid_func)))
 	{
@@ -536,15 +522,10 @@ treasure_chest_weapon_spawn(player, repsin)
 		if(chance_of_joker > random)
 		{
 			self.weapon_string = undefined;
+			self.weapon_model maps\apex\_zm_weapons::model_hide_weapon(); // hides lh model if any
+			self.weapon_model Show(); // show only the rh model
 			self.weapon_model SetModel(level.zombie_vars["zombie_magicbox_joker_model"]);
 			self.weapon_model.angles = self.chest.angles + (0, 90, 0);
-
-			if(isdefined(self.weapon_model_dw))
-			{
-				self.weapon_model_dw Unlink();
-				self.weapon_model_dw Delete();
-				self.weapon_model_dw = undefined;
-			}
 
 			self.chest_moving = true;
 			flag_set("moving_chest_now");
@@ -562,7 +543,7 @@ treasure_chest_weapon_spawn(player, repsin)
 		wait 2;
 		self.weapon_model MoveZ(500, 4, 3);
 		self.weapon_model waittill("movedone");
-		self.weapon_model Delete();
+		self.weapon_model maps\apex\_zm_weapons::delete_weapon_model();
 		self notify("box_moving");
 		level notify("weapon_fly_away_end");
 	}
@@ -587,21 +568,14 @@ treasure_chest_weapon_spawn(player, repsin)
 				run_function(self, self.box_hacks["respin"], self.chest, player);
 		}
 
-		self.weapon_model thread timer_til_despawn(self.weapon_model_dw);
+		self.weapon_model thread timer_til_despawn();
 		self waittill("weapon_grabbed");
 
 		if(!is_true(self.timedOut))
 		{
-			if(isdefined(self.weapon_model_dw))
-			{
-				self.weapon_model_dw Unlink();
-				self.weapon_model_dw Delete();
-				self.weapon_model_dw = undefined;
-			}
-
 			if(isdefined(self.weapon_model))
 			{
-				self.weapon_model Delete();
+				self.weapon_model maps\apex\_zm_weapons::delete_weapon_model();
 				self.weapon_model = undefined;
 			}
 		}
@@ -611,20 +585,14 @@ treasure_chest_weapon_spawn(player, repsin)
 	self notify("box_spin_done");
 }
 
-timer_til_despawn(weapon_model_dw)
+timer_til_despawn()
 {
 	self endon("kill_weapon_movement");
 	self MoveTo(self.origin - (0, 0, 43), 12, 6);
 	wait 12;
 
-	if(isdefined(weapon_model_dw))
-	{
-		weapon_model_dw Unlink();
-		weapon_model_dw Delete();
-	}
-
 	if(isdefined(self))
-		self Delete();
+		self maps\apex\_zm_weapons::delete_weapon_model();
 }
 
 treasure_chest_glowfx()
@@ -732,6 +700,14 @@ default_cymbal_monkey_weighting_func()
 //============================================================================================
 // Weigheted / Limited Weapons
 //============================================================================================
+add_limited_weapon(weapon, limit)
+{
+	if(!isdefined(level.limited_weapons))
+		level.limited_weapons = [];
+	if(!isdefined(level.limited_weapons[weapon]))
+		level.limited_weapons[weapon] = limit;
+}
+
 limited_weapon_below_quota(weapon, ignore_player)
 {
 	if(isdefined(level.limited_weapons) && isdefined(level.limited_weapons[weapon]))
@@ -888,6 +864,14 @@ is_weapon_in_box(weapon)
 	if(!isdefined(level._zm_box_weapons))
 		return false;
 	return IsInArray(level._zm_box_weapons, weapon);
+}
+
+add_weapon_to_magicbox(weapon)
+{
+	if(!isdefined(level._zm_box_weapons))
+		level._zm_box_weapons = [];
+	if(!IsInArray(level._zm_box_weapons, weapon))
+		level._zm_box_weapons[level._zm_box_weapons.size] = weapon;
 }
 
 //============================================================================================

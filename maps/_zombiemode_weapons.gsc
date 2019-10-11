@@ -5,159 +5,8 @@
 
 init()
 {
-	init_weapons();
 	init_weapon_upgrade();
 //	init_weapon_cabinet();
-}
-
-add_zombie_weapon( weapon_name, upgrade_name, hint, cost, weaponVO, weaponVOresp, ammo_cost )
-{
-	if( IsDefined( level.zombie_include_weapons ) && !IsDefined( level.zombie_include_weapons[weapon_name] ) )
-	{
-		return;
-	}
-
-	// Check the table first
-	table = "mp/zombiemode.csv";
-	table_cost = TableLookUp( table, 0, weapon_name, 1 );
-	table_ammo_cost = TableLookUp( table, 0, weapon_name, 2 );
-
-	if( IsDefined( table_cost ) && table_cost != "" )
-	{
-		cost = round_up_to_ten( int( table_cost ) );
-	}
-
-	if( IsDefined( table_ammo_cost ) && table_ammo_cost != "" )
-	{
-		ammo_cost = round_up_to_ten( int( table_ammo_cost ) );
-	}
-
-	PrecacheString( hint );
-
-	struct = SpawnStruct();
-
-	if( !IsDefined( level.zombie_weapons ) )
-	{
-		level.zombie_weapons = [];
-	}
-
-	struct.weapon_name = weapon_name;
-	struct.upgrade_name = upgrade_name;
-	struct.weapon_classname = "weapon_" + weapon_name;
-	struct.hint = hint;
-	struct.cost = cost;
-	struct.vox = weaponVO;
-	struct.vox_response = weaponVOresp;
-
-	if( !IsDefined( ammo_cost ) )
-	{
-		ammo_cost = round_up_to_ten( int( cost * 0.5 ) );
-	}
-
-	struct.ammo_cost = ammo_cost;
-
-	level.zombie_weapons[weapon_name] = struct;
-}
-
-include_zombie_weapon( weapon_name, in_box, collector, weighting_func )
-{
-	if( !IsDefined( level.zombie_include_weapons ) )
-	{
-		level.zombie_include_weapons = [];
-	}
-
-	level.zombie_include_weapons[weapon_name] = true;
-
-	PrecacheItem( weapon_name );
-
-	if(is_true(in_box))
-	{
-		if(!isdefined(level._zm_box_weapons))
-			level._zm_box_weapons = [];
-		if(!maps\apex\_utility::IsInArray(level._zm_box_weapons, weapon_name))
-			level._zm_box_weapons[level._zm_box_weapons.size] = weapon_name;
-	}
-}
-
-//
-//Z2 add_zombie_weapon will call PrecacheItem on the weapon name.  So this means we're loading
-//		the model even if we're not using it?  This could save some memory if we change this.
-init_weapons()
-{
-	// Zombify
-//	PrecacheItem( "zombie_melee" );
-
-	//Z2 Weapons disabled for now
-	// Pistols
-	add_zombie_weapon( "m1911_zm",					"m1911_upgraded_zm",					&"ZOMBIE_WEAPON_M1911",					50,		"pistol",			"",		undefined );
-	add_zombie_weapon( "python_zm",					"python_upgraded_zm",					&"ZOMBIE_WEAPON_PYTHON",				2200,	"pistol",			"",		undefined );
-	add_zombie_weapon( "cz75_zm",					"cz75_upgraded_zm",						&"ZOMBIE_WEAPON_CZ75",					50,		"pistol",			"",		undefined );
-
-	//	Weapons - SMGs
-	add_zombie_weapon( "ak74u_zm",					"ak74u_upgraded_zm",					&"ZOMBIE_WEAPON_AK74U",					1200,		"smg",				"",		undefined );
-	add_zombie_weapon( "mp5k_zm",					"mp5k_upgraded_zm",						&"ZOMBIE_WEAPON_MP5K",					1000,		"smg",				"",		undefined );
-	add_zombie_weapon( "mp40_zm",					"mp40_upgraded_zm",						&"ZOMBIE_WEAPON_MP40",					1000,		"smg",				"",		undefined );
-	add_zombie_weapon( "mpl_zm",					"mpl_upgraded_zm",						&"ZOMBIE_WEAPON_MPL",					1000,		"smg",				"",		undefined );
-	add_zombie_weapon( "pm63_zm",					"pm63_upgraded_zm",						&"ZOMBIE_WEAPON_PM63",					1000,		"smg",				"",		undefined );
-	add_zombie_weapon( "spectre_zm",				"spectre_upgraded_zm",					&"ZOMBIE_WEAPON_SPECTRE",				50,		"smg",				"",		undefined );
-
-	//	Weapons - Dual Wield
-	add_zombie_weapon( "cz75dw_zm",					"cz75dw_upgraded_zm",					&"ZOMBIE_WEAPON_CZ75DW",				50,		"dualwield",		"",		undefined );
-
-	//	Weapons - Shotguns
-	add_zombie_weapon( "ithaca_zm",					"ithaca_upgraded_zm",					&"ZOMBIE_WEAPON_ITHACA",				1500,		"shotgun",			"",		undefined );
-	add_zombie_weapon( "spas_zm",					"spas_upgraded_zm",						&"ZOMBIE_WEAPON_SPAS",					2000,		"shotgun",			"",		undefined );
-	add_zombie_weapon( "rottweil72_zm",				"rottweil72_upgraded_zm",				&"ZOMBIE_WEAPON_ROTTWEIL72",			500,		"shotgun",			"",		undefined );
-	add_zombie_weapon( "hs10_zm",					"hs10_upgraded_zm",						&"ZOMBIE_WEAPON_HS10",					50,		"shotgun",			"",		undefined );
-
-	//	Weapons - Semi-Auto Rifles
-	add_zombie_weapon( "m14_zm",					"m14_upgraded_zm",						&"ZOMBIE_WEAPON_M14",					500,		"rifle",			"",		undefined );
-
-	//	Weapons - Burst Rifles
-	add_zombie_weapon( "m16_zm",					"m16_gl_upgraded_zm",					&"ZOMBIE_WEAPON_M16",					1200,		"burstrifle",		"",		undefined );
-	add_zombie_weapon( "g11_lps_zm",				"g11_lps_upgraded_zm",					&"ZOMBIE_WEAPON_G11",					900,		"burstrifle",		"",		undefined );
-	add_zombie_weapon( "famas_zm",					"famas_upgraded_zm",					&"ZOMBIE_WEAPON_FAMAS",					50,		"burstrifle",		"",		undefined );
-
-	//	Weapons - Assault Rifles
-	add_zombie_weapon( "aug_acog_zm",				"aug_acog_mk_upgraded_zm",				&"ZOMBIE_WEAPON_AUG",					1200,	"assault",			"",		undefined );
-	add_zombie_weapon( "galil_zm",					"galil_upgraded_zm",					&"ZOMBIE_WEAPON_GALIL",					100,	"assault",			"",		undefined );
-	add_zombie_weapon( "commando_zm",				"commando_upgraded_zm",					&"ZOMBIE_WEAPON_COMMANDO",				100,	"assault",			"",		undefined );
-	add_zombie_weapon( "fnfal_zm",					"fnfal_upgraded_zm",					&"ZOMBIE_WEAPON_FNFAL",					100,	"burstrifle",			"",		undefined );
-
-	//	Weapons - Sniper Rifles
-	add_zombie_weapon( "dragunov_zm",				"dragunov_upgraded_zm",					&"ZOMBIE_WEAPON_DRAGUNOV",				2500,		"sniper",			"",		undefined );
-	add_zombie_weapon( "l96a1_zm",					"l96a1_upgraded_zm",					&"ZOMBIE_WEAPON_L96A1",					50,		"sniper",			"",		undefined );
-
-	//	Weapons - Machineguns
-	add_zombie_weapon( "rpk_zm",					"rpk_upgraded_zm",						&"ZOMBIE_WEAPON_RPK",					4000,		"mg",				"",		undefined );
-	add_zombie_weapon( "hk21_zm",					"hk21_upgraded_zm",						&"ZOMBIE_WEAPON_HK21",					50,		"mg",				"",		undefined );
-
-	// Grenades
-	add_zombie_weapon( "frag_grenade_zm", 			undefined,								&"ZOMBIE_WEAPON_FRAG_GRENADE",			250,	"grenade",			"",		undefined );
-	add_zombie_weapon( "sticky_grenade_zm", 		undefined,								&"ZOMBIE_WEAPON_STICKY_GRENADE",		250,	"grenade",			"",		undefined );
-	add_zombie_weapon( "claymore_zm", 				undefined,								&"ZOMBIE_WEAPON_CLAYMORE",				1000,	"grenade",			"",		undefined );
-
-	// Rocket Launchers
-	add_zombie_weapon( "m72_law_zm", 				"m72_law_upgraded_zm",					&"ZOMBIE_WEAPON_M72_LAW",	 			2000,	"launcher",			"",		undefined );
-	add_zombie_weapon( "china_lake_zm", 			"china_lake_upgraded_zm",				&"ZOMBIE_WEAPON_CHINA_LAKE", 			2000,	"launcher",			"",		undefined );
-
-	// Special
- 	add_zombie_weapon( "zombie_cymbal_monkey",		undefined,								&"ZOMBIE_WEAPON_SATCHEL_2000", 			2000,	"monkey",			"",		undefined );
- 	add_zombie_weapon( "ray_gun_zm", 				"ray_gun_upgraded_zm",					&"ZOMBIE_WEAPON_RAYGUN", 				10000,	"raygun",			"",		undefined );
- 	add_zombie_weapon( "tesla_gun_zm",				"tesla_gun_upgraded_zm",				&"ZOMBIE_WEAPON_TESLA", 				10,		"tesla",			"",		undefined );
- 	add_zombie_weapon( "thundergun_zm",				"thundergun_upgraded_zm",				&"ZOMBIE_WEAPON_THUNDERGUN", 			10,		"thunder",			"",		undefined );
- 	add_zombie_weapon( "crossbow_explosive_zm",		"crossbow_explosive_upgraded_zm",		&"ZOMBIE_WEAPON_CROSSBOW_EXPOLOSIVE",	10,		"crossbow",			"",		undefined );
- 	add_zombie_weapon( "knife_ballistic_zm",		"knife_ballistic_upgraded_zm",			&"ZOMBIE_WEAPON_KNIFE_BALLISTIC",		10,		"bowie",	"",		undefined );
- 	add_zombie_weapon( "knife_ballistic_bowie_zm",	"knife_ballistic_bowie_upgraded_zm",	&"ZOMBIE_WEAPON_KNIFE_BALLISTIC",		10,		"bowie",	"",		undefined );
- 	add_zombie_weapon( "knife_ballistic_sickle_zm",	"knife_ballistic_sickle_upgraded_zm",	&"ZOMBIE_WEAPON_KNIFE_BALLISTIC",		10,		"sickle",	"",		undefined );
- 	add_zombie_weapon( "freezegun_zm",				"freezegun_upgraded_zm",				&"ZOMBIE_WEAPON_FREEZEGUN", 			10,		"freezegun",		"",		undefined );
- 	add_zombie_weapon( "zombie_black_hole_bomb",		undefined,								&"ZOMBIE_WEAPON_SATCHEL_2000", 			2000,	"gersh",			"",		undefined );
- 	add_zombie_weapon( "zombie_nesting_dolls",		undefined,								&"ZOMBIE_WEAPON_NESTING_DOLLS", 		2000,	"dolls",	"",		undefined );
-
-	if(IsDefined(level._zombie_custom_add_weapons))
-	{
-		[[level._zombie_custom_add_weapons]]();
-	}
 }
 
 // For buying weapon upgrades in the environment
@@ -170,7 +19,7 @@ init_weapon_upgrade()
 	{
 		// hint_string = get_weapon_hint( weapon_spawns[i].zombie_weapon_upgrade );
 		// cost = get_weapon_cost( weapon_spawns[i].zombie_weapon_upgrade );
-		hint_string = level.zombie_weapons[weapon_spawns[i].zombie_weapon_upgrade].hint;
+		hint_string = level.zombie_weapons[weapon_spawns[i].zombie_weapon_upgrade].display_name;
 		cost = level.zombie_weapons[weapon_spawns[i].zombie_weapon_upgrade].cost;
 
 		weapon_spawns[i] SetHintString( hint_string, cost );
@@ -278,8 +127,10 @@ weapon_cabinet_door_open( left_or_right )
 	}
 }
 
-weapon_set_first_time_hint( cost, ammo_cost )
+weapon_set_first_time_hint( cost )
 {
+	ammo_cost = Int(cost / 2);
+
 	if ( isDefined( level.has_pack_a_punch ) && !level.has_pack_a_punch )
 	{
 		self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", cost, ammo_cost );
@@ -294,8 +145,6 @@ weapon_spawn_think()
 {
 	// cost = get_weapon_cost( self.zombie_weapon_upgrade );
 	cost = level.zombie_weapons[self.zombie_weapon_upgrade].cost;
-	// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
-	ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
 	is_grenade = (WeaponType( self.zombie_weapon_upgrade ) == "grenade");
 
 	self thread decide_hide_show_hint();
@@ -341,7 +190,7 @@ weapon_spawn_think()
 
 					if(!is_grenade)
 					{
-						self weapon_set_first_time_hint( cost, ammo_cost );
+						self weapon_set_first_time_hint( cost );
 					}
 				}
 
@@ -376,8 +225,7 @@ weapon_spawn_think()
 				}
 				else
 				{
-					// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
-					ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
+					ammo_cost = Int(cost / 2);
 				}
 			}
 			else
@@ -388,8 +236,7 @@ weapon_spawn_think()
 				}
 				else
 				{
-					// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
-					ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
+					ammo_cost = Int(cost / 2);
 				}
 			}
 			// if the player does have this then give him ammo.
@@ -404,7 +251,7 @@ weapon_spawn_think()
 					if(!is_grenade)
 					{
 						// self weapon_set_first_time_hint( cost, get_ammo_cost( self.zombie_weapon_upgrade ) );
-						self weapon_set_first_time_hint(cost, ammo_cost);
+						self weapon_set_first_time_hint(cost);
 					}
 				}
 

@@ -1,4 +1,4 @@
-#include clientscripts\_utility; 
+#include clientscripts\_utility;
 #include clientscripts\_fx;
 #include clientscripts\_music;
 
@@ -8,13 +8,13 @@ init()
 	{
 		return;
 	}
-	
-	if ( !clientscripts\_zombiemode_weapons::is_weapon_included( "thundergun_zm" ) )
+
+	if ( !clientscripts\apex\_zm_weapons::is_weapon_included( "thundergun_zm" ) )
 	{
 		return;
 	}
-	
-	
+
+
 	level._effect["thundergun_viewmodel_power_cell1"] = loadfx("weapon/thunder_gun/fx_thundergun_power_cell_view1");
 	level._effect["thundergun_viewmodel_power_cell2"] = loadfx("weapon/thunder_gun/fx_thundergun_power_cell_view2");
 	level._effect["thundergun_viewmodel_power_cell3"] = loadfx("weapon/thunder_gun/fx_thundergun_power_cell_view3");
@@ -31,16 +31,16 @@ init()
 	level.thundergun_power_cell_fx_handles[level.thundergun_power_cell_fx_handles.size] = -1;
 	level.thundergun_power_cell_fx_handles[level.thundergun_power_cell_fx_handles.size] = -1;
 	level.thundergun_power_cell_fx_handles[level.thundergun_power_cell_fx_handles.size] = -1;
-	
+
 	level thread player_init();
-	level thread thundergun_notetrack_think(); 
+	level thread thundergun_notetrack_think();
 }
 
 player_init()
 {
 	waitforclient( 0 );
 	level.thundergun_play_fx_power_cell = [];
-	
+
 	players = GetLocalPlayers();
 	for( i = 0; i < players.size; i++ )
 	{
@@ -55,7 +55,7 @@ thundergun_fx_power_cell( localclientnum )
 
 	oldAmmo = -1;
 	oldCount = -1;
-	
+
 	self thread thundergun_fx_listener( localclientnum );
 
 	for( ;; )
@@ -69,8 +69,8 @@ thundergun_fx_power_cell( localclientnum )
 		}
 
 		weaponname = undefined;
-		
-		currentweapon = GetCurrentWeapon( localclientnum ); 
+
+		currentweapon = GetCurrentWeapon( localclientnum );
 		if ( !level.thundergun_play_fx_power_cell[localclientnum] || IsThrowingGrenade( localclientnum ) || IsMeleeing( localclientnum ) || IsOnTurret( localclientnum ) || (currentweapon != "thundergun_zm" && currentweapon != "thundergun_upgraded_zm") )
 		{
 			if ( oldAmmo != -1 )
@@ -81,12 +81,12 @@ thundergun_fx_power_cell( localclientnum )
 			oldCount = -1;
 			continue;
 		}
-		
+
 		ammo = GetWeaponAmmoClip( localclientnum, currentweapon );
 		if ( oldAmmo > 0 && oldAmmo != ammo )
 		{
 			thundergun_fx_fire( localclientnum );
-			
+
 		}
 		oldAmmo = ammo;
 
@@ -115,7 +115,7 @@ thundergun_play_power_cell_fx( localclientnum, count )
 			level.thundergun_power_cell_fx_handles[i] = -1;
 		}
 	}
-	
+
 	if ( !count )
 	{
 		return;
@@ -125,7 +125,7 @@ thundergun_play_power_cell_fx( localclientnum, count )
 
 	for ( ;; )
 	{
-		currentweapon = GetCurrentWeapon( localclientnum ); 
+		currentweapon = GetCurrentWeapon( localclientnum );
 		if ( currentweapon != "thundergun_zm" && currentweapon != "thundergun_upgraded_zm" )
 		{
 			wait( 0.05 );
@@ -197,7 +197,7 @@ thread_zombie_vox()
 	playsound(0, "wpn_thundergun_proj_impact_zombie", ent.origin);
 	wait(5);
 	ent delete();
-	
+
 }
 
 // listen for the fx to be enabled/disabled

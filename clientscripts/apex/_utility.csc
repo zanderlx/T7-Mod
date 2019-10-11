@@ -14,6 +14,14 @@ has_perk(clientnum, perk)
 //============================================================================================
 // Common Utility Functions
 //============================================================================================
+spawn_model(clientnum, model, origin, angles)
+{
+	ent = Spawn(clientnum, origin, "script_model");
+	ent SetModel(model);
+	ent.angles = angles;
+	return ent;
+}
+
 get_player_id(clientnum)
 {
 	player = GetLocalPlayer(clientnum);
@@ -156,6 +164,30 @@ Pow(num, raise)
 Distance2DSquared(origin, origin2)
 {
 	return (Abs(origin2[0] - origin[0]) * Abs(origin2[0] - origin[0])) + (Abs(origin2[1] - origin[1]) * Abs(origin2[1] - origin[1]));
+}
+
+//============================================================================================
+// Weapon Engine Functions
+//============================================================================================
+WeaponInventoryType(weapon_name)
+{
+	if(clientscripts\apex\_zm_weapons::is_weapon_included(weapon_name) && isdefined(level.zombie_weapons[weapon_name].inventory_type))
+		return level.zombie_weapons[weapon_name].inventory_type;
+	return "primary"; // default?!?
+}
+
+WeaponDualWieldWeaponName(weapon_name)
+{
+	if(clientscripts\apex\_zm_weapons::is_weapon_included(weapon_name) && isdefined(level.zombie_weapons[weapon_name].lh_name))
+		return level.zombie_weapons[weapon_name].lh_name;
+	return "none";
+}
+
+WeaponAltWeaponName(weapon_name)
+{
+	if(clientscripts\apex\_zm_weapons::is_weapon_included(weapon_name) && isdefined(level.zombie_weapons[weapon_name].alt_name))
+		return level.zombie_weapons[weapon_name].alt_name;
+	return "none";
 }
 
 //============================================================================================

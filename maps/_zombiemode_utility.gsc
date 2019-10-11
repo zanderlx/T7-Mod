@@ -3026,24 +3026,6 @@ play_sound_2D(sound)
 	*/
 }
 
-include_weapon( weapon_name, in_box, collector, weighting_func )
-{
-	if( !isDefined( in_box ) )
-	{
-		in_box = true;
-	}
-	if( !isDefined( collector ) )
-	{
-		collector = false;
-	}
-	maps\_zombiemode_weapons::include_zombie_weapon( weapon_name, in_box, collector, weighting_func );
-}
-
-include_powerup( powerup_name )
-{
-	maps\_zombiemode_powerups::include_zombie_powerup( powerup_name );
-}
-
 include_equipment( equipment_name )
 {
 	maps\_zombiemode_equipment::include_zombie_equipment( equipment_name );

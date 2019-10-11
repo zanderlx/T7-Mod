@@ -72,7 +72,9 @@ main()
 	//level.round_spawn_func = maps\zombie_theater_quad::Intro_Quad_Spawn;;
 
 	setup_t7_mod();
-	include_weapons();
+	level._uses_retrievable_ballisitic_knives = true;
+	precacheItem( "explosive_bolt_zm" );
+	precacheItem( "explosive_bolt_upgraded_zm" );
 
 	level.use_zombie_heroes = true;
 	level.disable_protips = 1;
@@ -142,115 +144,6 @@ theater_playanim( animname )
 {
 	self UseAnimTree(#animtree);
 	self animscripted(animname + "_done", self.origin, self.angles, level.scr_anim[animname],"normal", undefined, 2.0  );
-}
-
-
-//*****************************************************************************
-// WEAPON FUNCTIONS
-//
-// Include the weapons that are only in your level so that the cost/hints are accurate
-// Also adds these weapons to the random treasure chest.
-// Copy all include_weapon lines over to the level.csc file too - removing the weighting funcs...
-//*****************************************************************************
-include_weapons()
-{
-	include_weapon( "frag_grenade_zm", false, true );
-	include_weapon( "claymore_zm", false, true );
-
-	//	Weapons - Pistols
-	include_weapon( "m1911_zm", false );						// colt
-	include_weapon( "m1911_upgraded_zm", false );
-	include_weapon( "python_zm" );						// 357
-	include_weapon( "python_upgraded_zm", false );
-  	include_weapon( "cz75_zm" );
-  	include_weapon( "cz75_upgraded_zm", false );
-
-	//	Weapons - Semi-Auto Rifles
-	include_weapon( "m14_zm", false, true );							// gewehr43
-	include_weapon( "m14_upgraded_zm", false );
-
-	//	Weapons - Burst Rifles
-	include_weapon( "m16_zm", false, true );
-	include_weapon( "m16_gl_upgraded_zm", false );
-	include_weapon( "g11_lps_zm" );
-	include_weapon( "g11_lps_upgraded_zm", false );
-	include_weapon( "famas_zm" );
-	include_weapon( "famas_upgraded_zm", false );
-
-	//	Weapons - SMGs
-	include_weapon( "ak74u_zm", false, true );						// thompson, mp40, bar
-	include_weapon( "ak74u_upgraded_zm", false );
-	include_weapon( "mp5k_zm", false, true );
-	include_weapon( "mp5k_upgraded_zm", false );
-	include_weapon( "mp40_zm", false, true );
-	include_weapon( "mp40_upgraded_zm", false );
-	include_weapon( "mpl_zm", false, true );
-	include_weapon( "mpl_upgraded_zm", false );
-	include_weapon( "pm63_zm", false, true );
-	include_weapon( "pm63_upgraded_zm", false );
-	include_weapon( "spectre_zm" );
-	include_weapon( "spectre_upgraded_zm", false );
-
-	//	Weapons - Dual Wield
-  	include_weapon( "cz75dw_zm" );
-  	include_weapon( "cz75dw_upgraded_zm", false );
-
-	//	Weapons - Shotguns
-	include_weapon( "ithaca_zm", false, true );						// shotgun
-	include_weapon( "ithaca_upgraded_zm", false );
-	include_weapon( "rottweil72_zm", false, true );
-	include_weapon( "rottweil72_upgraded_zm", false );
-	include_weapon( "spas_zm" );						//
-	include_weapon( "spas_upgraded_zm", false );
-	include_weapon( "hs10_zm" );
-	include_weapon( "hs10_upgraded_zm", false );
-
-	//	Weapons - Assault Rifles
-	include_weapon( "aug_acog_zm" );
-	include_weapon( "aug_acog_mk_upgraded_zm", false );
-	include_weapon( "galil_zm" );
-	include_weapon( "galil_upgraded_zm", false );
-	include_weapon( "commando_zm" );
-	include_weapon( "commando_upgraded_zm", false );
-	include_weapon( "fnfal_zm" );
-	include_weapon( "fnfal_upgraded_zm", false );
-
-	//	Weapons - Sniper Rifles
-	include_weapon( "dragunov_zm" );					// ptrs41
-	include_weapon( "dragunov_upgraded_zm", false );
-	include_weapon( "l96a1_zm" );
-	include_weapon( "l96a1_upgraded_zm", false );
-
-	//	Weapons - Machineguns
-	include_weapon( "rpk_zm" );							// mg42, 30 cal, ppsh
-	include_weapon( "rpk_upgraded_zm", false );
-	include_weapon( "hk21_zm" );
-	include_weapon( "hk21_upgraded_zm", false );
-
-	//	Weapons - Misc
-	include_weapon( "m72_law_zm" );
-	include_weapon( "m72_law_upgraded_zm", false );
-	include_weapon( "china_lake_zm" );
-	include_weapon( "china_lake_upgraded_zm", false );
-
-	//	Weapons - Special
-	include_weapon( "zombie_cymbal_monkey" );
-	include_weapon( "ray_gun_zm" );
-	include_weapon( "ray_gun_upgraded_zm", false );
-
-	include_weapon( "thundergun_zm", true );
-	include_weapon( "thundergun_upgraded_zm", false );
-	include_weapon( "crossbow_explosive_zm" );
-	include_weapon( "crossbow_explosive_upgraded_zm", false );
-
-	include_weapon( "knife_ballistic_zm", true );
-	include_weapon( "knife_ballistic_upgraded_zm", false );
-	include_weapon( "knife_ballistic_bowie_zm", false );
-	include_weapon( "knife_ballistic_bowie_upgraded_zm", false );
-	level._uses_retrievable_ballisitic_knives = true;
-
-	precacheItem( "explosive_bolt_zm" );
-	precacheItem( "explosive_bolt_upgraded_zm" );
 }
 
 //*****************************************************************************

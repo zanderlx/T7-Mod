@@ -1,1 +1,0 @@
-include_zombie_powerup(powerup_name) { }

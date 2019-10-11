@@ -112,15 +112,7 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 	}
 	else
 	{
-		stub.worldgun = spawn_model(GetWeaponModel(current_weapon), origin_base + interact_offset, self.angles);
-		stub.worldgun UseWeaponHideTags(current_weapon);
-
-		if(maps\apex\_zm_weapons::weapon_is_dual_wield(current_weapon))
-		{
-			stub.worldgun.lh = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
-			stub.worldgun.lh LinkTo(stub.worldgun);
-			stub.worldgun.lh UseWeaponHideTags(current_weapon);
-		}
+		stub.worldgun = maps\apex\_zm_weapons::spawn_weapon_model(current_weapon, origin_base + interact_offset, self.angles);
 
 		if(isdefined(level.custom_pap_move_in))
 			run_function(self, level.custom_pap_move_in, stub, origin_offset, angles_offset);
@@ -136,12 +128,7 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 	{
 		stub.flag RotateTo(stub.flag.angles - (179, 0, 0), .25, 0, 0);
 		wait .35;
-
-		stub.worldgun Hide();
-
-		if(isdefined(stub.worldgun.lh))
-			stub.worldgun.lh Hide();
-
+		stub.worldgun maps\apex\_zm_weapons::model_hide_weapon();
 		wait 3;
 	}
 
@@ -154,35 +141,7 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 	}
 	else
 	{
-		stub.worldgun SetModel(GetWeaponModel(upgrade_weapon));
-		stub.worldgun UseWeaponHideTags(upgrade_weapon);
-		stub.worldgun Show();
-
-		if(isdefined(stub.worldgun.lh))
-		{
-			if(maps\apex\_zm_weapons::weapon_is_dual_wield(upgrade_weapon))
-			{
-				stub.worldgun.lh SetModel(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(upgrade_weapon));
-				stub.worldgun.lh UseWeaponHideTags(upgrade_weapon);
-				stub.worldgun.lh Show();
-			}
-			else
-			{
-				stub.worldgun.lh Unlink();
-				stub.worldgun.lh Delete();
-				stub.worldgun.lh = undefined;
-			}
-		}
-		else
-		{
-			if(maps\apex\_zm_weapons::weapon_is_dual_wield(upgrade_weapon))
-			{
-				stub.worldgun.lh = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
-				stub.worldgun.lh LinkTo(stub.worldgun);
-				stub.worldgun.lh UseWeaponHideTags(current_weapon);
-			}
-		}
-
+		stub.worldgun maps\apex\_zm_weapons::model_use_weapon_options(upgrade_weapon);
 		stub.flag RotateTo(stub.flag.angles + (179, 0, 0), .25, 0, 0);
 
 		if(isdefined(level.custom_pap_move_out))
@@ -429,6 +388,7 @@ playertrigger_think()
 				continue;
 
 			current_weapon = player GetCurrentWeapon();
+			current_weapon = maps\apex\_zm_weapons::get_nonalternate_weapon(current_weapon);
 
 			if(current_weapon == "microwavegun_zm")
 				current_weapon = "microwavegundw_zm";
@@ -465,7 +425,7 @@ vending_post_think(player, current_weapon)
 	player maps\_zombiemode_audio::create_and_play_dialog("weapon_pickup", "upgrade_wait");
 	self.trigger_hidden = true;
 	player thread do_knuckle_crack();
-	upgrade_weapon = level.zombie_weapons[current_weapon].upgrade_name;
+	upgrade_weapon = maps\apex\_zm_weapons::get_upgrade_weapon(current_weapon);
 	self.current_weapon = current_weapon;
 	self.upgrade_weapon = upgrade_weapon;
 	player third_person_weapon_upgrade(self, current_weapon, upgrade_weapon);
@@ -479,14 +439,7 @@ vending_post_think(player, current_weapon)
 
 	if(isdefined(self.worldgun))
 	{
-		if(isdefined(self.worldgun.lh))
-		{
-			self.worldgun.lh Unlink();
-			self.worldgun.lh Delete();
-			self.worldgun.lh = undefined;
-		}
-
-		self.worldgun Delete();
+		self.worldgun maps\apex\_zm_weapons::delete_weapon_model();
 		self.worldgun = undefined;
 	}
 	self.pack_player = undefined;
@@ -514,19 +467,7 @@ wait_for_player_to_take(player, weapon, upgrade_weapon)
 				self notify("pap_taken");
 				player notify("pap_taken");
 				player.pap_used = true;
-				weapon_limit = player get_player_weapon_limit();
-				primaries = player GetWeaponsListPrimaries();
-
-				if(isdefined(primaries) && primaries.size >= weapon_limit)
-					player maps\apex\_zm_weapons::weapon_give(upgrade_weapon);
-				else
-				{
-					player GiveWeapon(upgrade_weapon, 0, player maps\apex\_zm_weapons::get_pack_a_punch_weapon_options(upgrade_weapon));
-					player GiveStartAmmo(upgrade_weapon);
-				}
-
-				player SwitchToWeapon(upgrade_weapon);
-				player maps\apex\_zm_weapons::play_weapon_vo(upgrade_weapon);
+				player maps\apex\_zm_weapons::weapon_give(upgrade_weapon, false, false);
 				return;
 			}
 		}
@@ -562,14 +503,7 @@ destroy_weapon_on_disconnect(player)
 
 	if(isdefined(self.worldgun))
 	{
-		if(isdefined(self.worldgun.lh))
-		{
-			self.worldgun.lh Unlink();
-			self.worldgun.lh Delete();
-			self.worldgun.lh = undefined;
-		}
-
-		self.worldgun Delete();
+		self.worldgun maps\apex\_zm_weapons::delete_weapon_model();
 		self.worldgun = undefined;
 	}
 }
@@ -588,15 +522,8 @@ destroy_weapon_in_blackout(player)
 	if(isdefined(self.worldgun))
 	{
 		self.worldgun RotateTo(self.worldgun.angles + (RandomInt(90) - 45, 0, RandomInt(360) - 180), 1.5, 0, 0);
-
-		if(isdefined(self.worldgun.lh))
-		{
-			self.worldgun.lh Unlink();
-			self.worldgun.lh Delete();
-			self.worldgun.lh = undefined;
-		}
-
-		self.worldgun Delete();
+		self waittill("rotatedone");
+		self.worldgun maps\apex\_zm_weapons::delete_weapon_model();
 		self.worldgun = undefined;
 	}
 }
@@ -605,9 +532,9 @@ can_pack_weapon(weapon_name)
 {
 	if(flag("pack_machine_in_use"))
 		return true;
-	if(!maps\apex\_zm_weapons::is_weapon_included(weapon_name))
+	if(!maps\apex\_zm_weapons::is_weapon_or_base_included(weapon_name))
 		return false;
-	if(!isdefined(level.zombie_weapons[weapon_name].upgrade_name) || level.zombie_weapons[weapon_name].upgrade_name == "none")
+	if(!maps\apex\_zm_weapons::can_upgrade_weapon(weapon_name))
 		return false;
 	return true;
 }
@@ -634,9 +561,9 @@ player_use_can_pack_now()
 //============================================================================================
 do_knuckle_crack()
 {
-	gun = self upgrade_kuckle_crack_begin();
+	self upgrade_kuckle_crack_begin();
 	self waittill_any("fake_death", "death", "player_downed", "weapon_change_complete");
-	self upgrade_kuckle_crack_end(gun);
+	self upgrade_kuckle_crack_end();
 }
 
 upgrade_kuckle_crack_begin()
@@ -656,10 +583,9 @@ upgrade_kuckle_crack_begin()
 
 	self GiveWeapon("zombie_knuckle_crack");
 	self SwitchToWeapon("zombie_knuckle_crack");
-	return gun;
 }
 
-upgrade_kuckle_crack_end(gun)
+upgrade_kuckle_crack_end()
 {
 	self enable_player_move_states();
 	self TakeWeapon("zombie_knuckle_crack");
@@ -668,14 +594,11 @@ upgrade_kuckle_crack_end(gun)
 		return;
 
 	self decrement_is_drinking();
-	primaries = self GetWeaponsListPrimaries();
 
 	if(self is_drinking())
 		return;
-	else if(isdefined(primaries) && primaries.size > 0)
-		self SwitchToWeapon(primaries[0]);
 	else
-		self SwitchToWeapon(level.laststandpistol);
+		self maps\apex\_zm_weapons::switch_back_primary_weapon();
 }
 
 //============================================================================================
@@ -734,14 +657,14 @@ process_pap_zbarrier_state(state)
 			self.machine Show();
 			self.flag Show();
 			self.weapon Show();
-			self pap_attach_weapons();
+			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name);
 			self thread pap_take_gun();
 			break;
 		case "eject_gun":
 			self.machine Show();
 			self.flag Show();
 			self.weapon Show();
-			self pap_attach_weapons();
+			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name);
 			self thread pap_eject_gun();
 			break;
 		/*case "leaving":
@@ -844,19 +767,6 @@ pap_eject_gun()
 	self.weapon ClearAnim(%root, .2);
 	self.weapon SetFlaggedAnim("packapunch_worldguns_ejected", %o_zombie_base_packapunch_worldguns_ejected, 1, .2, 1);
 	// self.weapon waittillend("packapunch_worldguns_ejected");
-}
-
-pap_attach_weapons()
-{
-	weapon = self.weapon;
-	weapon_name = weapon.weapon_name;
-
-	weapon Attach(GetWeaponModel(weapon_name), "tag_weapon");
-
-	if(maps\apex\_zm_weapons::weapon_is_dual_wield(weapon_name))
-		weapon Attach(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(weapon_name), "tag_weapon_left");
-
-	weapon UseWeaponHideTags(weapon_name);
 }
 
 set_state_initial()

@@ -1,4 +1,4 @@
-#include clientscripts\_utility; 
+#include clientscripts\_utility;
 #include clientscripts\_fx;
 
 init()
@@ -7,11 +7,11 @@ init()
 	{
 		return;
 	}
-	
+
 	if ( isDefined( level.use_freezegun_features ) && level.use_freezegun_features == true )
 	{
 	}
-	else if ( !clientscripts\_zombiemode_weapons::is_weapon_included( "freezegun_zm" ) )
+	else if ( !clientscripts\apex\_zm_weapons::is_weapon_included( "freezegun_zm" ) )
 	{
 		return;
 	}
@@ -282,7 +282,7 @@ freezegun_do_gib_fx( tag, shatter )
 	players = getlocalplayers();
 	for ( i = 0; i < players.size; i++ )
 	{
-		PlayFxOnTag( i, freezegun_get_gibtrailfx( shatter ), self, tag ); 
+		PlayFxOnTag( i, freezegun_get_gibtrailfx( shatter ), self, tag );
 	}
 	//PlaySound( 0, freezegun_get_gibsound( shatter ), self gettagorigin( tag ) );
 }
@@ -346,7 +346,7 @@ freezegun_gib_override( type, locations )
 					case 6: // level._ZOMBIE_GIB_PIECE_INDEX_GUTS
 						freezegun_end_extremity_damage_fx_for_all_localclients( "left_arm" );
 						break;
-				} 
+				}
 			}
 		}
 
@@ -419,7 +419,7 @@ freezegun_gib_override( type, locations )
 				self clientscripts\_zombiemode::mark_piece_gibbed( level._ZOMBIE_GIB_PIECE_INDEX_LEFT_LEG );
 				self clientscripts\_zombiemode::mark_piece_gibbed( level._ZOMBIE_GIB_PIECE_INDEX_HEAD );
 				break;
-		} 
+		}
 	}
 
 	self.gibbed = true;

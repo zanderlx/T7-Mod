@@ -714,23 +714,8 @@ do_perk_bottle_drink_end(perk, gun)
 		self decrement_is_drinking();
 		return;
 	}
-	else if(gun != "none" && !is_placeable_mine(gun) && !is_equipment(gun))
-	{
-		self SwitchToWeapon(gun);
-
-		if(is_melee_weapon(gun))
-		{
-			self decrement_is_drinking();
-			return;
-		}
-	}
 	else
-	{
-		weapons = self GetWeaponsListPrimaries();
-
-		if(isdefined(weapons) && weapons.size > 0)
-			self SwitchToWeapon(weapons[0]);
-	}
+		self maps\apex\_zm_weapons::switch_back_primary_weapon(gun);
 
 	self waittill("weapon_change_complete");
 

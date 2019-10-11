@@ -21,18 +21,10 @@ setup_random_weapon()
 
 	level.random_weapon_powerups[level.random_weapon_powerups.size] = self;
 
-	if(isdefined(level.zombie_weapons[self.weapon].upgrade_name) && !RandomInt(4))
-		self.weapon = level.zombie_weapons[self.weapon].upgrade_name;
+	if(maps\apex\_zm_weapons::can_upgrade_weapon(self.weapon) && !RandomInt(4))
+		self.weapon = maps\apex\_zm_weapons::get_upgrade_weapon(self.weapon);
 
-	self SetModel(GetWeaponModel(self.weapon));
-	self UseWeaponHideTags(self.weapon);
-
-	if(maps\apex\_zm_weapons::weapon_is_dual_wield(self.weapon))
-	{
-		self.worldgundw = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(self.weapon), self.origin + (3, 3, 3), self.angles);
-		self.worldgundw UseWeaponHideTags(self.weapon);
-		self.worldgundw LinkTo(self, "tag_weapon", (3, 3, 3), (0, 0, 0));
-	}
+	self maps\apex\_zm_weapons::model_use_weapon_options(self.weapon);
 }
 
 grab_random_weapon(player)
@@ -42,14 +34,8 @@ grab_random_weapon(player)
 
 cleanup_random_weapon()
 {
-	if(isdefined(self.worldgundw))
-	{
-		self.worldgundw Unlink();
-		self.worldgundw Delete();
-		self.worldgundw = undefined;
-	}
-
 	level.random_weapon_powerups = array_remove_nokeys(level.random_weapon_powerups, self);
+	self maps\apex\_zm_weapons::delete_weapon_model();
 	level.random_weapon_powerups = array_removeUndefined(level.random_weapon_powerups);
 }
 
