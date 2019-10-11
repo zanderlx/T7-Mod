@@ -5,9 +5,49 @@ Black Ops 1 mod, Rescripting and Downporting alot of features from newer games
 See here for current mod [TODO list](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true)
 All development for this mod will and has been streamed live over at [**_ApexModder's_** Twitch](https://www.twitch.tv/apexmdr/)
 
+## Features
+- Player Trigger
+	- These are triggers which handle all logic and prompts per player.
+	- Every player sees a different hint string
+
+- Rewritten Powerups System
+	- No longer any hard scripted logic in main powerups script
+	- All powerup logic automated, individual powerups just speciy what happens during 'onGrab' 'onTimeout' 'onTimedPowerupStart' etc
+	- All powerupes seperated in to a script per powerup
+	- Black Ops III powerup hud logic downported
+
+- Rewritten Perk System
+	- Perks are no longer required to be named `specialty_`
+	- Perks can still have `specialty` tied to them, that are set & unset with the perk
+	- Perk icons moved to menu, this reduces the amount of HudElements used in script
+	- No longer any hard scripted logic in main perks script
+	- Perk bottle now supoprts 'indexed' models and 'weaponOptions.csv'
+	- All perks seperated in to a script per perk
+	- Perk machines now use `PlayerTriggers`
+
+- Rewritten Pack-A-Punch
+	- Pack-A-Punch now uses state based xanims
+	- Pack-A-Punch now uses `PlayerTriggers`
+
+- Rewritten Magicbox
+	- Magicbox now uses state based xanims
+	- Magicbox now uses `PlayerTriggers`
+	- All Magicbox logic moved out of `_zombiemode_weapons.gsc/.csc` into `_zm_magicbox.gsc/.csc`
+	- Fixed Magicbox cycle being fps based
+
+- Rewritten Weapons Script
+	- Weapons now loaded from csv string tables
+		- Removed the need for each level to manually include
+		- Auto registeres and loads correct weapons on the client side
+		- Auto registeres correct weapons offhand types
+	- Many weapon utility functions downported from Black Ops III
+	- `weapon_give()` now supports any weapon type, not just primary and melee weapons
+		- Swaps out lethal, tactical, melee weapons automaticly
+
 ## Credits
 - **_ApexModder_** - Mod Owner
-- **_xSanchez78_** - Ported **Black Ops 3** models and anims to **Black Ops 1**, Various scripting help
-- **_JBird632_** - Custom modeled **Electric Cherry** machine
+- **_xSanchez78_**
+	- Ported **Black Ops 3** models and anims to **Black Ops 1**
+	- **Huge** scripting help
 - **_Scobalula_** - For developing and releasing various of his tools (**Greyhound**, **HydraX**)
 - **_Tom BMX_** - For developing and releasing **FF Extractor**
