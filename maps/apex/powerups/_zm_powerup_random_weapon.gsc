@@ -16,7 +16,7 @@ include_powerup_for_level()
 
 setup_random_weapon()
 {
-	self.weapon = maps\_zombiemode_weapons::treasure_chest_ChooseWeightedRandomWeapon();
+	self.weapon = maps\apex\_zm_magicbox::treasure_chest_ChooseWeightedRandomWeapon();
 	self.base_weapon = self.weapon;
 
 	level.random_weapon_powerups[level.random_weapon_powerups.size] = self;

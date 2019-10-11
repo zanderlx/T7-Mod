@@ -41,8 +41,8 @@ enable_fire_sale_chests()
 			if(level.chest_index != i)
 			{
 				level.chests[i].was_temp = true;
-				level.chests[i] thread maps\_zombiemode_weapons::show_chest();
-				level.chests[i] thread maps\_zombiemode_weapons::hide_rubble();
+				level.chests[i] thread maps\apex\_zm_magicbox::show_chest();
+				level.chests[i] thread maps\apex\_zm_magicbox::hide_rubble();
 				wait_network_frame();
 			}
 
@@ -109,8 +109,8 @@ remove_temp_chest()
 	PlayFX(level._effect["poltergeist"], self.orig_origin);
 	self PlaySound("zmb_box_poof_land");
 	self PlaySound("zmb_couch_slam");
-	self maps\_zombiemode_weapons::hide_chest();
-	self maps\_zombiemode_weapons::show_rubble();
+	self maps\apex\_zm_magicbox::hide_chest();
+	self maps\apex\_zm_magicbox::show_rubble();
 }
 
 func_should_drop_fire_sale()
