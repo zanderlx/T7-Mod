@@ -253,6 +253,7 @@ rawfile,maps\_zombiemode_perks.gsc
 rawfile,maps\_zombiemode_powerups.gsc
 rawfile,maps\_zombiemode_spawner.gsc
 rawfile,maps\_zombiemode_traps.gsc
+rawfile,maps\_zombiemode_weapons.gsc
 rawfile,maps\_zombiemode.gsc
 
 menufile,ui\hud_zombie.txt
