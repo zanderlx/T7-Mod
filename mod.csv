@@ -274,6 +274,7 @@ rawfile,clientscripts\_zombiemode.csc
 
 rawfile,maps\_zombiemode_ai_dogs.gsc
 rawfile,maps\_zombiemode_auto_turret.gsc
+rawfile,maps\_zombiemode_bowie.gsc
 rawfile,maps\_zombiemode_devgui.gsc
 rawfile,maps\_zombiemode_blockers.gsc
 rawfile,maps\_zombiemode_perks.gsc
