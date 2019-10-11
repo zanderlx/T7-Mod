@@ -602,6 +602,7 @@ setup_t7_mod()
 {
 	level._zm_perk_includes = ::theater_include_perks;
 	level._zm_powerup_includes = ::theater_include_powerups;
+	level._zm_packapunch_include = maps\apex\_zm_packapunch::include_t7_packapunch;
 	setup_extra_powerables();
 }
 
