@@ -127,6 +127,9 @@ set_level_power_state(power_on_off)
 		// extra powerables
 		if(isdefined(level._zm_powerables))
 			array_func(level._zm_powerables, ::powerable_power_on);
+
+		// notify CSC
+		level levelNotify("ZPO");
 	}
 	else
 	{
@@ -139,6 +142,9 @@ set_level_power_state(power_on_off)
 			// extra powerables
 			if(isdefined(level._zm_powerables))
 				array_func(level._zm_powerables, ::powerable_power_off);
+
+			// notify CSC
+			level levelNotify("ZPOff");
 		}
 	}
 }

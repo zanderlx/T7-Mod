@@ -232,3 +232,81 @@ visionset_deactivate(clientnum, vision)
 		level.current_visionset[clientnum] = highest_vision;
 	}
 }
+
+//============================================================================================
+// Flags
+//============================================================================================
+flag_init(message, val)
+{
+	if(!isdefined(self.flag))
+		self.flag = [];
+
+	if(is_true(val))
+		self.flag[message] = true;
+	else
+		self.flag[message] = false;
+}
+
+flag(message)
+{
+	if(self flag_exists(message))
+		return is_true(self.flag[message]);
+	return false;
+}
+
+flag_set(message)
+{
+	if(!self flag_exists(message))
+		self flag_init(message, false);
+
+	self.flag[message] = true;
+	self notify(message);
+}
+
+flag_toggle(message)
+{
+	if(self flag(message))
+		self flag_clear(message);
+	else
+		self flag_set(message);
+}
+
+flag_wait(message)
+{
+	if(self != level)
+		self endon("death");
+
+	while(!self flag(message))
+	{
+		self waittill(message);
+	}
+}
+
+flag_clear(message)
+{
+	if(!self flag_exists(message))
+		self flag_init(message, true);
+
+	self.flag[message] = false;
+	self notify(message);
+}
+
+flag_waitopen(message)
+{
+	if(self != level)
+		self endon("death");
+
+	while(self flag(message))
+	{
+		self waittill(message);
+	}
+}
+
+flag_exists(message)
+{
+	if(!isdefined(self.flag))
+		return false;
+	if(!isdefined(self.flag[message]))
+		return false;
+	return true;
+}

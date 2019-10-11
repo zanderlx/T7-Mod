@@ -27,8 +27,6 @@ main()
 	level._playerCBFunc = clientscripts\_zombiemode::on_player_spawn;
 	level._gibEventCBFunc = clientscripts\_zombiemode::on_gib_event;
 
-	level thread ZPO_listener();
-
 	level._BOX_INDICATOR_NO_LIGHTS = -1;
 	level._BOX_INDICATOR_FLASH_LIGHTS_MOVING = 99;
 	level._BOX_INDICATOR_FLASH_LIGHTS_FIRE_SALE = 98;
@@ -108,8 +106,6 @@ init_client_flags()
 {
 	// Client flags for script movers
 
-	level._ZOMBIE_SCRIPTMOVER_FLAG_BOX_RANDOM	= 15;
-
 	if(isDefined(level.use_clientside_board_fx) && level.use_clientside_board_fx)
 	{
 		//for tearing down and repairing the boards and rock chunks
@@ -155,7 +151,6 @@ init_client_flag_callback_funcs()
 	{
 		register_clientflag_callback("scriptmover", level._ZOMBIE_SCRIPTMOVER_FLAG_ROCK_FX, ::handle_rock_clientside_fx);
 	}
-	register_clientflag_callback("scriptmover", level._ZOMBIE_SCRIPTMOVER_FLAG_BOX_RANDOM, clientscripts\_zombiemode_weapons::weapon_box_callback);
 
 
 	// Callbacks for players
@@ -365,24 +360,6 @@ box_monitor(clientNum, state, oldState)
 	if(IsDefined(level._custom_box_monitor))
 	{
 		[[level._custom_box_monitor]](clientNum, state, oldState);
-	}
-}
-
-ZPO_listener()
-{
-	while(1)
-	{
-		level waittill("ZPO");	// Zombie power on.
-
-		level notify("power_on" );
-		level notify("revive_on");
-		level notify("middle_door_open");
-		level notify("fast_reload_on");
-		level notify("doubletap_on");
-		level notify("divetonuke_on");
-		level notify("marathon_on");
-		level notify("jugger_on");
-		level notify("additionalprimaryweapon_on");
 	}
 }
 
