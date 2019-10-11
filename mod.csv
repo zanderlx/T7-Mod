@@ -19,11 +19,29 @@ localize,mod
 //============================================================================================
 // rawfile,clientscripts\apex\_zm_packapunch.csc
 rawfile,maps\apex\_zm_packapunch.gsc
-xmodel,zombie_vending_packapunch
-xmodel,zombie_vending_packapunch_on
-xmodel,zombie_sign_please_wait
 weapon,sp\zombie_knuckle_crack
 fx,maps\zombie\fx_zombie_packapunch
+
+// Legacy pap assets
+// Remove if using bo3
+// xmodel,zombie_vending_packapunch
+// xmodel,zombie_vending_packapunch_on
+// xmodel,zombie_sign_please_wait
+
+// Black Ops 3 pap assets
+rawfile,animtrees\zm_packapunch.atr
+xmodel,p7_zm_vending_packapunch
+xmodel,p7_zm_vending_packapunch_on
+xmodel,p7_zm_vending_packapunch_sign_wait
+xmodel,p7_zm_vending_packapunch_weapon
+xanim,o_zombie_base_packapunch_flag_down
+xanim,o_zombie_base_packapunch_flag_up
+xanim,o_zombie_base_packapunch_poweron
+xanim,o_zombie_base_packapunch_working_eject_gun
+xanim,o_zombie_base_packapunch_working_loop
+xanim,o_zombie_base_packapunch_working_take_gun
+xanim,o_zombie_base_packapunch_worldguns_ejected
+xanim,o_zombie_base_packapunch_worldguns_taken
 
 //============================================================================================
 // New Powerup System
