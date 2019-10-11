@@ -170,6 +170,9 @@ convert_legacy_magicbox_prefabs()
 	}
 }
 
+//============================================================================================
+// PlayerTriggers
+//============================================================================================
 playertrigger_update_prompt(player)
 {
 	self.hint_param1 = undefined;
@@ -222,45 +225,9 @@ unregister_playertrigger_on_kill_think()
 	unregister_playertrigger(self);
 }
 
-default_check_firesale_loc_valid_func()
-{
-	return true;
-}
-
-default_weighting_func()
-{
-	return 1;
-}
-
-default_1st_move_weighting_func()
-{
-	if(level.chest_moves > 0)
-		return 1;
-	else
-		return 0;
-}
-
-default_cymbal_monkey_weighting_func()
-{
-	players = GetPlayers();
-	count = 0;
-
-	for(i = 0; i < players.size; i++)
-	{
-		if(players[i] maps\_zombiemode_weapons::has_weapon_or_upgrade("zombie_cymbal_monkey"))
-			count++;
-	}
-
-	if(count > 0)
-		return 1;
-	else
-	{
-		if(level.round_number < 10)
-			return 3;
-		return 5;
-	}
-}
-
+//============================================================================================
+// Logic
+//============================================================================================
 init_starting_chest_location()
 {
 	start_chest_index = -1;
@@ -292,84 +259,6 @@ init_starting_chest_location()
 	level.chests[start_chest_index].hidden = false;
 	level.chests[start_chest_index] set_magic_box_zbarrier_state("initial");
 	single_thread(level.chests[start_chest_index], level.pandora_show_func);
-}
-
-play_crazi_sound()
-{
-	if(is_true(level.player_4_vox_override))
-		self PlayLocalSound("zmb_laugh_rich");
-	else
-		self PlayLocalSound("zmb_laugh_child");
-}
-
-show_chest(dont_enable_trigger)
-{
-	self thread set_magic_box_zbarrier_state("arriving");
-	self waittill("arrived");
-	single_thread(self, level.pandora_show_func);
-
-	if(!is_true(dont_enable_trigger))
-		register_playertrigger(self, ::playertrigger_think);
-
-	PlaySoundAtPosition("zmb_box_poof_land", self.chest.origin);
-	PlaySoundAtPosition("zmb_couch_slam", self.chest.origin);
-	self.hidden = false;
-
-	if(isdefined(self.box_hacks["summon_box"]))
-		run_function(self, self.box_hacks["summon_box"], false);
-}
-
-hide_chest(doBoxLeave)
-{
-	unregister_playertrigger(self);
-
-	if(isdefined(self.pandora_light))
-		self.pandora_light Delete();
-
-	self.hidden = true;
-
-	if(isdefined(self.box_hacks["summon_box"]))
-		run_function(self, self.box_hacks["summon_box"], true);
-
-	if(is_true(doBoxLeave))
-	{
-		PlaySoundAtPosition("zmb_box_move", self.chest.origin);
-		PlaySoundAtPosition("zmb_whoosh", self.chest.origin);
-
-		if(is_true(level.player_4_vox_override))
-			PlaySoundAtPosition("zmb_vox_rich_magicbox", self.chest.origin);
-		else
-			PlaySoundAtPosition("zmb_vox_ann_magicbox", self.chest.origin);
-
-		self thread set_magic_box_zbarrier_state("leaving");
-		self waittill("left");
-		self thread set_magic_box_zbarrier_state("away");
-		PlayFX(level._effect["poltergeist"], self.rubble.origin);
-		PlaySoundAtPosition("zmb_box_poof", self.rubble.origin);
-	}
-	else
-		self thread set_magic_box_zbarrier_state("away");
-}
-
-default_pandora_fx_func()
-{
-	if(isdefined(self.pandora_light))
-	{
-		self.pandora_light Unlink();
-		self.pandora_light Delete();
-	}
-
-	self.pandora_light = spawn_model("tag_origin", self.chest.origin, self.chest.angles + (-90, 90, 0));
-	self.pandora_light LinkTo(self.chest);
-	PlayFXOnTag(level._effect["lght_marker"], self.pandora_light, "tag_origin");
-}
-
-default_pandora_show_func()
-{
-	run_function(self, level.pandora_fx_func);
-	PlaySoundAtPosition("zmb_box_poof", self.chest.origin);
-	wait .5;
-	PlayFX(level._effect["lght_marker_flare"], self.pandora_light.origin);
 }
 
 treasure_chest_think()
@@ -494,35 +383,6 @@ treasure_chest_think()
 	self thread treasure_chest_think();
 }
 
-default_box_move_logic()
-{
-	index = -1;
-
-	for(i = 0; i < level.chests.size; i++)
-	{
-		if(IsSubStr(level.chests[i].script_noteworthy, "move" + (level.chest_moves + 1)) && i != level.chest_index)
-		{
-			index = i;
-			break;
-		}
-	}
-
-	if(index == -1)
-		level.chest_index++;
-	else
-		level.chest_index = index;
-
-	if(level.chest_index > level.chests.size)
-	{
-		temp_chest_name = level.chests[level.chest_index - 1].script_noteworthy;
-		level.chest_index = 0;
-		level.chests = array_randomize(level.chests);
-
-		if(temp_chest_name == level.chests[level.chest_index].script_noteworthy)
-			level.chest_index++;
-	}
-}
-
 treasure_chest_move(player_vox)
 {
 	level waittill("weapon_fly_away_start");
@@ -592,97 +452,6 @@ treasure_chest_timeout()
 	self endon("box_hacked_rerespin");
 	wait 12;
 	self notify("trigger", level);
-}
-
-treasure_chest_CanPlayerReceiveWeapon(player, weapon)
-{
-	if(!is_weapon_in_box(weapon))
-		return false;
-	if(isdefined(player) && player maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
-		return false;
-	if(!limited_weapon_below_quota(weapon, player))
-		return false;
-	if(isdefined(player) && isdefined(level.special_weapon_magicbox_check))
-		return run_function(player, level.special_weapon_magicbox_check, weapon);
-	return true;
-}
-
-treasure_chest_ChooseWeightedRandomWeapon(player)
-{
-	keys = array_randomize(GetArrayKeys(level.zombie_weapons));
-
-	for(i = 0; i < keys.size; i++)
-	{
-		if(treasure_chest_CanPlayerReceiveWeapon(player, keys[i]))
-			return keys[i];
-	}
-	return keys[0];
-}
-
-limited_weapon_below_quota(weapon, ignore_player)
-{
-	if(isdefined(level.limited_weapons) && isdefined(level.limited_weapons[weapon]))
-	{
-		upgrade_weapon = weapon;
-
-		if(isdefined(level.zombie_weapons[weapon]) && isdefined(level.zombie_weapons[weapon].upgrade_name))
-			upgrade_weapon = level.zombie_weapons[weapon].upgrade_name;
-
-		count = 0;
-		limit = level.limited_weapons[weapon];
-		players = GetPlayers();
-		pap_triggers = level._zm_packapunch_machines;
-
-		for(i = 0; i < players.size; i++)
-		{
-			player = players[i];
-
-			if(isdefined(ignore_player) && ignore_player == player)
-				continue;
-
-			if(maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
-			{
-				count++;
-
-				if(count >= limit)
-					return false;
-			}
-		}
-
-		for(i = 0; i < pap_triggers.size; i++)
-		{
-			if(isdefined(pap_triggers[i].current_weapon) && (pap_triggers[i].current_weapon == weapon || pap_triggers[i].current_weapon == upgrade_weapon))
-			{
-				count++;
-
-				if(count >= limit)
-					return false;
-			}
-		}
-
-		for(i = 0; i < level.chests.size; i++)
-		{
-			if(isdefined(level.chests[i].weapon_string) && level.chests[i].weapon_string == weapon)
-			{
-				count++;
-
-				if(count >= limit)
-					return false;
-			}
-		}
-
-		if(isdefined(level.custom_limited_weapon_checks))
-		{
-			for(i = 0; i < level.custom_limited_weapon_checks.size; i++)
-			{
-				count += run_function(level, level.custom_limited_weapon_checks[i], weapon, ignore_player);
-			}
-
-			if(count >= limit)
-				return false;
-		}
-	}
-	return true;
 }
 
 clean_up_hacked_box()
@@ -868,6 +637,252 @@ treasure_chest_glowfx()
 	fx_ent Delete();
 }
 
+//============================================================================================
+// Default Functions
+//============================================================================================
+default_box_move_logic()
+{
+	index = -1;
+
+	for(i = 0; i < level.chests.size; i++)
+	{
+		if(IsSubStr(level.chests[i].script_noteworthy, "move" + (level.chest_moves + 1)) && i != level.chest_index)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if(index == -1)
+		level.chest_index++;
+	else
+		level.chest_index = index;
+
+	if(level.chest_index > level.chests.size)
+	{
+		temp_chest_name = level.chests[level.chest_index - 1].script_noteworthy;
+		level.chest_index = 0;
+		level.chests = array_randomize(level.chests);
+
+		if(temp_chest_name == level.chests[level.chest_index].script_noteworthy)
+			level.chest_index++;
+	}
+}
+
+default_pandora_fx_func()
+{
+	if(isdefined(self.pandora_light))
+	{
+		self.pandora_light Unlink();
+		self.pandora_light Delete();
+	}
+
+	self.pandora_light = spawn_model("tag_origin", self.chest.origin, self.chest.angles + (-90, 90, 0));
+	self.pandora_light LinkTo(self.chest);
+	PlayFXOnTag(level._effect["lght_marker"], self.pandora_light, "tag_origin");
+}
+
+default_pandora_show_func()
+{
+	run_function(self, level.pandora_fx_func);
+	PlaySoundAtPosition("zmb_box_poof", self.chest.origin);
+	wait .5;
+	PlayFX(level._effect["lght_marker_flare"], self.pandora_light.origin);
+}
+
+default_check_firesale_loc_valid_func()
+{
+	return true;
+}
+
+default_weighting_func()
+{
+	return 1;
+}
+
+default_1st_move_weighting_func()
+{
+	if(level.chest_moves > 0)
+		return 1;
+	else
+		return 0;
+}
+
+default_cymbal_monkey_weighting_func()
+{
+	players = GetPlayers();
+	count = 0;
+
+	for(i = 0; i < players.size; i++)
+	{
+		if(players[i] maps\_zombiemode_weapons::has_weapon_or_upgrade("zombie_cymbal_monkey"))
+			count++;
+	}
+
+	if(count > 0)
+		return 1;
+	else
+	{
+		if(level.round_number < 10)
+			return 3;
+		return 5;
+	}
+}
+
+//============================================================================================
+// Weigheted / Limited Weapons
+//============================================================================================
+limited_weapon_below_quota(weapon, ignore_player)
+{
+	if(isdefined(level.limited_weapons) && isdefined(level.limited_weapons[weapon]))
+	{
+		upgrade_weapon = weapon;
+
+		if(isdefined(level.zombie_weapons[weapon]) && isdefined(level.zombie_weapons[weapon].upgrade_name))
+			upgrade_weapon = level.zombie_weapons[weapon].upgrade_name;
+
+		count = 0;
+		limit = level.limited_weapons[weapon];
+		players = GetPlayers();
+		pap_triggers = level._zm_packapunch_machines;
+
+		for(i = 0; i < players.size; i++)
+		{
+			player = players[i];
+
+			if(isdefined(ignore_player) && ignore_player == player)
+				continue;
+
+			if(maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
+			{
+				count++;
+
+				if(count >= limit)
+					return false;
+			}
+		}
+
+		for(i = 0; i < pap_triggers.size; i++)
+		{
+			if(isdefined(pap_triggers[i].current_weapon) && (pap_triggers[i].current_weapon == weapon || pap_triggers[i].current_weapon == upgrade_weapon))
+			{
+				count++;
+
+				if(count >= limit)
+					return false;
+			}
+		}
+
+		for(i = 0; i < level.chests.size; i++)
+		{
+			if(isdefined(level.chests[i].weapon_string) && level.chests[i].weapon_string == weapon)
+			{
+				count++;
+
+				if(count >= limit)
+					return false;
+			}
+		}
+
+		if(isdefined(level.custom_limited_weapon_checks))
+		{
+			for(i = 0; i < level.custom_limited_weapon_checks.size; i++)
+			{
+				count += run_function(level, level.custom_limited_weapon_checks[i], weapon, ignore_player);
+			}
+
+			if(count >= limit)
+				return false;
+		}
+	}
+	return true;
+}
+
+treasure_chest_CanPlayerReceiveWeapon(player, weapon)
+{
+	if(!is_weapon_in_box(weapon))
+		return false;
+	if(isdefined(player) && player maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
+		return false;
+	if(!limited_weapon_below_quota(weapon, player))
+		return false;
+	if(isdefined(player) && isdefined(level.special_weapon_magicbox_check))
+		return run_function(player, level.special_weapon_magicbox_check, weapon);
+	return true;
+}
+
+treasure_chest_ChooseWeightedRandomWeapon(player)
+{
+	keys = array_randomize(GetArrayKeys(level.zombie_weapons));
+
+	for(i = 0; i < keys.size; i++)
+	{
+		if(treasure_chest_CanPlayerReceiveWeapon(player, keys[i]))
+			return keys[i];
+	}
+	return keys[0];
+}
+
+//============================================================================================
+// Utils
+//============================================================================================
+play_crazi_sound()
+{
+	if(is_true(level.player_4_vox_override))
+		self PlayLocalSound("zmb_laugh_rich");
+	else
+		self PlayLocalSound("zmb_laugh_child");
+}
+
+show_chest(dont_enable_trigger)
+{
+	self thread set_magic_box_zbarrier_state("arriving");
+	self waittill("arrived");
+	single_thread(self, level.pandora_show_func);
+
+	if(!is_true(dont_enable_trigger))
+		register_playertrigger(self, ::playertrigger_think);
+
+	PlaySoundAtPosition("zmb_box_poof_land", self.chest.origin);
+	PlaySoundAtPosition("zmb_couch_slam", self.chest.origin);
+	self.hidden = false;
+
+	if(isdefined(self.box_hacks["summon_box"]))
+		run_function(self, self.box_hacks["summon_box"], false);
+}
+
+hide_chest(doBoxLeave)
+{
+	unregister_playertrigger(self);
+
+	if(isdefined(self.pandora_light))
+		self.pandora_light Delete();
+
+	self.hidden = true;
+
+	if(isdefined(self.box_hacks["summon_box"]))
+		run_function(self, self.box_hacks["summon_box"], true);
+
+	if(is_true(doBoxLeave))
+	{
+		PlaySoundAtPosition("zmb_box_move", self.chest.origin);
+		PlaySoundAtPosition("zmb_whoosh", self.chest.origin);
+
+		if(is_true(level.player_4_vox_override))
+			PlaySoundAtPosition("zmb_vox_rich_magicbox", self.chest.origin);
+		else
+			PlaySoundAtPosition("zmb_vox_ann_magicbox", self.chest.origin);
+
+		self thread set_magic_box_zbarrier_state("leaving");
+		self waittill("left");
+		self thread set_magic_box_zbarrier_state("away");
+		PlayFX(level._effect["poltergeist"], self.rubble.origin);
+		PlaySoundAtPosition("zmb_box_poof", self.rubble.origin);
+	}
+	else
+		self thread set_magic_box_zbarrier_state("away");
+}
+
 is_weapon_in_box(weapon)
 {
 	if(!isdefined(level._zm_box_weapons))
@@ -875,6 +890,9 @@ is_weapon_in_box(weapon)
 	return IsInArray(level._zm_box_weapons, weapon);
 }
 
+//============================================================================================
+// States
+//============================================================================================
 set_magic_box_zbarrier_state(state)
 {
 	self notify("zbarrier_state_change");
