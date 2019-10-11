@@ -73,7 +73,6 @@ main()
 
 	setup_t7_mod();
 	include_weapons();
-	include_powerups();
 
 	level.use_zombie_heroes = true;
 	level.disable_protips = 1;
@@ -261,17 +260,6 @@ include_weapons()
 //*****************************************************************************
 // POWERUP FUNCTIONS
 //*****************************************************************************
-
-include_powerups()
-{
-	include_powerup( "nuke" );
-	include_powerup( "insta_kill" );
-	include_powerup( "double_points" );
-	include_powerup( "full_ammo" );
-	include_powerup( "carpenter" );
-	include_powerup( "fire_sale" );
-}
-
 add_powerups_after_round_1()
 {
 
