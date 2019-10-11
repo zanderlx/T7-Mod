@@ -257,7 +257,7 @@ init_starting_chest_location()
 
 	level.chest_index = start_chest_index;
 	level.chests[start_chest_index].hidden = false;
-	level.chests[start_chest_index] set_magic_box_zbarrier_state("initial");
+	level.chests[start_chest_index] set_state_initial();
 	single_thread(level.chests[start_chest_index], level.pandora_show_func);
 }
 
@@ -310,7 +310,7 @@ treasure_chest_think()
 
 	play_sound_at_pos("open_chest", self.chest.origin);
 	play_sound_at_pos("music_chest", self.chest.origin);
-	self set_magic_box_zbarrier_state("open");
+	self set_state_open();
 	self.timedOut = false;
 	self.weapon_out = true;
 	self thread treasure_chest_weapon_spawn(user);
@@ -368,7 +368,7 @@ treasure_chest_think()
 
 		unregister_playertrigger(self);
 		play_sound_at_pos("close_chest", self.origin);
-		self set_magic_box_zbarrier_state("close");
+		self set_state_close();
 		self waittill("closed");
 		wait 1;
 
@@ -836,7 +836,7 @@ play_crazi_sound()
 
 show_chest(dont_enable_trigger)
 {
-	self thread set_magic_box_zbarrier_state("arriving");
+	self set_state_arriving();
 	self waittill("arrived");
 	single_thread(self, level.pandora_show_func);
 
@@ -873,14 +873,14 @@ hide_chest(doBoxLeave)
 		else
 			PlaySoundAtPosition("zmb_vox_ann_magicbox", self.chest.origin);
 
-		self thread set_magic_box_zbarrier_state("leaving");
+		self set_state_leaving();
 		self waittill("left");
-		self thread set_magic_box_zbarrier_state("away");
+		self set_state_away();
 		PlayFX(level._effect["poltergeist"], self.rubble.origin);
 		PlaySoundAtPosition("zmb_box_poof", self.rubble.origin);
 	}
 	else
-		self thread set_magic_box_zbarrier_state("away");
+		self set_state_away();
 }
 
 is_weapon_in_box(weapon)
@@ -900,6 +900,11 @@ set_magic_box_zbarrier_state(state)
 	self.chest Hide();
 	run_function(self, level.magicbox_zbarrier_state_func, state);
 	self.state = state;
+}
+
+get_magic_box_zbarrier_state()
+{
+	return self.state;
 }
 
 process_magicbox_zbarrier_state(state)
@@ -986,6 +991,44 @@ magic_box_closes()
 	self notify("closed");
 }
 
+set_state_away()
+{
+	self thread set_magic_box_zbarrier_state("away");
+}
+
+set_state_arriving()
+{
+	self thread set_magic_box_zbarrier_state("arriving");
+}
+
+set_state_initial()
+{
+	self thread set_magic_box_zbarrier_state("initial");
+}
+
+set_state_open()
+{
+	self thread set_magic_box_zbarrier_state("open");
+}
+
+set_state_close()
+{
+	self thread set_magic_box_zbarrier_state("close");
+}
+
+set_state_leaving()
+{
+	self thread set_magic_box_zbarrier_state("leaving");
+}
+
+set_state_hidden()
+{
+	self thread set_magic_box_zbarrier_state("hidden");
+}
+
+//============================================================================================
+// Old / Legacy
+//============================================================================================
 // spawning t4 / t5 styled magicbox
 // spawn_magicbox(origin, angles)
 // {
