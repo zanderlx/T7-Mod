@@ -27,9 +27,9 @@ setup_random_weapon()
 	self SetModel(GetWeaponModel(self.weapon));
 	self UseWeaponHideTags(self.weapon);
 
-	if(maps\_zombiemode_weapons::weapon_is_dual_wield(self.weapon))
+	if(maps\apex\_zm_weapons::weapon_is_dual_wield(self.weapon))
 	{
-		self.worldgundw = spawn_model(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(self.weapon), self.origin + (3, 3, 3), self.angles);
+		self.worldgundw = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(self.weapon), self.origin + (3, 3, 3), self.angles);
 		self.worldgundw UseWeaponHideTags(self.weapon);
 		self.worldgundw LinkTo(self, "tag_weapon", (3, 3, 3), (0, 0, 0));
 	}
@@ -75,19 +75,19 @@ random_weapon_powerup(player)
 		if(current_weapon_type != "primary" && current_weapon_type != "altmode")
 			return true;
 
-		if(maps\_zombiemode_weapons::is_weapon_upgraded(self.weapon))
+		if(maps\apex\_zm_weapons::is_weapon_upgraded(self.weapon))
 		{
-			if(!maps\_zombiemode_weapons::is_weapon_included(self.base_weapon))
+			if(!maps\apex\_zm_weapons::is_weapon_included(self.base_weapon))
 				return true;
 		}
 		else
 		{
-			if(!maps\_zombiemode_weapons::is_weapon_included(self.weapon))
+			if(!maps\apex\_zm_weapons::is_weapon_included(self.weapon))
 				return true;
 		}
 	}
 
 	player thread random_weapon_powerup_throttle();
-	player maps\_zombiemode_weapons::weapon_give(self.weapon, false);
+	player maps\apex\_zm_weapons::weapon_give(self.weapon, false, true);
 	return false;
 }

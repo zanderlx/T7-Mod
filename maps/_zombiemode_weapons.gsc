@@ -59,17 +59,6 @@ add_zombie_weapon( weapon_name, upgrade_name, hint, cost, weaponVO, weaponVOresp
 	level.zombie_weapons[weapon_name] = struct;
 }
 
-is_weapon_included( weapon_name )
-{
-	if( !IsDefined( level.zombie_weapons ) )
-	{
-		return false;
-	}
-
-	return IsDefined( level.zombie_weapons[weapon_name] );
-}
-
-
 include_zombie_weapon( weapon_name, in_box, collector, weighting_func )
 {
 	if( !IsDefined( level.zombie_include_weapons ) )
@@ -89,7 +78,6 @@ include_zombie_weapon( weapon_name, in_box, collector, weighting_func )
 			level._zm_box_weapons[level._zm_box_weapons.size] = weapon_name;
 	}
 }
-
 
 //
 //Z2 add_zombie_weapon will call PrecacheItem on the weapon name.  So this means we're loading
@@ -180,8 +168,10 @@ init_weapon_upgrade()
 
 	for( i = 0; i < weapon_spawns.size; i++ )
 	{
-		hint_string = get_weapon_hint( weapon_spawns[i].zombie_weapon_upgrade );
-		cost = get_weapon_cost( weapon_spawns[i].zombie_weapon_upgrade );
+		// hint_string = get_weapon_hint( weapon_spawns[i].zombie_weapon_upgrade );
+		// cost = get_weapon_cost( weapon_spawns[i].zombie_weapon_upgrade );
+		hint_string = level.zombie_weapons[weapon_spawns[i].zombie_weapon_upgrade].hint;
+		cost = level.zombie_weapons[weapon_spawns[i].zombie_weapon_upgrade].cost;
 
 		weapon_spawns[i] SetHintString( hint_string, cost );
 		weapon_spawns[i] setCursorHint( "HINT_NOICON" );
@@ -209,102 +199,6 @@ init_weapon_cabinet()
 	}
 
 //	array_thread( weapon_cabs, ::weapon_cabinet_think );
-}
-
-// returns the trigger hint string for the given weapon
-get_weapon_hint( weapon_name )
-{
-	AssertEx( IsDefined( level.zombie_weapons[weapon_name] ), weapon_name + " was not included or is not part of the zombie weapon list." );
-
-	return level.zombie_weapons[weapon_name].hint;
-}
-
-get_weapon_cost( weapon_name )
-{
-	AssertEx( IsDefined( level.zombie_weapons[weapon_name] ), weapon_name + " was not included or is not part of the zombie weapon list." );
-
-	return level.zombie_weapons[weapon_name].cost;
-}
-
-get_ammo_cost( weapon_name )
-{
-	AssertEx( IsDefined( level.zombie_weapons[weapon_name] ), weapon_name + " was not included or is not part of the zombie weapon list." );
-
-	return level.zombie_weapons[weapon_name].ammo_cost;
-}
-
-
-// Check to see if this is an upgraded version of another weapon
-//	weaponname can be any weapon name.
-is_weapon_upgraded( weaponname )
-{
-	if( !isdefined( weaponname ) || weaponname == "" )
-	{
-		return false;
-	}
-
-	weaponname = ToLower( weaponname );
-
-	ziw_keys = GetArrayKeys( level.zombie_weapons );
-	for ( i=0; i<level.zombie_weapons.size; i++ )
-	{
-		if ( IsDefined(level.zombie_weapons[ ziw_keys[i] ].upgrade_name) &&
-			 level.zombie_weapons[ ziw_keys[i] ].upgrade_name == weaponname )
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
-//	Check to see if the player has the upgraded version of the weapon
-//	weaponname should only be a base weapon name
-//	self is a player
-has_upgrade( weaponname )
-{
-	has_upgrade = false;
-	if( IsDefined(level.zombie_weapons[weaponname]) && IsDefined(level.zombie_weapons[weaponname].upgrade_name) )
-	{
-		has_upgrade = self HasWeapon( level.zombie_weapons[weaponname].upgrade_name );
-	}
-
-	// double check for the bowie variant on the ballistic knife
-	if ( !has_upgrade && "knife_ballistic_zm" == weaponname )
-	{
-		has_upgrade = has_upgrade( "knife_ballistic_bowie_zm" ) || has_upgrade( "knife_ballistic_sickle_zm" );
-	}
-
-	return has_upgrade;
-}
-
-
-//	Check to see if the player has the normal or upgraded weapon
-//	weaponname should only be a base weapon name
-//	self is a player
-has_weapon_or_upgrade( weaponname )
-{
-	upgradedweaponname = weaponname;
-	if ( IsDefined( level.zombie_weapons[weaponname] ) && IsDefined( level.zombie_weapons[weaponname].upgrade_name ) )
-	{
-		upgradedweaponname = level.zombie_weapons[weaponname].upgrade_name;
-	}
-
-	has_weapon = false;
-	// If the weapon you're checking doesn't exist, it will return undefined
-	if( IsDefined( level.zombie_weapons[weaponname] ) )
-	{
-		has_weapon = self HasWeapon( weaponname ) || self has_upgrade( weaponname );
-	}
-
-	// double check for the bowie variant on the ballistic knife
-	if ( !has_weapon && "knife_ballistic_zm" == weaponname )
-	{
-		has_weapon = has_weapon_or_upgrade( "knife_ballistic_bowie_zm" ) || has_weapon_or_upgrade( "knife_ballistic_sickle_zm" );
-	}
-
-	return has_weapon;
 }
 
 weapon_show_hint_choke()
@@ -346,7 +240,7 @@ decide_hide_show_hint( endon_notify )
 		players = get_players();
 		for( i = 0; i < players.size; i++ )
 		{
-			if( players[i] can_buy_weapon())
+			if( players[i] maps\apex\_zm_weapons::can_buy_weapon())
 			{
 				self SetInvisibleToPlayer( players[i], false );
 			}
@@ -369,68 +263,6 @@ decide_hide_show_hint( endon_notify )
 		}
 
 		level._weapon_show_hint_choke ++;
-	}
-}
-
-can_buy_weapon()
-{
-	if( IsDefined( self.is_drinking ) && self is_drinking() )
-	{
-		return false;
-	}
-
-	if(self hacker_active())
-	{
-		return false;
-	}
-
-	current_weapon = self GetCurrentWeapon();
-	if( is_placeable_mine( current_weapon ) || is_equipment( current_weapon ) )
-	{
-		return false;
-	}
-	if( self in_revive_trigger() )
-	{
-		return false;
-	}
-
-	if( current_weapon == "none" )
-	{
-		return false;
-	}
-
-	return true;
-}
-
-// Functions namesake in _zombiemode_weapons.csc must match this one.
-
-weapon_is_dual_wield(name)
-{
-	switch(name)
-	{
-		case  "cz75dw_zm":
-		case  "cz75dw_upgraded_zm":
-		case  "m1911_upgraded_zm":
-		case  "hs10_upgraded_zm":
-		case  "pm63_upgraded_zm":
-		case  "microwavegundw_zm":
-		case  "microwavegundw_upgraded_zm":
-			return true;
-		default:
-			return false;
-	}
-}
-
-get_left_hand_weapon_model_name( name )
-{
-	switch ( name )
-	{
-		case  "microwavegundw_zm":
-			return GetWeaponModel( "microwavegunlh_zm" );
-		case  "microwavegundw_upgraded_zm":
-			return GetWeaponModel( "microwavegunlh_upgraded_zm" );
-		default:
-			return GetWeaponModel( name );
 	}
 }
 
@@ -460,8 +292,10 @@ weapon_set_first_time_hint( cost, ammo_cost )
 
 weapon_spawn_think()
 {
-	cost = get_weapon_cost( self.zombie_weapon_upgrade );
-	ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+	// cost = get_weapon_cost( self.zombie_weapon_upgrade );
+	cost = level.zombie_weapons[self.zombie_weapon_upgrade].cost;
+	// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+	ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
 	is_grenade = (WeaponType( self.zombie_weapon_upgrade ) == "grenade");
 
 	self thread decide_hide_show_hint();
@@ -478,7 +312,7 @@ weapon_spawn_think()
 			continue;
 		}
 
-		if( !player can_buy_weapon() )
+		if( !player maps\apex\_zm_weapons::can_buy_weapon() )
 		{
 			wait( 0.1 );
 			continue;
@@ -491,7 +325,7 @@ weapon_spawn_think()
 		}
 
 		// Allow people to get ammo off the wall for upgraded weapons
-		player_has_weapon = player has_weapon_or_upgrade( self.zombie_weapon_upgrade );
+		player_has_weapon = player maps\apex\_zm_weapons::has_weapon_or_upgrade( self.zombie_weapon_upgrade );
 
 		if( !player_has_weapon )
 		{
@@ -522,7 +356,7 @@ weapon_spawn_think()
 					player set_player_lethal_grenade( self.zombie_weapon_upgrade );
 				}
 
-				player weapon_give( self.zombie_weapon_upgrade );
+				player maps\apex\_zm_weapons::weapon_give( self.zombie_weapon_upgrade, false, false );
 			}
 			else
 			{
@@ -536,24 +370,26 @@ weapon_spawn_think()
 			// MM - need to check and see if the player has an upgraded weapon.  If so, the ammo cost is much higher
 			if(IsDefined(self.hacked) && self.hacked)	// hacked wall buys have their costs reversed...
 			{
-				if ( !player has_upgrade( self.zombie_weapon_upgrade ) )
+				if ( !player maps\apex\_zm_weapons::has_upgrade( self.zombie_weapon_upgrade ) )
 				{
 					ammo_cost = 4500;
 				}
 				else
 				{
-					ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+					// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+					ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
 				}
 			}
 			else
 			{
-				if ( player has_upgrade( self.zombie_weapon_upgrade ) )
+				if ( player maps\apex\_zm_weapons::has_upgrade( self.zombie_weapon_upgrade ) )
 				{
 					ammo_cost = 4500;
 				}
 				else
 				{
-					ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+					// ammo_cost = get_ammo_cost( self.zombie_weapon_upgrade );
+					ammo_cost = level.zombie_weapons[self.zombie_weapon_upgrade].ammo_cost;
 				}
 			}
 			// if the player does have this then give him ammo.
@@ -567,7 +403,8 @@ weapon_spawn_think()
 					self.first_time_triggered = true;
 					if(!is_grenade)
 					{
-						self weapon_set_first_time_hint( cost, get_ammo_cost( self.zombie_weapon_upgrade ) );
+						// self weapon_set_first_time_hint( cost, get_ammo_cost( self.zombie_weapon_upgrade ) );
+						self weapon_set_first_time_hint(cost, ammo_cost);
 					}
 				}
 
@@ -577,13 +414,13 @@ weapon_spawn_think()
 // 					ammo_given = player ammo_give( self.zombie_weapon_upgrade, true );
 // 				}
 //				else
-				if( player has_upgrade( self.zombie_weapon_upgrade ) )
+				if( player maps\apex\_zm_weapons::has_upgrade( self.zombie_weapon_upgrade ) )
 				{
-					ammo_given = player ammo_give( level.zombie_weapons[ self.zombie_weapon_upgrade ].upgrade_name );
+					ammo_given = player maps\apex\_zm_weapons::ammo_give( level.zombie_weapons[ self.zombie_weapon_upgrade ].upgrade_name );
 				}
 				else
 				{
-					ammo_given = player ammo_give( self.zombie_weapon_upgrade );
+					ammo_given = player maps\apex\_zm_weapons::ammo_give( self.zombie_weapon_upgrade );
 				}
 
 				if( ammo_given )
@@ -636,277 +473,4 @@ weapon_show( player )
 
 	time = 1;
 	self MoveTo( self.og_origin, time );
-}
-
-get_pack_a_punch_weapon_options( weapon )
-{
-	if ( !isDefined( self.pack_a_punch_weapon_options ) )
-	{
-		self.pack_a_punch_weapon_options = [];
-	}
-
-	if ( !is_weapon_upgraded( weapon ) )
-	{
-		return self CalcWeaponOptions( 0 );
-	}
-
-	if ( isDefined( self.pack_a_punch_weapon_options[weapon] ) )
-	{
-		return self.pack_a_punch_weapon_options[weapon];
-	}
-
-	smiley_face_reticle_index = 21; // smiley face is reserved for the upgraded famas, keep it at the end of the list
-
-	camo_index = 15;
-	lens_index = randomIntRange( 0, 6 );
-	reticle_index = randomIntRange( 0, smiley_face_reticle_index );
-	reticle_color_index = randomIntRange( 0, 6 );
-
-	if ( "famas_upgraded_zm" == weapon )
-	{
-		reticle_index = smiley_face_reticle_index;
-	}
-
-/*
-/#
-	if ( GetDvarInt( #"scr_force_reticle_index" ) )
-	{
-		reticle_index = GetDvarInt( #"scr_force_reticle_index" );
-	}
-#/
-*/
-
-	scary_eyes_reticle_index = 8; // weapon_reticle_zom_eyes
-	purple_reticle_color_index = 3; // 175 0 255
-	if ( reticle_index == scary_eyes_reticle_index )
-	{
-		reticle_color_index = purple_reticle_color_index;
-	}
-	letter_a_reticle_index = 2; // weapon_reticle_zom_a
-	pink_reticle_color_index = 6; // 255 105 180
-	if ( reticle_index == letter_a_reticle_index )
-	{
-		reticle_color_index = pink_reticle_color_index;
-	}
-	letter_e_reticle_index = 7; // weapon_reticle_zom_e
-	green_reticle_color_index = 1; // 0 255 0
-	if ( reticle_index == letter_e_reticle_index )
-	{
-		reticle_color_index = green_reticle_color_index;
-	}
-
-	self.pack_a_punch_weapon_options[weapon] = self CalcWeaponOptions( camo_index, lens_index, reticle_index, reticle_color_index );
-	return self.pack_a_punch_weapon_options[weapon];
-}
-
-weapon_give( weapon, is_upgrade )
-{
-	primaryWeapons = self GetWeaponsListPrimaries();
-	current_weapon = undefined;
-	weapon_limit = 2;
-
-	//if is not an upgraded perk purchase
-	if( !IsDefined( is_upgrade ) )
-	{
-		is_upgrade = false;
-	}
-
- 	if ( self HasPerk( "specialty_additionalprimaryweapon" ) )
- 	{
- 		weapon_limit = 3;
- 	}
-
-	// This should never be true for the first time.
-	if( primaryWeapons.size >= weapon_limit )
-	{
-		current_weapon = self getCurrentWeapon(); // get his current weapon
-
-		if ( is_placeable_mine( current_weapon ) || is_equipment( current_weapon ) )
-		{
-			current_weapon = undefined;
-		}
-
-		if( isdefined( current_weapon ) )
-		{
-			if( !is_offhand_weapon( weapon ) )
-			{
-				if ( issubstr( current_weapon, "knife_ballistic_" ) )
-				{
-					self notify( "zmb_lost_knife" );
-				}
-				self TakeWeapon( current_weapon );
-				if ( current_weapon == "m1911_zm" )
-				{
-					self.last_pistol_swap = GetTime();
-				}
-			}
-		}
-	}
-
-	if( IsDefined( level.zombiemode_offhand_weapon_give_override ) )
-	{
-		if( self [[ level.zombiemode_offhand_weapon_give_override ]]( weapon ) )
-		{
-			return;
-		}
-	}
-
-	if( weapon == "zombie_cymbal_monkey" )
-	{
-		self maps\_zombiemode_weap_cymbal_monkey::player_give_cymbal_monkey();
-		self play_weapon_vo( weapon );
-		return;
-	}
-
-	self play_sound_on_ent( "purchase" );
-
-	if ( !is_weapon_upgraded( weapon ) )
-	{
-		self GiveWeapon( weapon );
-	}
-	else
-	{
-		self GiveWeapon( weapon, 0, self get_pack_a_punch_weapon_options( weapon ) );
-	}
-
-	self GiveStartAmmo( weapon );
-	self SwitchToWeapon( weapon );
-
-	self play_weapon_vo(weapon);
-}
-
-play_weapon_vo(weapon)
-{
-	//Added this in for special instances of New characters with differing favorite weapons
-	if ( isDefined( level._audio_custom_weapon_check ) )
-	{
-		type = self [[ level._audio_custom_weapon_check ]]( weapon );
-	}
-	else
-	{
-	    type = self weapon_type_check(weapon);
-	}
-
-	self maps\_zombiemode_audio::create_and_play_dialog( "weapon_pickup", type );
-}
-
-weapon_type_check(weapon)
-{
-    if( !IsDefined( self.entity_num ) )
-        return "crappy";
-
-    switch(self.entity_num)
-    {
-        case 0:   //DEMPSEY'S FAVORITE WEAPON: M16 UPGRADED: ROTTWEIL72
-            if( weapon == "m16_zm" )
-                return "favorite";
-            else if( weapon == "rottweil72_upgraded_zm" )
-                return "favorite_upgrade";
-            break;
-
-        case 1:   //NIKOLAI'S FAVORITE WEAPON: FNFAL UPGRADED: HK21
-            if( weapon == "fnfal_zm" )
-                return "favorite";
-            else if( weapon == "hk21_upgraded_zm" )
-                return "favorite_upgrade";
-            break;
-
-        case 2:   //TAKEO'S FAVORITE WEAPON: M202 UPGRADED: THUNDERGUN
-            if( weapon == "china_lake_zm" )
-                return "favorite";
-            else if( weapon == "thundergun_upgraded_zm" )
-                return "favorite_upgrade";
-            break;
-
-        case 3:   //RICHTOFEN'S FAVORITE WEAPON: MP40 UPGRADED: CROSSBOW
-            if( weapon == "mp40_zm" )
-                return "favorite";
-            else if( weapon == "crossbow_explosive_upgraded_zm" )
-                return "favorite_upgrade";
-            break;
-    }
-
-    if( IsSubStr( weapon, "upgraded" ) )
-        return "upgrade";
-    else
-        return level.zombie_weapons[weapon].vox;
-}
-
-
-get_player_index(player)
-{
-	assert( IsPlayer( player ) );
-	assert( IsDefined( player.entity_num ) );
-/#
-	// used for testing to switch player's VO in-game from devgui
-	if( player.entity_num == 0 && GetDvar( #"zombie_player_vo_overwrite" ) != "" )
-	{
-		new_vo_index = GetDvarInt( #"zombie_player_vo_overwrite" );
-		return new_vo_index;
-	}
-#/
-	return player.entity_num;
-}
-
-ammo_give( weapon )
-{
-	// We assume before calling this function we already checked to see if the player has this weapon...
-
-	// Should we give ammo to the player
-	give_ammo = false;
-
-	// Check to see if ammo belongs to a primary weapon
-	if( !is_offhand_weapon( weapon ) )
-	{
-		if( isdefined( weapon ) )
-		{
-			// get the max allowed ammo on the current weapon
-			stockMax = 0;	// scope declaration
-			stockMax = WeaponStartAmmo( weapon );
-
-			// Get the current weapon clip count
-			clipCount = self GetWeaponAmmoClip( weapon );
-
-			currStock = self GetAmmoCount( weapon );
-
-			// compare it with the ammo player actually has, if more or equal just dont give the ammo, else do
-			if( ( currStock - clipcount ) >= stockMax )
-			{
-				give_ammo = false;
-			}
-			else
-			{
-				give_ammo = true; // give the ammo to the player
-			}
-		}
-	}
-	else
-	{
-		// Ammo belongs to secondary weapon
-		if( self has_weapon_or_upgrade( weapon ) )
-		{
-			// Check if the player has less than max stock, if no give ammo
-			if( self getammocount( weapon ) < WeaponMaxAmmo( weapon ) )
-			{
-				// give the ammo to the player
-				give_ammo = true;
-			}
-		}
-	}
-
-	if( give_ammo )
-	{
-		self play_sound_on_ent( "purchase" );
-		self GiveStartAmmo( weapon );
-// 		if( also_has_upgrade )
-// 		{
-// 			self GiveMaxAmmo( weapon+"_upgraded" );
-// 		}
-		return true;
-	}
-
-	if( !give_ammo )
-	{
-		return false;
-	}
 }

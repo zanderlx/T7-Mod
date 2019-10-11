@@ -818,7 +818,7 @@ teleporter_vo_play( vox_type, pre_wait )
 	{
 		pre_wait = 0;
 	}
-	index = maps\_zombiemode_weapons::get_player_index(self);
+	index = self maps\apex\_zm_weapons::get_player_index();
 	plr = "plr_" + index + "_";
 	wait(pre_wait);
 	self maps\_zombiemode_audio::create_and_play_dialog( plr, vox_type, 0.25 );

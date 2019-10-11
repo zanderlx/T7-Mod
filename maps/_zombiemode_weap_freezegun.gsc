@@ -10,7 +10,7 @@ init()
 	{
 		// using the functionality but not the weapon itself
 	}
-	else if ( !maps\_zombiemode_weapons::is_weapon_included( "freezegun_zm" ) )
+	else if ( !maps\apex\_zm_weapons::is_weapon_included( "freezegun_zm" ) )
 	{
 		return;
 	}

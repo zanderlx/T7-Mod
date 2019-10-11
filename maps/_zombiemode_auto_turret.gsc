@@ -95,7 +95,7 @@ auto_turret_think()
 	for( ;; )
 	{
 		self waittill( "trigger", player );
-		index = maps\_zombiemode_weapons::get_player_index(player);
+		index = player maps\apex\_zm_weapons::get_player_index();
 
 		if(!is_true(self.power_on))
 			continue;

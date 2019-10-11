@@ -408,3 +408,16 @@ visionset_deactivate(vision)
 {
 	self levelNotify("visionset_mgr_deactivate_" + vision);
 }
+
+//============================================================================================
+// Callbacks
+//============================================================================================
+OnPlayerSpawned_Callback(func)
+{
+	maps\apex\_load::_AddCallback("on_player_spawned", func);
+}
+
+OnPlayerSpawned_CallbackRemove(func)
+{
+	maps\apex\_load::_RemoveCallback("on_player_spawned", func);
+}

@@ -115,9 +115,9 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 		stub.worldgun = spawn_model(GetWeaponModel(current_weapon), origin_base + interact_offset, self.angles);
 		stub.worldgun UseWeaponHideTags(current_weapon);
 
-		if(maps\_zombiemode_weapons::weapon_is_dual_wield(current_weapon))
+		if(maps\apex\_zm_weapons::weapon_is_dual_wield(current_weapon))
 		{
-			stub.worldgun.lh = spawn_model(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
+			stub.worldgun.lh = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
 			stub.worldgun.lh LinkTo(stub.worldgun);
 			stub.worldgun.lh UseWeaponHideTags(current_weapon);
 		}
@@ -160,9 +160,9 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 
 		if(isdefined(stub.worldgun.lh))
 		{
-			if(maps\_zombiemode_weapons::weapon_is_dual_wield(upgrade_weapon))
+			if(maps\apex\_zm_weapons::weapon_is_dual_wield(upgrade_weapon))
 			{
-				stub.worldgun.lh SetModel(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(upgrade_weapon));
+				stub.worldgun.lh SetModel(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(upgrade_weapon));
 				stub.worldgun.lh UseWeaponHideTags(upgrade_weapon);
 				stub.worldgun.lh Show();
 			}
@@ -175,9 +175,9 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 		}
 		else
 		{
-			if(maps\_zombiemode_weapons::weapon_is_dual_wield(upgrade_weapon))
+			if(maps\apex\_zm_weapons::weapon_is_dual_wield(upgrade_weapon))
 			{
-				stub.worldgun.lh = spawn_model(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
+				stub.worldgun.lh = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(current_weapon), stub.worldgun.origin + (3, 3, 3), stub.worldgun.angles);
 				stub.worldgun.lh LinkTo(stub.worldgun);
 				stub.worldgun.lh UseWeaponHideTags(current_weapon);
 			}
@@ -518,15 +518,15 @@ wait_for_player_to_take(player, weapon, upgrade_weapon)
 				primaries = player GetWeaponsListPrimaries();
 
 				if(isdefined(primaries) && primaries.size >= weapon_limit)
-					player maps\_zombiemode_weapons::weapon_give(upgrade_weapon);
+					player maps\apex\_zm_weapons::weapon_give(upgrade_weapon);
 				else
 				{
-					player GiveWeapon(upgrade_weapon, 0, player maps\_zombiemode_weapons::get_pack_a_punch_weapon_options(upgrade_weapon));
+					player GiveWeapon(upgrade_weapon, 0, player maps\apex\_zm_weapons::get_pack_a_punch_weapon_options(upgrade_weapon));
 					player GiveStartAmmo(upgrade_weapon);
 				}
 
 				player SwitchToWeapon(upgrade_weapon);
-				player maps\_zombiemode_weapons::play_weapon_vo(upgrade_weapon);
+				player maps\apex\_zm_weapons::play_weapon_vo(upgrade_weapon);
 				return;
 			}
 		}
@@ -605,7 +605,7 @@ can_pack_weapon(weapon_name)
 {
 	if(flag("pack_machine_in_use"))
 		return true;
-	if(!maps\_zombiemode_weapons::is_weapon_included(weapon_name))
+	if(!maps\apex\_zm_weapons::is_weapon_included(weapon_name))
 		return false;
 	if(!isdefined(level.zombie_weapons[weapon_name].upgrade_name) || level.zombie_weapons[weapon_name].upgrade_name == "none")
 		return false;
@@ -620,7 +620,7 @@ player_use_can_pack_now()
 		return false;
 	if(self IsSwitchingWeapons())
 		return false;
-	if(!self maps\_zombiemode_weapons::can_buy_weapon())
+	if(!self maps\apex\_zm_weapons::can_buy_weapon())
 		return false;
 	if(self hacker_active())
 		return false;
@@ -853,8 +853,8 @@ pap_attach_weapons()
 
 	weapon Attach(GetWeaponModel(weapon_name), "tag_weapon");
 
-	if(maps\_zombiemode_weapons::weapon_is_dual_wield(weapon_name))
-		weapon Attach(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(weapon_name), "tag_weapon_left");
+	if(maps\apex\_zm_weapons::weapon_is_dual_wield(weapon_name))
+		weapon Attach(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(weapon_name), "tag_weapon_left");
 
 	weapon UseWeaponHideTags(weapon_name);
 }

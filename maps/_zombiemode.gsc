@@ -449,7 +449,7 @@ spawn_vo()
 	if(players.size > 1)
 	{
 		player = random(players);
-		index = maps\_zombiemode_weapons::get_player_index(player);
+		index = player maps\apex\_zm_weapons::get_player_index();
 		player thread spawn_vo_player(index,players.size);
 	}
 
@@ -1950,7 +1950,7 @@ player_too_many_weapons_monitor()
 		primaryWeapons = self GetWeaponsListPrimaries();
 		for ( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if ( maps\_zombiemode_weapons::is_weapon_included( primaryWeapons[i] ) || maps\_zombiemode_weapons::is_weapon_upgraded( primaryWeapons[i] ) )
+			if ( maps\apex\_zm_weapons::is_weapon_included( primaryWeapons[i] ) || maps\apex\_zm_weapons::is_weapon_upgraded( primaryWeapons[i] ) )
 			{
 				primary_weapons_to_take[primary_weapons_to_take.size] = primaryWeapons[i];
 			}
@@ -2115,7 +2115,7 @@ take_additionalprimaryweapon()
 	primaryWeapons = self GetWeaponsListPrimaries();
 	for ( i = 0; i < primaryWeapons.size; i++ )
 	{
-		if ( maps\_zombiemode_weapons::is_weapon_included( primaryWeapons[i] ) || maps\_zombiemode_weapons::is_weapon_upgraded( primaryWeapons[i] ) )
+		if ( maps\apex\_zm_weapons::is_weapon_included( primaryWeapons[i] ) || maps\apex\_zm_weapons::is_weapon_upgraded( primaryWeapons[i] ) )
 		{
 			primary_weapons_that_can_be_taken[primary_weapons_that_can_be_taken.size] = primaryWeapons[i];
 		}

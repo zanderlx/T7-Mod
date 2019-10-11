@@ -195,12 +195,12 @@ trigger_visible_to_player(player)
 {
 	if(isdefined(self.stub.chest_user) && !is_true(self.stub.box_rerespun))
 	{
-		if(player != self.stub.chest_user || !player maps\_zombiemode_weapons::can_buy_weapon())
+		if(player != self.stub.chest_user || !player maps\apex\_zm_weapons::can_buy_weapon())
 			return false;
 	}
 	else
 	{
-		if(!player maps\_zombiemode_weapons::can_buy_weapon())
+		if(!player maps\apex\_zm_weapons::can_buy_weapon())
 			return false;
 	}
 	return true;
@@ -345,7 +345,7 @@ treasure_chest_think()
 				if(grabber == user)
 				{
 					self notify("user_grabbed_weapon");
-					user thread maps\_zombiemode_weapons::weapon_give(self.weapon_string);
+					user thread maps\apex\_zm_weapons::weapon_give(self.weapon_string, true, false);
 					break;
 				}
 				else if(grabber == level)
@@ -485,9 +485,9 @@ treasure_chest_weapon_spawn(player, repsin)
 	self.weapon_model = spawn_model(GetWeaponModel(self.weapon_string), self.chest.origin + (0, 0, 43), self.chest.angles + (0, 180, 0));
 	self.weapon_model UseWeaponHideTags(self.weapon_string);
 
-	if(maps\_zombiemode_weapons::weapon_is_dual_wield(self.weapon_string))
+	if(maps\apex\_zm_weapons::weapon_is_dual_wield(self.weapon_string))
 	{
-		self.weapon_model_dw = spawn_model(maps\_zombiemode_weapons::get_left_hand_weapon_model_name(self.weapon_string), self.weapon_model.origin - (3, 3, 3), self.weapon_model.angles);
+		self.weapon_model_dw = spawn_model(maps\apex\_zm_weapons::get_left_hand_weapon_model_name(self.weapon_string), self.weapon_model.origin - (3, 3, 3), self.weapon_model.angles);
 		self.weapon_model_dw UseWeaponHideTags(self.weapon_string);
 		self.weapon_model_dw LinkTo(self.weapon_model);
 	}
@@ -715,7 +715,7 @@ default_cymbal_monkey_weighting_func()
 
 	for(i = 0; i < players.size; i++)
 	{
-		if(players[i] maps\_zombiemode_weapons::has_weapon_or_upgrade("zombie_cymbal_monkey"))
+		if(players[i] maps\apex\_zm_weapons::has_weapon_or_upgrade("zombie_cymbal_monkey"))
 			count++;
 	}
 
@@ -753,7 +753,7 @@ limited_weapon_below_quota(weapon, ignore_player)
 			if(isdefined(ignore_player) && ignore_player == player)
 				continue;
 
-			if(maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
+			if(maps\apex\_zm_weapons::has_weapon_or_upgrade(weapon))
 			{
 				count++;
 
@@ -802,7 +802,7 @@ treasure_chest_CanPlayerReceiveWeapon(player, weapon)
 {
 	if(!is_weapon_in_box(weapon))
 		return false;
-	if(isdefined(player) && player maps\_zombiemode_weapons::has_weapon_or_upgrade(weapon))
+	if(isdefined(player) && player maps\apex\_zm_weapons::has_weapon_or_upgrade(weapon))
 		return false;
 	if(!limited_weapon_below_quota(weapon, player))
 		return false;

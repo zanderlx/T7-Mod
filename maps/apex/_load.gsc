@@ -8,17 +8,61 @@ main()
 	maps\apex\_utility_code::init_apex_utility();
 	/# maps\apex\_debug::debug_init(); #/
 	level thread solo_game_init();
+	maps\apex\_zm_weapons::init();
 	maps\apex\_zm_magicbox::init();
 	maps\apex\_zm_powerups::init();
 	maps\apex\_zm_power::init();
 	maps\apex\_zm_perks::init();
 	maps\apex\_zm_packapunch::init();
 	level thread power_off_zones_init();
+	OnPlayerConnect_Callback(::onPlayerSpawned);
+}
+
+//============================================================================================
+// Callbacks
+//============================================================================================
+_AddCallback(type, func)
+{
+	if(!isdefined(level._callbacks))
+		level._callbacks = [];
+	if(!isdefined(level._callbacks[type]))
+		level._callbacks[type] = [];
+
+	maps\_callbackglobal::AddCallback(type, func);
+}
+
+_RemoveCallback(type, func)
+{
+	if(isdefined(level._callbacks) && isdefined(level._callbacks[type]))
+		maps\_callbackglobal::RemoveCallback(type, func);
+}
+
+_Callback(type)
+{
+	if(!isdefined(level._callbacks))
+		return;
+	if(!isdefined(level._callbacks[type]))
+		return;
+	if(level._callbacks[type].size == 0)
+		return;
+
+	self maps\_callbackglobal::Callback(type);
+}
+
+onPlayerSpawned()
+{
+	self endon("disconnect");
+
+	for(;;)
+	{
+		self waittill("spawned_player");
+		self _Callback("on_player_spawned");
+	}
 }
 
 //============================================================================================
 // Solo Game
-//===========================================================================================
+//============================================================================================
 solo_game_init()
 {
 	flag_init("solo_game", is_solo_game());

@@ -251,10 +251,6 @@ include_weapons()
 
 	precacheItem( "explosive_bolt_zm" );
 	precacheItem( "explosive_bolt_upgraded_zm" );
-
-
-	// get the bowie into the collector achievement list
-	level.collector_achievement_weapons = array_add( level.collector_achievement_weapons, "bowie_knife_zm" );
 }
 
 //*****************************************************************************

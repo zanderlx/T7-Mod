@@ -1,5 +1,5 @@
-#include maps\_utility; 
-#include common_scripts\utility; 
+#include maps\_utility;
+#include common_scripts\utility;
 #include maps\_zombiemode_utility;
 #include maps\_zombiemode_net;
 
@@ -7,7 +7,7 @@
 
 init()
 {
-	if ( !maps\_zombiemode_weapons::is_weapon_included( "tesla_gun_zm" ) && !is_true( level.uses_tesla_powerup ) )
+	if ( !maps\apex\_zm_weapons::is_weapon_included( "tesla_gun_zm" ) && !is_true( level.uses_tesla_powerup ) )
 	{
 		return;
 	}
@@ -28,7 +28,7 @@ init()
 	level._effect["tesla_shock_eyes"]		= loadfx( "maps/zombie/fx_zombie_tesla_shock_eyes" );
 
 	precacheshellshock( "electrocution" );
-	
+
 	set_zombie_var( "tesla_max_arcs",			5 );
 	set_zombie_var( "tesla_max_enemies_killed", 20 );
 	set_zombie_var( "tesla_radius_start",		300 );
@@ -39,7 +39,7 @@ init()
 	set_zombie_var( "tesla_min_fx_distance",	128 );
 	set_zombie_var( "tesla_network_death_choke",4 );
 
-	level thread on_player_connect(); 
+	level thread on_player_connect();
 }
 
 
@@ -62,14 +62,14 @@ tesla_damage_init( hit_location, hit_origin, player )
 	debug_print( "TESLA: Player: '" + player.playername + "' hit with the tesla gun" );
 
 	//TO DO Add Tesla Kill Dialog thread....
-	
+
 	player.tesla_enemies = undefined;
 	player.tesla_enemies_hit = 1;
 	player.tesla_powerup_dropped = false;
 	player.tesla_arc_count = 0;
-	
+
 	self tesla_arc_damage( self, player, 1 );
-	
+
 	if( player.tesla_enemies_hit >= 4)
 	{
 		player thread tesla_killstreak_sound();
@@ -96,16 +96,16 @@ tesla_arc_damage( source_enemy, player, arc_num )
 	self thread tesla_do_damage( source_enemy, arc_num, player );
 
 	debug_print( "TESLA: " + enemies.size + " enemies hit during arc: " + arc_num );
-			
+
 	for( i = 0; i < enemies.size; i++ )
 	{
 		if( enemies[i] == self )
 		{
 			continue;
 		}
-		
+
 		if ( tesla_end_arc_damage( arc_num + 1, player.tesla_enemies_hit ) )
-		{			
+		{
 			tesla_flag_hit( enemies[i], false );
 			continue;
 		}
@@ -127,7 +127,7 @@ tesla_end_arc_damage( arc_num, enemies_hit_num )
 
 	if ( enemies_hit_num >= level.zombie_vars["tesla_max_enemies_killed"] )
 	{
-		debug_print( "TESLA: Ending arcing. Max enemies killed" );		
+		debug_print( "TESLA: Ending arcing. Max enemies killed" );
 		return true;
 	}
 
@@ -148,7 +148,7 @@ tesla_get_enemies_in_area( origin, distance, player )
 	/#
 		level thread tesla_debug_arc( origin, distance );
 	#/
-	
+
 	distance_squared = distance * distance;
 	enemies = [];
 
@@ -158,7 +158,7 @@ tesla_get_enemies_in_area( origin, distance, player )
 		player.tesla_enemies = get_array_of_closest( origin, player.tesla_enemies );
 	}
 
-	zombies = player.tesla_enemies; 
+	zombies = player.tesla_enemies;
 
 	if ( IsDefined( zombies ) )
 	{
@@ -226,7 +226,7 @@ tesla_do_damage( source_enemy, arc_num, player )
 
 	if( !IsDefined( self ) || !IsAlive( self ) )
 	{
-		// guy died on us 
+		// guy died on us
 		return;
 	}
 
@@ -245,7 +245,7 @@ tesla_do_damage( source_enemy, arc_num, player )
 	{
 		self.a.nodeath = undefined;
 	}
-	
+
 	if( is_true( self.is_traversing))
 	{
 		self.deathanim = undefined;
@@ -258,20 +258,20 @@ tesla_do_damage( source_enemy, arc_num, player )
 			wait_network_frame();
 			player.tesla_arc_count = 0;
 		}
-		
+
 		player.tesla_arc_count++;
 		source_enemy tesla_play_arc_fx( self );
 	}
 
 	while ( player.tesla_network_death_choke > level.zombie_vars["tesla_network_death_choke"] )
 	{
-		debug_print( "TESLA: Choking Tesla Damage. Dead enemies this network frame: " + player.tesla_network_death_choke );		
-		wait( 0.05 ); 
+		debug_print( "TESLA: Choking Tesla Damage. Dead enemies this network frame: " + player.tesla_network_death_choke );
+		wait( 0.05 );
 	}
 
 	if( !IsDefined( self ) || !IsAlive( self ) )
 	{
-		// guy died on us 
+		// guy died on us
 		return;
 	}
 
@@ -279,7 +279,7 @@ tesla_do_damage( source_enemy, arc_num, player )
 
 	self.tesla_death = true;
 	self tesla_play_death_fx( arc_num );
-	
+
 	// use the origin of the arc orginator so it pics the correct death direction anim
 	origin = source_enemy.origin;
 	if ( source_enemy == self || !IsDefined( origin ) )
@@ -289,10 +289,10 @@ tesla_do_damage( source_enemy, arc_num, player )
 
 	if( !IsDefined( self ) || !IsAlive( self ) )
 	{
-		// guy died on us 
+		// guy died on us
 		return;
 	}
-	
+
 	if ( IsDefined( self.tesla_damage_func ) )
 	{
 		self [[ self.tesla_damage_func ]]( origin, player );
@@ -346,7 +346,7 @@ tesla_play_arc_fx( target )
 		wait( level.zombie_vars["tesla_arc_travel_time"] );
 		return;
 	}
-	
+
 	tag = "J_SpineUpper";
 
 	if ( self.isdog )
@@ -360,23 +360,23 @@ tesla_play_arc_fx( target )
 	{
 		target_tag = "J_Spine1";
 	}
-	
+
 	origin = self GetTagOrigin( tag );
 	target_origin = target GetTagOrigin( target_tag );
 	distance_squared = level.zombie_vars["tesla_min_fx_distance"] * level.zombie_vars["tesla_min_fx_distance"];
 
 	if ( DistanceSquared( origin, target_origin ) < distance_squared )
 	{
-		debug_print( "TESLA: Not playing arcing FX. Enemies too close." );		
+		debug_print( "TESLA: Not playing arcing FX. Enemies too close." );
 		return;
 	}
-	
+
 	fxOrg = Spawn( "script_model", origin );
 	fxOrg SetModel( "tag_origin" );
 
 	fx = PlayFxOnTag( level._effect["tesla_bolt"], fxOrg, "tag_origin" );
 	playsoundatposition( "wpn_tesla_bounce", fxOrg.origin );
-	
+
 	fxOrg MoveTo( target_origin, level.zombie_vars["tesla_arc_travel_time"] );
 	fxOrg waittill( "movedone" );
 	fxOrg delete();
@@ -396,7 +396,7 @@ tesla_debug_arc( origin, distance )
 	while( GetTime() < start + 3000 )
 	{
 		drawcylinder( origin, distance, 1 );
-		wait( 0.05 ); 
+		wait( 0.05 );
 	}
 #/
 }
@@ -409,8 +409,8 @@ is_tesla_damage( mod )
 
 enemy_killed_by_tesla()
 {
-	return ( IsDefined( self.tesla_death ) && self.tesla_death == true ); 
-	
+	return ( IsDefined( self.tesla_death ) && self.tesla_death == true );
+
 }
 
 
@@ -418,8 +418,8 @@ on_player_connect()
 {
 	for( ;; )
 	{
-		level waittill( "connecting", player ); 
-		player thread tesla_sound_thread(); 
+		level waittill( "connecting", player );
+		player thread tesla_sound_thread();
 		player thread tesla_pvp_thread();
 		player thread tesla_network_choke();
 	}
@@ -429,12 +429,12 @@ on_player_connect()
 tesla_sound_thread()
 {
 	self endon( "disconnect" );
-	self waittill( "spawned_player" ); 
+	self waittill( "spawned_player" );
 
 
 	for( ;; )
 	{
-		result = self waittill_any_return( "grenade_fire", "death", "player_downed", "weapon_change", "grenade_pullback" );		
+		result = self waittill_any_return( "grenade_fire", "death", "player_downed", "weapon_change", "grenade_pullback" );
 
 		if ( !IsDefined( result ) )
 		{
@@ -459,7 +459,7 @@ tesla_sound_thread()
 tesla_engine_sweets()
 {
 
-	self endon( "disconnect" ); 
+	self endon( "disconnect" );
 	self endon ("weap_away");
 	while(1)
 	{
@@ -475,7 +475,7 @@ tesla_pvp_thread()
 {
 	self endon( "disconnect" );
 	self endon( "death" );
-	self waittill( "spawned_player" ); 
+	self waittill( "spawned_player" );
 
 	for( ;; )
 	{
@@ -514,7 +514,7 @@ tesla_pvp_thread()
 			}
 		}
 
-		self setelectrified( 1.0 );	
+		self setelectrified( 1.0 );
 		self shellshock( "electrocution", 1.0 );
 		self playsound( "wpn_tesla_bounce" );
 	}
@@ -526,7 +526,7 @@ play_tesla_sound(emotion)
 	if(!IsDefined (level.one_emo_at_a_time))
 	{
 		level.one_emo_at_a_time = 0;
-		level.var_counter = 0;	
+		level.var_counter = 0;
 	}
 	if(level.one_emo_at_a_time == 0)
 	{
@@ -538,7 +538,7 @@ play_tesla_sound(emotion)
 		org waittill("sound_complete"+ "_"+level.var_counter);
 		org delete();
 		level.one_emo_at_a_time = 0;
-	}		
+	}
 }
 
 tesla_killstreak_sound()
@@ -547,7 +547,7 @@ tesla_killstreak_sound()
 
 	//TUEY Play some dialog if you kick ass with the Tesla gun
 
-	self maps\_zombiemode_audio::create_and_play_dialog( "kill", "tesla" );	
+	self maps\_zombiemode_audio::create_and_play_dialog( "kill", "tesla" );
 	wait(3.5);
 	level clientNotify ("TGH");
 }
@@ -557,7 +557,7 @@ tesla_network_choke()
 {
 	self endon( "disconnect" );
 	self endon( "death" );
-	self waittill( "spawned_player" ); 
+	self waittill( "spawned_player" );
 
 	self.tesla_network_death_choke = 0;
 

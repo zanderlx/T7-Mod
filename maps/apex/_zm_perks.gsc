@@ -382,7 +382,7 @@ vending_trigger_can_player_use(player)
 		return false;
 	if(player in_revive_trigger())
 		return false;
-	if(!player maps\_zombiemode_weapons::can_buy_weapon())
+	if(!player maps\apex\_zm_weapons::can_buy_weapon())
 		return false;
 	if(player IsThrowingGrenade())
 		return false;

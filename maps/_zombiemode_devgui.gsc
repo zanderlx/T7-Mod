@@ -303,7 +303,7 @@ zombie_devgui_open_sesame()
 
 zombie_devgui_tesla_think()
 {
-	if ( !maps\_zombiemode_weapons::is_weapon_included( "tesla_gun_zm" ) )
+	if ( !maps\apex\_zm_weapons::is_weapon_included( "tesla_gun_zm" ) )
 	{
 		return;
 	}
@@ -331,7 +331,7 @@ zombie_devgui_tesla_think()
 
 zombie_devgui_thundergun_think()
 {
-	if ( !maps\_zombiemode_weapons::is_weapon_included( "thundergun_zm" ) )
+	if ( !maps\apex\_zm_weapons::is_weapon_included( "thundergun_zm" ) )
 	{
 		return;
 	}
@@ -359,7 +359,7 @@ zombie_devgui_thundergun_think()
 
 zombie_devgui_freezegun_think()
 {
-	if ( !maps\_zombiemode_weapons::is_weapon_included( "freezegun_zm" ) )
+	if ( !maps\apex\_zm_weapons::is_weapon_included( "freezegun_zm" ) )
 	{
 		return;
 	}
@@ -830,12 +830,12 @@ zombie_devgui_pack_current_weapon()
 		if ( !players[i] maps\_laststand::player_is_in_laststand() )
 		{
 			weap = players[i] getcurrentweapon();
-			if(!players[i] maps\_zombiemode_weapons::has_upgrade( weap ) )
+			if(!players[i] maps\apex\_zm_weapons::has_upgrade( weap ) )
 			{
 				weapon = get_upgrade( weap );
 				if(isDefined(weapon))
 				{
-					players[i] GiveWeapon( weapon, 0, players[i] maps\_zombiemode_weapons::get_pack_a_punch_weapon_options( weapon ) );
+					players[i] GiveWeapon( weapon, 0, players[i] maps\apex\_zm_weapons::get_pack_a_punch_weapon_options( weapon ) );
 					players[i] GiveStartAmmo( weapon );
 					players[i] SwitchToWeapon( weapon );
 				}

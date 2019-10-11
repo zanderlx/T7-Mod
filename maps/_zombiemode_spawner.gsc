@@ -3820,7 +3820,7 @@ zombie_death_event( zombie )
 		zombie thread zombie_eye_glow_stop();
 	}
 
-	if ( maps\_zombiemode_weapons::is_weapon_included( "freezegun_zm" ) )
+	if ( maps\apex\_zm_weapons::is_weapon_included( "freezegun_zm" ) )
 	{
 		zombie thread maps\_zombiemode_weap_freezegun::freezegun_clear_extremity_damage_fx();
 		zombie thread maps\_zombiemode_weap_freezegun::freezegun_clear_torso_damage_fx();

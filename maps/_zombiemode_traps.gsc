@@ -1201,7 +1201,7 @@ trap_dialog()
 			if(dist < 70*70 && timer == 3)
 			{
 
-				index = maps\_zombiemode_weapons::get_player_index(players[i]);
+				index = players[i] maps\apex\_zm_weapons::get_player_index();
 				plr = "plr_" + index + "_";
 				//players[i] create_and_play_dialog( plr, "vox_level_start", 0.25 );
 				wait(3);
