@@ -36,13 +36,11 @@ enable_fire_sale_chests()
 		if(is_true(show_firesale_box))
 		{
 			level.chests[i].zombie_cost = level.zombie_vars["zombie_powerup_fire_sale_chest_cost"];
-			level.chests[i] set_hint_string(level.chests[i], "powerup_fire_sale_cost");
 
 			if(level.chest_index != i)
 			{
 				level.chests[i].was_temp = true;
-				level.chests[i] thread maps\apex\_zm_magicbox::show_chest();
-				level.chests[i] thread maps\apex\_zm_magicbox::hide_rubble();
+				level.chests[i] thread maps\apex\_zm_magicbox::show_chest(false);
 				wait_network_frame();
 			}
 
@@ -69,13 +67,7 @@ disable_fire_sale_chests()
 				level.chests[i] thread remove_temp_chest();
 			}
 
-			if(is_true(level.chests[i].grab_weapon_hint))
-				level.chests[i] thread fire_sale_weapon_wait();
-			else
-			{
-				level.chests[i].zombie_cost = level.chests[i].old_cost;
-				level.chests[i] set_hint_string(level.chests[i], "default_treasure_chest_" + level.chests[i].zombie_cost);
-			}
+			level.chests[i].zombie_cost = level.chests[i].old_cost;
 
 			if(isdefined(level.chests[i].fire_sale_snd_ent))
 			{
@@ -87,18 +79,6 @@ disable_fire_sale_chests()
 	}
 }
 
-fire_sale_weapon_wait()
-{
-	self.zombie_cost = self.old_cost;
-
-	while(isdefined(self.chest_user))
-	{
-		wait_network_frame();
-	}
-
-	self set_hint_string(self, "default_treasure_chest_" + self.zombie_cost);
-}
-
 remove_temp_chest()
 {
 	while(isdefined(self.chest_user) || is_true(self._box_open))
@@ -106,11 +86,7 @@ remove_temp_chest()
 		wait_network_frame();
 	}
 
-	PlayFX(level._effect["poltergeist"], self.orig_origin);
-	self PlaySound("zmb_box_poof_land");
-	self PlaySound("zmb_couch_slam");
-	self maps\apex\_zm_magicbox::hide_chest();
-	self maps\apex\_zm_magicbox::show_rubble();
+	self maps\apex\_zm_magicbox::hide_chest(true);
 }
 
 func_should_drop_fire_sale()

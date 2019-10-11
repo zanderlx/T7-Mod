@@ -19,14 +19,26 @@ localize,mod
 //============================================================================================
 // rawfile,clientscripts\apex\_zm_magicbox.csc
 rawfile,maps\apex\_zm_magicbox.gsc
-weapon,sp\zombie_knuckle_crack
-fx,maps\zombie\fx_zombie_packapunch
 
 // Legacy box assets
 // xmodel,zombie_treasure_box
 // xmodel,zombie_coast_bearpile
 // xmodel,zombie_treasure_box_lid
 // xmodel,zombie_teddybear
+
+// Black Ops 2 magicbox assets
+rawfile,animtrees\zm_magicbox.atr
+xmodel,p6_anim_zm_magic_box
+xmodel,p6_anim_zm_magic_box_fake
+xanim,o_zombie_magic_box_arrive
+xanim,o_zombie_magic_box_close
+xanim,o_zombie_magic_box_fake_idle_twitch_a
+xanim,o_zombie_magic_box_fake_idle_twitch_b
+xanim,o_zombie_magic_box_leave
+xanim,o_zombie_magic_box_open
+xanim,o_zombie_magic_box_teddy_rise
+xanim,o_zombie_magic_box_weapon_dual_rise
+xanim,o_zombie_magic_box_weapon_rise
 
 //============================================================================================
 // Pack-A-Punch
