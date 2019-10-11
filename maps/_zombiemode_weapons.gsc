@@ -7,7 +7,6 @@ init()
 {
 	init_weapons();
 	init_weapon_upgrade();
-	init_pay_turret();
 //	init_weapon_cabinet();
 }
 
@@ -175,27 +174,6 @@ init_weapons()
 	if(IsDefined(level._zombie_custom_add_weapons))
 	{
 		[[level._zombie_custom_add_weapons]]();
-	}
-}
-
-// For pay turrets
-init_pay_turret()
-{
-	pay_turrets = [];
-	pay_turrets = GetEntArray( "pay_turret", "targetname" );
-
-	for( i = 0; i < pay_turrets.size; i++ )
-	{
-		cost = level.pay_turret_cost;
-		if( !isDefined( cost ) )
-		{
-			cost = 1000;
-		}
-		pay_turrets[i] SetHintString( &"ZOMBIE_PAY_TURRET", cost );
-		pay_turrets[i] SetCursorHint( "HINT_NOICON" );
-		pay_turrets[i] UseTriggerRequireLookAt();
-
-		pay_turrets[i] thread pay_turret_think( cost );
 	}
 }
 
@@ -459,142 +437,6 @@ get_left_hand_weapon_model_name( name )
 		default:
 			return GetWeaponModel( name );
 	}
-}
-
-pay_turret_think( cost )
-{
-	if( !isDefined( self.target ) )
-	{
-		return;
-	}
-	turret = GetEnt( self.target, "targetname" );
-
-	if( !isDefined( turret ) )
-	{
-		return;
-	}
-
-	turret makeTurretUnusable();
-
-	// figure out what zone it's in
-	zone_name = turret get_current_zone();
-	if ( !IsDefined( zone_name ) )
-	{
-		zone_name = "";
-	}
-
-	while( true )
-	{
-		self waittill( "trigger", player );
-
-		if( !is_player_valid( player ) )
-		{
-			player thread ignore_triggers( 0.5 );
-			continue;
-		}
-
-		if( player in_revive_trigger() )
-		{
-			wait( 0.1 );
-			continue;
-		}
-
-		if( player is_drinking() )
-		{
-			wait(0.1);
-			continue;
-		}
-
-		if( player.score >= cost )
-		{
-			player maps\_zombiemode_score::minus_to_player_score( cost );
-			bbPrint( "zombie_uses: playername %s playerscore %d teamscore %d round %d cost %d name %s x %f y %f z %f type turret", player.playername, player.score, level.team_pool[ player.team_num ].score, level.round_number, cost, zone_name, self.origin );
-			turret makeTurretUsable();
-			turret UseBy( player );
-			self disable_trigger();
-
-			player maps\_zombiemode_audio::create_and_play_dialog( "weapon_pickup", "mg" );
-
-			player.curr_pay_turret = turret;
-
-			turret thread watch_for_laststand( player );
-			turret thread watch_for_fake_death( player );
-			if( isDefined( level.turret_timer ) )
-			{
-				turret thread watch_for_timeout( player, level.turret_timer );
-			}
-
-			while( isDefined( turret getTurretOwner() ) && turret getTurretOwner() == player )
-			{
-				wait( 0.05 );
-			}
-
-			turret notify( "stop watching" );
-
-			player.curr_pay_turret = undefined;
-
-			turret makeTurretUnusable();
-			self enable_trigger();
-		}
-		else // not enough money
-		{
-			play_sound_on_ent( "no_purchase" );
-			player maps\_zombiemode_audio::create_and_play_dialog( "general", "no_money", undefined, 0 );
-		}
-	}
-}
-
-watch_for_laststand( player )
-{
-	self endon( "stop watching" );
-
-	while( !player maps\_laststand::player_is_in_laststand() )
-	{
-		if( isDefined( level.intermission ) && level.intermission )
-		{
-			intermission = true;
-		}
-		wait( 0.05 );
-	}
-
-	if( isDefined( self getTurretOwner() ) && self getTurretOwner() == player )
-	{
-		self UseBy( player );
-	}
-}
-
-watch_for_fake_death( player )
-{
-	self endon( "stop watching" );
-
-	player waittill( "fake_death" );
-
-	if( isDefined( self getTurretOwner() ) && self getTurretOwner() == player )
-	{
-		self UseBy( player );
-	}
-}
-
-watch_for_timeout( player, time )
-{
-	self endon( "stop watching" );
-
-	self thread cancel_timer_on_end( player );
-
-//	player thread maps\_zombiemode_timer::start_timer( time, "stop watching" );
-
-	wait( time );
-
-	if( isDefined( self getTurretOwner() ) && self getTurretOwner() == player )
-	{
-		self UseBy( player );
-	}
-}
-
-cancel_timer_on_end( player )
-{
-	self waittill( "stop watching" );
-	player notify( "stop watching" );
 }
 
 weapon_cabinet_door_open( left_or_right )
