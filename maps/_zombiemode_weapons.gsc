@@ -75,11 +75,6 @@ include_zombie_weapon( weapon_name, in_box, collector, weighting_func )
 	if( !IsDefined( level.zombie_include_weapons ) )
 	{
 		level.zombie_include_weapons = [];
-		level.collector_achievement_weapons = [];
-	}
-	if( isDefined( collector ) && collector )
-	{
-		level.collector_achievement_weapons = array_add( level.collector_achievement_weapons, weapon_name );
 	}
 
 	level.zombie_include_weapons[weapon_name] = true;
@@ -451,34 +446,6 @@ weapon_cabinet_door_open( left_or_right )
 	}
 }
 
-check_collector_achievement( bought_weapon )
-{
-	if ( !isdefined( self.bought_weapons ) )
-	{
-		self.bought_weapons = [];
-		self.bought_weapons = array_add( self.bought_weapons, bought_weapon );
-	}
-	else if ( !is_in_array( self.bought_weapons, bought_weapon ) )
-	{
-		self.bought_weapons = array_add( self.bought_weapons, bought_weapon );
-	}
-	else
-	{
-		// don't bother checking, they've bought it before
-		return;
-	}
-
-	for( i = 0; i < level.collector_achievement_weapons.size; i++ )
-	{
-		if ( !is_in_array( self.bought_weapons, level.collector_achievement_weapons[i] ) )
-		{
-			return;
-		}
-	}
-
-	self giveachievement_wrapper( "SP_ZOM_COLLECTOR" );
-}
-
 weapon_set_first_time_hint( cost, ammo_cost )
 {
 	if ( isDefined( level.has_pack_a_punch ) && !level.has_pack_a_punch )
@@ -556,8 +523,6 @@ weapon_spawn_think()
 				}
 
 				player weapon_give( self.zombie_weapon_upgrade );
-
-				player check_collector_achievement( self.zombie_weapon_upgrade );
 			}
 			else
 			{
@@ -605,8 +570,6 @@ weapon_spawn_think()
 						self weapon_set_first_time_hint( cost, get_ammo_cost( self.zombie_weapon_upgrade ) );
 					}
 				}
-
-				player check_collector_achievement( self.zombie_weapon_upgrade );
 
 //				MM - I don't think this is necessary
 // 				if( player HasWeapon( self.zombie_weapon_upgrade ) && player has_upgrade( self.zombie_weapon_upgrade ) )
