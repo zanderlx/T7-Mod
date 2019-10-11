@@ -15,6 +15,20 @@ menufile,ui\hud_test.menu
 localize,mod
 
 //============================================================================================
+// MagicBox
+//============================================================================================
+// rawfile,clientscripts\apex\_zm_magicbox.csc
+rawfile,maps\apex\_zm_magicbox.gsc
+weapon,sp\zombie_knuckle_crack
+fx,maps\zombie\fx_zombie_packapunch
+
+// Legacy box assets
+// xmodel,zombie_treasure_box
+// xmodel,zombie_coast_bearpile
+// xmodel,zombie_treasure_box_lid
+// xmodel,zombie_teddybear
+
+//============================================================================================
 // Pack-A-Punch
 //============================================================================================
 // rawfile,clientscripts\apex\_zm_packapunch.csc

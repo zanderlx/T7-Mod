@@ -86,6 +86,14 @@ include_zombie_weapon( weapon_name, in_box, collector, weighting_func )
 	level.zombie_include_weapons[weapon_name] = true;
 
 	PrecacheItem( weapon_name );
+
+	if(is_true(in_box))
+	{
+		if(!isdefined(level._zm_box_weapons))
+			level._zm_box_weapons = [];
+		if(!maps\apex\_utility::IsInArray(level._zm_box_weapons, weapon_name))
+			level._zm_box_weapons[level._zm_box_weapons.size] = weapon_name;
+	}
 }
 
 
