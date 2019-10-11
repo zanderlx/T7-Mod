@@ -282,6 +282,8 @@ rawfile,maps\_zombiemode_powerups.gsc
 rawfile,maps\_zombiemode_spawner.gsc
 rawfile,maps\_zombiemode_traps.gsc
 rawfile,maps\_zombiemode_weap_freezegun.gsc
+rawfile,maps\_zombiemode_weap_tesla.gsc
+rawfile,maps\_zombiemode_weap_thundergun.gsc
 rawfile,maps\_zombiemode_weapons.gsc
 rawfile,maps\_zombiemode.gsc
 
