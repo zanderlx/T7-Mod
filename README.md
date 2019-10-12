@@ -36,13 +36,11 @@ Support for other maps will come once the base mod and all major function / scri
 	- All perks seperated in to a script per perk
 	- Perk machines now use `PlayerTriggers`
 	- Perk machines now use Black Ops II / III models
-		- Thanks to xSanchez78 for Black ops III machine ports
 
 - Rewritten Pack-A-Punch
 	- Pack-A-Punch now uses state based xanims
 	- Pack-A-Punch now uses `PlayerTriggers`
 	- Pack-A-Punch now uses Black Ops III models and anims
-		- thanks to xSanchez78 for the ports
 
 - Rewritten Magicbox
 	- Magicbox now uses state based xanims
