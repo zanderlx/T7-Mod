@@ -8,6 +8,8 @@ All development for this mod will and has been streamed live over at [**_ApexMod
 **Note:** Mod has only been tested on Kino Der Toten so far, Other maps may & possible will crash, This is due to replacing functions and scripts they use.
 Support for other maps will come once the base mod and all major function / script changes have been completed.
 
+**Note:** There may be and possible are major bugs and issues in the mod. They will all be fixed by the time the mod releases.
+
 ## Features & Changes
 - Player Trigger
 	- These are triggers which handle all logic and prompts per player.
