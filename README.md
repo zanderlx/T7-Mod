@@ -1,4 +1,4 @@
-# T7-Mod
+# Black Ops - Overhauled
 [![Discord](https://img.shields.io/badge/chat-Discord-blue.svg?label=Discord)](https://discord.gg/rTTb3uB)
 
 Black Ops 1 mod, Rescripting and Downporting alot of features from newer games
