@@ -10,6 +10,11 @@ All development for this mod will and has been streamed live over at [**_ApexMod
 	- These are triggers which handle all logic and prompts per player.
 	- Every player sees a different hint string
 
+- VisionSet System
+	- Removed the vision system `_zombiemode.csc`
+	- Replaced with a much improved version
+	- Visions can be applied from server side that intreact with with the system client side
+
 - Rewritten Powerups System
 	- No longer any hard scripted logic in main powerups script
 	- All powerup logic automated, individual powerups just speciy what happens during 'onGrab' 'onTimeout' 'onTimedPowerupStart' etc
