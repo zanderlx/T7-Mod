@@ -32,18 +32,24 @@ Support for other maps will come once the base mod and all major function / scri
 	- Perk icons moved to menu, this reduces the amount of HudElements used in script
 	- No longer any hard scripted logic in main perks script
 	- [Perk bottle now support 'indexed' models and 'weaponOptions.csv'](https://streamable.com/vnb3a)
+		- Unfortunately this change means we are stuck with Black Ops perk bottles, due to how materials have to be set up for weapon options to work.
 	- All perks seperated in to a script per perk
 	- Perk machines now use `PlayerTriggers`
+	- Perk machines now use Black Ops II / III models
+		- Thanks to xSanchez78 for Black ops III machine ports
 
 - Rewritten Pack-A-Punch
 	- Pack-A-Punch now uses state based xanims
 	- Pack-A-Punch now uses `PlayerTriggers`
+	- Pack-A-Punch now uses Black Ops III models and anims
+		- thanks to xSanchez78 for the ports
 
 - Rewritten Magicbox
 	- Magicbox now uses state based xanims
 	- Magicbox now uses `PlayerTriggers`
 	- All Magicbox logic moved out of `_zombiemode_weapons.gsc/.csc` into `_zm_magicbox.gsc/.csc`
 	- Fixed Magicbox cycle being fps based
+	- Magicbox now uses Black Ops II models and anims
 
 - Rewritten Weapons Script
 	- Weapons now loaded from csv string tables
