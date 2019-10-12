@@ -5,6 +5,9 @@ Black Ops 1 mod, Rescripting and Downporting alot of features from newer games
 See here for current mod [TODO list](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true)
 All development for this mod will and has been streamed live over at [**_ApexModder's_** Twitch](https://www.twitch.tv/apexmdr/)
 
+**Note:** Mod has only been tested on Kino Der Toten so far, Other maps may & possible will crash, This is due to replacing functions and scripts they use.
+Support for other maps will come once the base mod and all major function / script changes have been completed.
+
 ## Features & Changes
 - Player Trigger
 	- These are triggers which handle all logic and prompts per player.
