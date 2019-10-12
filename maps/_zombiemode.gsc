@@ -1851,11 +1851,11 @@ player_too_many_weapons_monitor_takeaway_simultaneous( primary_weapons_to_take )
 
 	for ( i = 0; i < primary_weapons_to_take.size; i++ )
 	{
-		self TakeWeapon( primary_weapons_to_take[i] );
+		self maps\apex\_zm_weapons::weapon_take( primary_weapons_to_take[i] );
 	}
 
 	self maps\_zombiemode_score::minus_to_player_score( self.score );
-	self GiveWeapon( "m1911_zm" );
+	self maps\apex\_zm_weapons::give_weapon( "m1911_zm" );
 	if ( !self maps\_laststand::player_is_in_laststand() )
 	{
 		self decrement_is_drinking();
@@ -1893,7 +1893,7 @@ player_too_many_weapons_monitor_takeaway_sequence( primary_weapons_to_take )
 		self maps\_zombiemode_score::minus_to_player_score( score_decrement );
 		wait( 3 );
 
-		self TakeWeapon( primary_weapons_to_take[i] );
+		self maps\apex\_zm_weapons::weapon_take( primary_weapons_to_take[i] );
 	}
 
 	if( is_true( level.player_4_vox_override ) )
@@ -1906,7 +1906,7 @@ player_too_many_weapons_monitor_takeaway_sequence( primary_weapons_to_take )
 	}
 	self maps\_zombiemode_score::minus_to_player_score( self.score );
 	wait( 1 );
-	self GiveWeapon( "m1911_zm" );
+	self maps\apex\_zm_weapons::give_weapon( "m1911_zm" );
 	self SwitchToWeapon( "m1911_zm" );
 	self decrement_is_drinking();
 
@@ -2128,7 +2128,7 @@ take_additionalprimaryweapon()
 		{
 			self SwitchToWeapon( primary_weapons_that_can_be_taken[0] );
 		}
-		self TakeWeapon( weapon_to_take );
+		self maps\apex\_zm_weapons::weapon_take( weapon_to_take );
 	}
 
 	return weapon_to_take;
@@ -2471,7 +2471,7 @@ last_stand_pistol_swap()
 
 	if ( !self HasWeapon( self.laststandpistol ) )
 	{
-		self GiveWeapon( self.laststandpistol );
+		self maps\apex\_zm_weapons::give_weapon( self.laststandpistol );
 	}
 	ammoclip = WeaponClipSize( self.laststandpistol );
 	doubleclip = ammoclip * 2;
@@ -2746,14 +2746,14 @@ last_stand_grenade_save_and_return()
 			has_lethal_nade = true;
 			lethal_nade_amt = self GetWeaponAmmoClip( self get_player_lethal_grenade() );
 			self SetWeaponAmmoClip( self get_player_lethal_grenade(), 0 );
-			self TakeWeapon( self get_player_lethal_grenade() );
+			self maps\apex\_zm_weapons::weapon_take( self get_player_lethal_grenade() );
 		}
 		else if ( self is_player_tactical_grenade( weapons_on_player[i] ) )
 		{
 			has_tactical_nade = true;
 			tactical_nade_amt = self GetWeaponAmmoClip( self get_player_tactical_grenade() );
 			self SetWeaponAmmoClip( self get_player_tactical_grenade(), 0 );
-			self TakeWeapon( self get_player_tactical_grenade() );
+			self maps\apex\_zm_weapons::weapon_take( self get_player_tactical_grenade() );
 		}
 	}
 
@@ -2761,13 +2761,13 @@ last_stand_grenade_save_and_return()
 
 	if ( has_lethal_nade )
 	{
-		self GiveWeapon( self get_player_lethal_grenade() );
+		self maps\apex\_zm_weapons::give_weapon( self get_player_lethal_grenade() );
 		self SetWeaponAmmoClip( self get_player_lethal_grenade(), lethal_nade_amt );
 	}
 
 	if ( has_tactical_nade )
 	{
-		self GiveWeapon( self get_player_tactical_grenade() );
+		self maps\apex\_zm_weapons::give_weapon( self get_player_tactical_grenade() );
 		self SetWeaponAmmoClip( self get_player_tactical_grenade(), tactical_nade_amt );
 	}
 }
@@ -2860,7 +2860,7 @@ spectator_respawn()
 
 	if ( IsDefined( self get_player_placeable_mine() ) )
 	{
-		self TakeWeapon( self get_player_placeable_mine() );
+		self maps\apex\_zm_weapons::weapon_take( self get_player_placeable_mine() );
 		self set_player_placeable_mine( undefined );
 	}
 
@@ -3468,7 +3468,7 @@ round_start()
 	players = get_players();
 	for (i = 0; i < players.size; i++)
 	{
-		players[i] giveweapon( players[i] get_player_lethal_grenade() );
+		players[i] maps\apex\_zm_weapons::give_weapon( players[i] get_player_lethal_grenade() );
 		players[i] setweaponammoclip( players[i] get_player_lethal_grenade(), 0);
 		players[i] SetClientDvars( "ammoCounterHide", "0",
 				"miniscoreboardhide", "0" );
@@ -3989,7 +3989,7 @@ award_grenades_for_survivors()
 			lethal_grenade = players[i] get_player_lethal_grenade();
 			if( !players[i] HasWeapon( lethal_grenade ) )
 			{
-				players[i] GiveWeapon( lethal_grenade );
+				players[i] maps\apex\_zm_weapons::give_weapon( lethal_grenade );
 				players[i] SetWeaponAmmoClip( lethal_grenade, 0 );
 			}
 

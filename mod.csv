@@ -9,8 +9,10 @@ rawfile,maps\apex\_debug.gsc
 rawfile,maps\apex\_load.gsc
 rawfile,maps\apex\_utility.gsc
 rawfile,maps\apex\_utility_code.gsc
+rawfile,maps\apex\_zm_clone.gsc
 rawfile,maps\apex\_zm_power.gsc
 
+rawfile,animtrees\zm_ally.atr
 menufile,ui\hud_test.menu
 localize,mod
 
@@ -18,6 +20,7 @@ localize,mod
 // Weapons
 //============================================================================================
 rawfile,clientscripts\apex\_zm_weapons.csc
+rawfile,maps\apex\_zm_melee_weapon.gsc
 rawfile,maps\apex\_zm_weapons.gsc
 stringtable,weapons\melee_weapons.csv
 stringtable,weapons\placeable_mines.csv

@@ -704,7 +704,7 @@ do_perk_bottle_drink_start(perk)
 do_perk_bottle_drink_end(perk, gun)
 {
 	self enable_player_move_states();
-	self TakeWeapon(get_perk_bottle(perk));
+	self maps\apex\_zm_weapons::weapon_take(get_perk_bottle(perk));
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;

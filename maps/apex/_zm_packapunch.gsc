@@ -574,21 +574,18 @@ upgrade_kuckle_crack_begin()
 	gun = self GetCurrentWeapon();
 
 	if(gun != "non" && !is_placeable_mine(gun) && !is_equipment(gun))
-	{
-		self notify("zmb_lost_knife");
-		self TakeWeapon(gun);
-	}
+		self maps\apex\_zm_weapons::weapon_take(gun);
 	else
 		return undefined;
 
-	self GiveWeapon("zombie_knuckle_crack");
+	self maps\apex\_zm_weapons::give_weapon("zombie_knuckle_crack");
 	self SwitchToWeapon("zombie_knuckle_crack");
 }
 
 upgrade_kuckle_crack_end()
 {
 	self enable_player_move_states();
-	self TakeWeapon("zombie_knuckle_crack");
+	self maps\apex\_zm_weapons::weapon_take("zombie_knuckle_crack");
 
 	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
 		return;

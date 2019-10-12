@@ -7,6 +7,7 @@ init()
 {
 	level.zombie_weapons = [];
 	level.zombie_weapons_upgraded = [];
+	maps\apex\_zm_melee_weapon::init();
 	load_weapons_for_level();
 	OnPlayerSpawned_Callback(::player_spawned);
 	level thread register_weapon_data_client_side();
@@ -170,7 +171,7 @@ switch_back_primary_weapon(oldPrimary)
 	if(self maps\_laststand::player_is_in_laststand())
 		return;
 
-	if(!isdefined(oldPrimary) || oldPrimary == "none" || /*maps\_zm_melee_weapon::is_flourish_weapon(oldPrimary) ||*/ is_melee_weapon(oldPrimary) || is_placeable_mine(oldPrimary) || is_lethal_grenade(oldPrimary) || is_tactical_grenade(oldPrimary) || !self HasWeapon(oldPrimary))
+	if(!isdefined(oldPrimary) || oldPrimary == "none" || maps\apex\_zm_melee_weapon::is_flourish_weapon(oldPrimary) || is_melee_weapon(oldPrimary) || is_placeable_mine(oldPrimary) || is_lethal_grenade(oldPrimary) || is_tactical_grenade(oldPrimary) || !self HasWeapon(oldPrimary))
 		oldPrimary = undefined;
 
 	primaryWeapons = self GetWeaponsListPrimaries();
@@ -179,6 +180,8 @@ switch_back_primary_weapon(oldPrimary)
 		self SwitchToWeapon(oldPrimary);
 	else if(primaryWeapons.size > 0)
 		self SwitchToWeapon(primaryWeapons[0]);
+	else
+		self maps\apex\_zm_melee_weapon::give_fallback_weapon();
 }
 
 is_weapon_included(weapon_name)
@@ -251,8 +254,8 @@ has_upgrade(weaponname)
 
 	if(isdefined(level.zombie_weapons[weaponname]) && isdefined(level.zombie_weapons[weaponname].upgrade_name))
 		has_upgrade = self HasWeapon(level.zombie_weapons[weaponname].upgrade_name);
-	if(!has_upgrade && weaponname == "knife_ballistic_zm") // maps\_zm_melee_weapon::has_any_ballistic_knife_upgraded()
-		has_upgrade = self has_upgrade("knife_ballistic_bowie_zm") || self has_upgrade("knife_ballistic_sickle_zm");
+	if(!has_upgrade && maps\apex\_zm_melee_weapon::is_ballistic_knife(weaponname))
+		has_upgrade = self maps\apex\_zm_melee_weapon::has_upgraded_ballistic_knife();
 	return has_upgrade;
 }
 
@@ -262,8 +265,8 @@ has_weapon_or_upgrade(weaponname)
 
 	if(is_weapon_included(weaponname))
 		has_weapon = self HasWeapon(weaponname) || self has_upgrade(weaponname);
-	if(!has_weapon && weaponname == "knife_ballistic_zm") // maps\_zm_melee_weapon::has_any_ballistic_knife()
-		has_weapon = self has_weapon_or_upgrade("knife_ballistic_bowie_zm") || self has_weapon_or_upgrade("knife_ballistic_sickle_zm");
+	if(!has_weapon && maps\apex\_zm_melee_weapon::is_ballistic_knife(weaponname))
+		has_weapon = self maps\apex\_zm_melee_weapon::has_any_ballistic_knife();
 	return has_weapon;
 }
 
@@ -457,7 +460,7 @@ weapon_give(weapon, magic_box, nosound)
 
 	if(self HasWeapon(weapon))
 	{
-		if(IsSubStr(weapon, "knife_ballistic_"))
+		if(maps\apex\_zm_melee_weapon::is_ballistic_knife(weapon))
 			self notify("zmb_lost_knife");
 
 		self GiveStartAmmo(weapon);
@@ -465,15 +468,18 @@ weapon_give(weapon, magic_box, nosound)
 		if(!is_offhand_weapon(weapon))
 			self SwitchToWeapon(weapon);
 
+		self notify("weapon_give", weapon);
 		return weapon;
 	}
 
-	if(is_lethal_grenade(weapon))
+	if(is_melee_weapon(weapon))
+		current_weapon = self maps\apex\_zm_melee_weapon::change_melee_weapon(weapon, current_weapon);
+	else if(is_lethal_grenade(weapon))
 	{
 		old_lethal = self get_player_lethal_grenade();
 
 		if(old_lethal != "none")
-			self TakeWeapon(old_lethal);
+			self weapon_take(old_lethal);
 
 		self set_player_lethal_grenade(weapon);
 	}
@@ -482,7 +488,7 @@ weapon_give(weapon, magic_box, nosound)
 		old_tactical = self get_player_tactical_grenade();
 
 		if(old_tactical != "none")
-			self TakeWeapon(old_tactical);
+			self weapon_take(old_tactical);
 
 		self set_player_tactical_grenade(weapon);
 	}
@@ -491,10 +497,13 @@ weapon_give(weapon, magic_box, nosound)
 		old_mine = self get_player_placeable_mine();
 
 		if(old_mine != "none")
-			self TakeWeapon(old_mine);
+			self weapon_take(old_mine);
 
 		self set_player_placeable_mine(weapon);
 	}
+
+	if(!is_offhand_weapon(weapon))
+		self maps\apex\_zm_melee_weapon::take_fallback_weapon();
 
 	if(primaryWeapons.size >= weapon_limit)
 	{
@@ -504,24 +513,21 @@ weapon_give(weapon, magic_box, nosound)
 		if(isdefined(current_weapon))
 		{
 			if(!is_offhand_weapon(current_weapon))
-			{
-				if(IsSubStr(current_weapon, "knife_ballistic_"))
-					self notify("zmb_lost_knife");
-				self TakeWeapon(current_weapon);
-			}
+				self weapon_take(current_weapon);
 		}
 	}
 
 	if(isdefined(level.zombiemode_offhand_weapon_give_override))
 	{
 		if(run_function(self, level.zombiemode_offhand_weapon_give_override, weapon))
+		{
+			self notify("weapon_give", weapon);
 			return weapon;
+		}
 	}
 
-	if(weapon == "knife_ballistic_zm" && self HasWeapon("bowie_knife_zm"))
-		weapon = "knife_ballistic_bowie_zm";
-	else if(weapon == "knife_ballistic_zm" && self HasWeapon("sickle_knife_zm"))
-		weapon = "knife_ballistic_sickle_zm";
+	if(maps\apex\_zm_melee_weapon::is_ballistic_knife(weapon))
+		weapon = maps\apex\_zm_melee_weapon::give_ballistic_knife(weapon, is_weapon_upgraded(weapon));
 	else if(is_placeable_mine(weapon))
 	{
 		self thread maps\_zombiemode_claymore::claymore_setup();
@@ -529,6 +535,7 @@ weapon_give(weapon, magic_box, nosound)
 		if(!is_true(nosound))
 			self play_weapon_vo(weapon, magic_box);
 
+		self notify("weapon_give", weapon);
 		return weapon;
 	}
 
@@ -539,13 +546,15 @@ weapon_give(weapon, magic_box, nosound)
 		if(!is_true(nosound))
 			self play_weapon_vo(weapon, magic_box);
 
+		self notify("weapon_give", weapon);
 		return weapon;
 	}
 
 	if(!is_true(nosound))
 		self play_sound_on_ent("purchase");
 
-	self GiveWeapon(weapon, 0, self get_pack_a_punch_weapon_options(weapon));
+	self give_weapon(weapon);
+	self notify("weapon_give", weapon);
 	self GiveStartAmmo(weapon);
 
 	if(!is_offhand_weapon(weapon))
@@ -559,6 +568,16 @@ weapon_give(weapon, magic_box, nosound)
 	if(!is_true(nosound))
 		self play_weapon_vo(weapon, magic_box);
 	return weapon;
+}
+
+weapon_take(weapon)
+{
+	self notify("weapon_take", weapon);
+
+	if(maps\apex\_zm_melee_weapon::is_ballistic_knife(weapon))
+		self notify("zmb_lost_knife");
+	if(self HasWeapon(weapon))
+		self TakeWeapon(weapon);
 }
 
 ammo_give(weapon)
@@ -598,6 +617,15 @@ ammo_give(weapon)
 	return give_ammo;
 }
 
+give_weapon(weapon, model_index)
+{
+	if(!isdefined(model_index))
+		model_index = 0;
+
+	weapon_options = self get_pack_a_punch_weapon_options(weapon);
+	self GiveWeapon(weapon, model_index, weapon_options);
+}
+
 //============================================================================================
 // Weapon VOX
 //============================================================================================
@@ -611,7 +639,7 @@ play_weapon_vo(weapon, magic_box)
 	self thread maps\_zombiemode_audio::create_and_play_dialog("weapon_pickup", type);
 }
 
-weapon_type_check( weapon )
+weapon_type_check(weapon)
 {
 	switch(self get_player_index())
 	{
@@ -801,14 +829,12 @@ load_weapon_for_level(weapon_name, stats_table)
 			break;
 
 		case "ballistic":
-			register_lethal_grenade_for_level(weapon_name);
-			struct.is_ballistic_knife = true;
+			// register_lethal_grenade_for_level(weapon_name);
 			// maps\_zm_melee_weapon::load_ballistic_knife(weapon_name);
 			break;
 
 		case "melee":
-			register_melee_weapon_for_level(weapon_name);
-			// maps\_zm_melee_weapon::load_melee_weapon(weapon_name);
+			maps\apex\_zm_melee_weapon::load_melee_weapon(weapon_name);
 			break;
 
 		case "equipment":

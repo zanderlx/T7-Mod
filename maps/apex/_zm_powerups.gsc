@@ -972,7 +972,7 @@ weapon_powerup(powerup_name)
 		self EnableWeaponCycling();
 
 	self._zombie_weapon_before_powerup[powerup_name] = self GetCurrentWeapon();
-	self GiveWeapon(level.zombie_powerup_weapon[powerup_name]);
+	self maps\apex\_zm_weapons::give_weapon(level.zombie_powerup_weapon[powerup_name]);
 	self SwitchToWeapon(level.zombie_powerup_weapon[powerup_name]);
 	self thread weapon_powerup_replace(powerup_name);
 	self thread weapon_powerup_change(powerup_name);
@@ -1015,7 +1015,7 @@ weapon_powerup_remove(powerup_name, switch_back_weapon)
 	if(!self has_powerup_weapon() || !is_true(self.has_specific_powerup_weapon[powerup_name]))
 		return;
 
-	self TakeWeapon(level.zombie_powerup_weapon[powerup_name]);
+	self maps\apex\_zm_weapons::weapon_take(level.zombie_powerup_weapon[powerup_name]);
 	self.has_specific_powerup_weapon[powerup_name] = false;
 	self.has_powerup_weapon = false;
 	self notify(powerup_name + "_time_over");

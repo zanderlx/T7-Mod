@@ -201,7 +201,7 @@ weapon_spawn_think()
 
 				if ( is_lethal_grenade( self.zombie_weapon_upgrade ) )
 				{
-					player takeweapon( player get_player_lethal_grenade() );
+					player maps\apex\_zm_weapons::weapon_take( player get_player_lethal_grenade() );
 					player set_player_lethal_grenade( self.zombie_weapon_upgrade );
 				}
 
