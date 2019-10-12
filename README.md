@@ -57,5 +57,8 @@ Support for other maps will come once the base mod and all major function / scri
 - **_xSanchez78_**
 	- Ported **Black Ops 3** models and anims to **Black Ops 1**
 	- **Huge** scripting help
+		- VisionSet System
+		- PlayerTrigger System
+		- Various down ported scripts
 - **_Scobalula_** - For developing and releasing various of his tools (**Greyhound**, **HydraX**)
 - **_Tom BMX_** - For developing and releasing **FF Extractor**
