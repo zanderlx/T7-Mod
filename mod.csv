@@ -26,6 +26,9 @@ stringtable,weapons\melee_weapons.csv
 stringtable,weapons\placeable_mines.csv
 stringtable,weapons\stats.csv
 stringtable,weapons\zombie_theater.csv
+weapon,sp\fallback_zm
+weapon,sp\fallback_bowie_zm
+weapon,sp\fallback_sickle_zm
 
 //============================================================================================
 // MagicBox
