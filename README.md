@@ -24,14 +24,14 @@ Support for other maps will come once the base mod and all major function / scri
 	- No longer any hard scripted logic in main powerups script
 	- All powerup logic automated, individual powerups just speciy what happens during 'onGrab' 'onTimeout' 'onTimedPowerupStart' etc
 	- All powerupes seperated in to a script per powerup
-	- Black Ops III powerup hud logic downported
+	- [Black Ops III powerup hud logic downported](https://streamable.com/ny2kn)
 
 - Rewritten Perk System
 	- Perks are no longer required to be named `specialty_`
 	- Perks can still have `specialty` tied to them, that are set & unset with the perk
 	- Perk icons moved to menu, this reduces the amount of HudElements used in script
 	- No longer any hard scripted logic in main perks script
-	- Perk bottle now supoprts 'indexed' models and 'weaponOptions.csv'
+	- [Perk bottle now supoprts 'indexed' models and 'weaponOptions.csv'](https://streamable.com/vnb3a)
 	- All perks seperated in to a script per perk
 	- Perk machines now use `PlayerTriggers`
 
