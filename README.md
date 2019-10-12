@@ -67,5 +67,6 @@ Support for other maps will come once the base mod and all major function / scri
 		- VisionSet System
 		- PlayerTrigger System
 		- Various other down ported scripts
+- **_MotoLegacy_** - HD Black Ops 1 styled Perk & Powerup shaders
 - **_Scobalula_** - For developing and releasing various of his tools (**Greyhound**, **HydraX**)
 - **_Tom BMX_** - For developing and releasing **FF Extractor**
