@@ -33,6 +33,7 @@ Support for other maps will come once the base mod and all major function / scri
 	- No longer any hard scripted logic in main perks script
 	- [Perk bottle now support 'indexed' models and 'weaponOptions.csv'](https://streamable.com/vnb3a)
 		- Unfortunately this change means we are stuck with Black Ops perk bottles, due to how materials have to be set up for weapon options to work.
+		- Up side to this means, we only use 1 weapon file slot and 1 xmodel slot for every perk bottle.
 	- All perks seperated in to a script per perk
 	- Perk machines now use `PlayerTriggers`
 	- Perk machines now use Black Ops II / III models
