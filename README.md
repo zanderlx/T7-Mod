@@ -59,6 +59,6 @@ Support for other maps will come once the base mod and all major function / scri
 	- **Huge** scripting help
 		- VisionSet System
 		- PlayerTrigger System
-		- Various down ported scripts
+		- Various other down ported scripts
 - **_Scobalula_** - For developing and releasing various of his tools (**Greyhound**, **HydraX**)
 - **_Tom BMX_** - For developing and releasing **FF Extractor**
