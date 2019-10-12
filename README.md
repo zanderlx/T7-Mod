@@ -47,7 +47,7 @@ Support for other maps will come once the base mod and all major function / scri
 
 - Rewritten Weapons Script
 	- Weapons now loaded from csv string tables
-		- Removed the need for each level to manually include
+		- Removed the need for each level to manually include weapons both client and server side
 		- Auto registeres and loads correct weapons on the client side
 		- Auto registeres correct weapons offhand types
 	- Many weapon utility functions downported from Black Ops III
