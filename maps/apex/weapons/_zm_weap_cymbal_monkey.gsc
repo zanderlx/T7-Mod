@@ -74,7 +74,7 @@ player_throw_cymbal_monkey(grenade)
 		}
 
 		grenade Hide();
-		model = maps\apex\_zm_weapons::spawn_weapon_model("zombie_cymbal_monkey", grenade.origin, grenade.angles);
+		model = maps\apex\_zm_weapons::spawn_weapon_model("zombie_cymbal_monkey", grenade.origin, grenade.angles, self);
 		model SetModel("weapon_zombie_monkey_bomb"); // need to use world model for anim GetWeaponModel() gets the viewmodel
 		model UseAnimTree(#animtree);
 		model LinkTo(grenade);

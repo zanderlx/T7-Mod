@@ -479,7 +479,7 @@ treasure_chest_weapon_spawn(player, repsin)
 	self.weapon_string = treasure_chest_ChooseWeightedRandomWeapon(player);
 	self.chest ClearClientFlag(level._ZOMBIE_SCRIPTMOVER_FLAG_BOX_RANDOM);
 	wait_network_frame();
-	self.weapon_model = maps\apex\_zm_weapons::spawn_weapon_model(self.weapon_string, self.chest.origin + (0, 0, 43), self.chest.angles + (0, 180, 0));
+	self.weapon_model = maps\apex\_zm_weapons::spawn_weapon_model(self.weapon_string, self.chest.origin + (0, 0, 43), self.chest.angles + (0, 180, 0), player);
 
 	if(!is_true(self._box_opened_by_fire_sale) && !(is_true(level.zombie_vars["zombie_powerup_fire_sale_on"]) && run_function(self, level._zombiemode_check_firesale_loc_valid_func)))
 	{

@@ -303,11 +303,31 @@ can_buy_weapon()
 
 weapon_is_dual_wield(name)
 {
+	if(maps\apex\_zm_melee_weapon::is_ballistic_knife(name))
+		return true;
 	return WeaponDualWieldWeaponName(name) != "none";
 }
 
 get_left_hand_weapon_model_name(name)
 {
+	// find 2nd knife model for ballistic knives
+	if(maps\apex\_zm_melee_weapon::is_ballistic_knife(name))
+	{
+		if(isdefined(self) && IsPlayer(self))
+			return GetWeaponModel(self get_player_melee_weapon());
+		else
+		{
+			weapon = get_base_weapon(name);
+
+			for(i = 0; i < level._melee_weapons.size; i++)
+			{
+				if(level._melee_weapons[i].ballistic_name == weapon)
+					return GetWeaponModel(level._melee_weapons[i].weapon);
+			}
+			return GetWeaponModel(level.zombie_vars["zombie_melee_weapon_default"]);
+		}
+	}
+
 	return GetWeaponModel(WeaponDualWieldWeaponName(name));
 }
 
@@ -353,7 +373,7 @@ get_pack_a_punch_weapon_options(weapon)
 //============================================================================================
 // Weapon Model
 //============================================================================================
-attach_weapon_model(weapon_name, rh_tag, lh_tag)
+attach_weapon_model(weapon_name, rh_tag, lh_tag, player)
 {
 	if(!isdefined(rh_tag))
 		rh_tag = "tag_weapon";
@@ -368,7 +388,7 @@ attach_weapon_model(weapon_name, rh_tag, lh_tag)
 	self UseWeaponHideTags(weapon_name);
 }
 
-detach_weapon_model(weapon_name, rh_tag, lh_tag)
+detach_weapon_model(weapon_name, rh_tag, lh_tag, player)
 {
 	if(!isdefined(rh_tag))
 		rh_tag = "tag_weapon";
@@ -378,10 +398,10 @@ detach_weapon_model(weapon_name, rh_tag, lh_tag)
 	self Detach(GetWeaponModel(weapon_name), rh_tag);
 
 	if(weapon_is_dual_wield(weapon_name))
-		self Detach(get_left_hand_weapon_model_name(weapon_name), lh_tag);
+		self Detach(player get_left_hand_weapon_model_name(weapon_name), lh_tag);
 }
 
-spawn_weapon_model(weapon_name, origin, angles)
+spawn_weapon_model(weapon_name, origin, angles, player)
 {
 	if(!isdefined(weapon_name) || weapon_name == "none")
 		return undefined;
@@ -391,15 +411,17 @@ spawn_weapon_model(weapon_name, origin, angles)
 		angles = (0, 0, 0);
 
 	model = spawn_model("tag_origin", origin, angles);
-	model model_use_weapon_options(weapon_name);
+	model model_use_weapon_options(weapon_name, player);
 
 	return model;
 }
 
-model_use_weapon_options(weapon_name)
+model_use_weapon_options(weapon_name, player)
 {
 	if(!isdefined(weapon_name) || weapon_name == "none")
 		return;
+	if(!isdefined(player))
+		player = level;
 
 	self SetModel(GetWeaponModel(weapon_name));
 	self UseWeaponHideTags(weapon_name);
@@ -409,7 +431,7 @@ model_use_weapon_options(weapon_name)
 	{
 		if(weapon_is_dual_wield(weapon_name))
 		{
-			self.lh_model SetModel(get_left_hand_weapon_model_name(weapon_name));
+			self.lh_model SetModel(player get_left_hand_weapon_model_name(weapon_name));
 			self.lh_model UseWeaponHideTags(weapon_name);
 			self.lh_model Show();
 		}
@@ -425,7 +447,7 @@ model_use_weapon_options(weapon_name)
 	{
 		if(weapon_is_dual_wield(weapon_name))
 		{
-			self.lh_model = spawn_model(get_left_hand_weapon_model_name(weapon_name), self.origin + (3, 3, 3), self.angles);
+			self.lh_model = spawn_model(player get_left_hand_weapon_model_name(weapon_name), self.origin + (3, 3, 3), self.angles);
 			self.lh_model UseWeaponHideTags(weapon_name);
 			self.lh_model LinkTo(self);
 		}

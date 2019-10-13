@@ -132,7 +132,7 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 	}
 	else
 	{
-		stub.worldgun = maps\apex\_zm_weapons::spawn_weapon_model(current_weapon, origin_base + interact_offset, self.angles);
+		stub.worldgun = maps\apex\_zm_weapons::spawn_weapon_model(current_weapon, origin_base + interact_offset, self.angles, self);
 
 		if(isdefined(level.custom_pap_move_in))
 			run_function(self, level.custom_pap_move_in, stub, origin_offset, angles_offset);
@@ -161,7 +161,7 @@ third_person_weapon_upgrade(stub, current_weapon, upgrade_weapon)
 	}
 	else
 	{
-		stub.worldgun maps\apex\_zm_weapons::model_use_weapon_options(upgrade_weapon);
+		stub.worldgun maps\apex\_zm_weapons::model_use_weapon_options(upgrade_weapon, self);
 		stub.flag RotateTo(stub.flag.angles + (179, 0, 0), .25, 0, 0);
 
 		if(isdefined(level.custom_pap_move_out))
@@ -674,14 +674,14 @@ process_pap_zbarrier_state(state)
 			self.machine Show();
 			self.flag Show();
 			self.weapon Show();
-			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name);
+			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name, undefined, undefined, self.pack_player);
 			self thread pap_take_gun();
 			break;
 		case "eject_gun":
 			self.machine Show();
 			self.flag Show();
 			self.weapon Show();
-			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name);
+			self.weapon maps\apex\_zm_weapons::attach_weapon_model(self.weapon.weapon_name, undefined, undefined, self.pack_player);
 			self thread pap_eject_gun();
 			break;
 		/*case "leaving":

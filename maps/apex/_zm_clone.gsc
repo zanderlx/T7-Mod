@@ -15,9 +15,9 @@ spawn_player_clone(player, origin, forceWeapon, forceModel)
 	clone = spawn_model(model, origin, player.angles);
 
 	if(isdefined(forceWeapon) && forceWeapon != "none")
-		clone maps\apex\_zm_weapons::attach_weapon_model(forceWeapon);
+		clone maps\apex\_zm_weapons::attach_weapon_model(forceWeapon, undefined, undefined, player);
 	else
-		clone maps\apex\_zm_weapons::attach_weapon_model(player GetCurrentWeapon());
+		clone maps\apex\_zm_weapons::attach_weapon_model(player GetCurrentWeapon(), undefined, undefined, player);
 
 	if(isdefined(player.headModel))
 	{
