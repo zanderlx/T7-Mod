@@ -46,8 +46,6 @@ main()
 	OnPlayerConnect_Callback( ::on_player_connect );
 
 	clientscripts\_zombiemode_weap_freezegun::init();
-	clientscripts\_zombiemode_weap_tesla::init();
-	clientscripts\_zombiemode_weap_thundergun::init();
 
 	level thread init_local_player_count();
 

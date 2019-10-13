@@ -247,7 +247,7 @@ zombie_spawn_init( animname_set )
 	self zombie_history( "zombie_spawn_init -> Spawned = " + self.origin );
 
 	self.thundergun_disintegrate_func = ::zombie_disintegrate;
-	self.thundergun_knockdown_func = ::zombie_knockdown;
+	self.thundergun_knockdown_func = level.basic_zombie_thundergun_knockdown;
 	self.tesla_head_gib_func = ::zombie_tesla_head_gib;
 
 	self setTeamForEntity( "axis" );
@@ -2803,7 +2803,7 @@ headshot_blood_fx()
 	wait( 0.3 );
 	if(IsDefined( self ))
 	{
-		if( self maps\_zombiemode_weap_tesla::enemy_killed_by_tesla() )
+		if( self maps\apex\_zm_lightning_chain::was_enemy_killed_by_tesla() )
 		{
 			PlayFxOnTag( level._effect["tesla_head_light"], self, fxTag );
 		}
@@ -3357,10 +3357,6 @@ zombie_death_animscript()
 		return false;
 	}
 
-	if( self maps\_zombiemode_weap_tesla::enemy_killed_by_tesla() || self maps\_zombiemode_weap_thundergun::enemy_killed_by_thundergun() )
-	{
-		return false;
-	}
 	if ( self maps\_zombiemode_weap_freezegun::should_do_freezegun_death( self.damagemod ) )
 	{
 		self thread maps\_zombiemode_weap_freezegun::freezegun_death( self.damagelocation, self.origin, self.attacker );
@@ -3545,11 +3541,6 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 			player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location, self.isdog );
 		}
 	}
-	else if( self maps\_zombiemode_weap_tesla::is_tesla_damage( mod ) )
-	{
-		self maps\_zombiemode_weap_tesla::tesla_damage_init( hit_location, hit_origin, player );
-		return;
-	}
 	else
 	{
 		if ( self maps\_zombiemode_weap_freezegun::is_freezegun_damage( self.damagemod ) )
@@ -3677,11 +3668,6 @@ zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 		{
 			player maps\_zombiemode_score::player_add_points( "damage_ads", mod, hit_location );
 		}
-	}
-	else if( self maps\_zombiemode_weap_tesla::is_tesla_damage( mod ) )
-	{
-		self maps\_zombiemode_weap_tesla::tesla_damage_init( hit_location, hit_origin, player );
-		return;
 	}
 	else
 	{
@@ -4936,26 +4922,6 @@ zombie_disintegrate( player )
 
 		wait( GetDvarFloat( #"cg_dissolveTransitionTime" ) + 4 );
 		self_delete();
-	}
-}
-
-zombie_knockdown( player, gib )
-{
-	if ( gib && !self.gibbed )
-	{
-		self.a.gib_ref = random( level.thundergun_gib_refs );
-		self thread animscripts\zombie_death::do_gib();
-	}
-
-	damage = level.zombie_vars["thundergun_knockdown_damage"];
-	if(isDefined(level.override_thundergun_damage_func))
-	{
-		self[[level.override_thundergun_damage_func]](player,gib);
-	}
-	else
-	{
-		self.thundergun_handle_pain_notetracks = maps\_zombiemode_weap_thundergun::handle_thundergun_pain_notetracks;
-		self DoDamage( damage, player.origin, player );
 	}
 }
 

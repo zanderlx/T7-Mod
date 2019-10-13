@@ -195,10 +195,10 @@ WeaponAltWeaponName(weapon_name)
 //============================================================================================
 register_client_system(system_name, callback_func)
 {
-	if(!isdefined(level.fake_client_system_callbacks))
-		level.fake_client_system_callbacks = [];
-	if(!isdefined(level.fake_client_system_callbacks[system_name]))
-		level.fake_client_system_callbacks[system_name] = callback_func;
+	if(!isdefined(level.fake_client_systems))
+		level.fake_client_systems = [];
+	if(!isdefined(level.fake_client_systems[system_name]))
+		level.fake_client_systems[system_name] = callback_func;
 }
 
 //============================================================================================

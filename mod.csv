@@ -19,8 +19,14 @@ localize,mod
 //============================================================================================
 // Weapons
 //============================================================================================
+rawfile,clientscripts\apex\weapons\_zm_weap_tesla.csc
+rawfile,clientscripts\apex\weapons\_zm_weap_thundergun.csc
 rawfile,clientscripts\apex\_zm_weapons.csc
 rawfile,maps\apex\weapons\_zm_weap_claymore.gsc
+rawfile,maps\apex\weapons\_zm_weap_crossbow.gsc
+rawfile,maps\apex\weapons\_zm_weap_cymbal_monkey.gsc
+rawfile,maps\apex\weapons\_zm_weap_tesla.csc
+rawfile,maps\apex\weapons\_zm_weap_thundergun.csc
 rawfile,maps\apex\_zm_melee_weapon.gsc
 rawfile,maps\apex\_zm_placeable_mine.gsc
 rawfile,maps\apex\_zm_weapons.gsc

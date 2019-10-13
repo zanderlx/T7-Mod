@@ -40,7 +40,7 @@ ballistic_knife_revive()
 	self endon("death");
 	self MakeFakeAI();
 	self SetCanDamage(true);
-	self.team = "allies";
+	self.team = level.player_team;
 	self.health = 999999;
 	self thread ballistic_knife_melee_watcher();
 	array_thread(GetPlayers(), ::ballistic_knife_watcher, self);

@@ -8,6 +8,9 @@
 //============================================================================================
 init_apex_utility()
 {
+	level.zombie_team = "axis";
+	level.player_team = "allies";
+
 	set_zombie_var("player_base_health", 100);
 
 	// Fake Client Systems - xSanchez78

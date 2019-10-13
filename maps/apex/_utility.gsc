@@ -64,6 +64,20 @@ increment_downed_stat()
 	SetDvar("player" + self GetEntityNumber() + "downs", self.downs);
 }
 
+get_round_enemy_array()
+{
+	a_ai_enemies = GetAITeamArray(level.zombie_team);
+	a_ai_valid_enemies = [];
+
+	for(i = 0; i < a_ai_enemies.size; i++)
+	{
+		if(is_true(a_ai_enemies[i].ignore_enemy_count))
+			continue;
+		a_ai_valid_enemies[a_ai_valid_enemies.size] = a_ai_enemies[i];
+	}
+	return a_ai_valid_enemies;
+}
+
 enable_player_move_states()
 {
 	self AllowCrouch(true);
@@ -256,6 +270,21 @@ GetDebugDvarBool(dvar_name, default_value)
 }
 #/
 
+PlaySoundToTeam(aliasname, teamname, ignoreplayer)
+{
+	players = GetPlayers();
+
+	for(i = 0; i < players.size; i++)
+	{
+		if(players[i].team != teamname)
+			continue;
+		if(isdefined(ignoreplayer) && players[i] == ignoreplayer)
+			continue;
+
+		players[i] PlayLocalSound(aliasname);
+	}
+}
+
 SetInvisibleToAll()
 {
 	players = GetPlayers();
@@ -263,6 +292,32 @@ SetInvisibleToAll()
 	for(i = 0; i < players.size; i++)
 	{
 		self SetInvisibleToPlayer(players[i], true);
+	}
+}
+
+SetVisibleToAllExceptTeam(team)
+{
+	players = GetPlayers();
+
+	for(i = 0; i < players.size; i++)
+	{
+		if(players[i].team == team)
+			self SetInvisibleToPlayer(players[i]);
+		else
+			self SetVisibleToPlayer(players[i]);
+	}
+}
+
+SetVisibleToTeam(team)
+{
+	players = GetPlayers();
+
+	for(i = 0; i < players.size; i++)
+	{
+		if(players[i].team == team)
+			self SetVisibleToPlayer(players[i]);
+		else
+			self SetInvisibleToPlayer(players[i]);
 	}
 }
 
@@ -294,6 +349,11 @@ GetNodesInRadiusSorted(origin, max_radius, min_radius, max_height/*, node_type, 
 		return [];
 
 	return get_array_of_closest(origin, valid_nodes);
+}
+
+GetAITeamArray(team)
+{
+	return GetAISpeciesArray(team, "all");
 }
 
 //============================================================================================

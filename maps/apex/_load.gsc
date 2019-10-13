@@ -243,7 +243,7 @@ disable_zone(zone_name)
 	spawn_points = GetStructArray("player_respawn_point", "targetname");
 	entry_points = GetStructArray(zone_name + "_barriers", "targetname");
 	players = GetPlayers(); // maps\_zombiemode_zone_manager::get_players_in_zone(zone_name); // returns amount of players not array of players
-	zombies = GetAISpeciesArray("axis", "all");
+	zombies = get_round_enemy_array();
 
 	for(i = 0; i < spawn_points.size; i++)
 	{

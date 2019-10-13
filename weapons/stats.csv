@@ -23,7 +23,7 @@ ithaca_zm,ithaca_upgraded_zm,WEAPON_ITHACA,1500,FALSE,-1,shotgun,FALSE,none
 ithaca_upgraded_zm,none,ZOMBIE_ITHACA_UPGRADED,5000,FALSE,-1,shotgun,FALSE,none
 spas_zm,spas_upgraded_zm,WEAPON_SPAS,2000,TRUE,-1,shotgun,FALSE,none
 spas_upgraded_zm,none,ZOMBIE_SPAS_UPGRADED,5000,FALSE,-1,shotgun,FALSE,none
-rottweil72_zm,rottweil72_upgraded_zm,WEAPON_ROTTWEIL72,500,TRUE,-1,shotgun,FALSE,none
+rottweil72_zm,rottweil72_upgraded_zm,WEAPON_ROTTWEIL72,500,FALSE,-1,shotgun,FALSE,none
 rottweil72_upgraded_zm,none,ZOMBIE_ROTTWEIL72_UPGRADED,5000,FALSE,-1,shotgun,FALSE,none
 hs10_zm,hs10_upgraded_zm,WEAPON_HS10,50,TRUE,-1,shotgun,FALSE,none
 hs10_upgraded_zm,none,ZOMBIE_HS10_UPGRADED,5000,FALSE,-1,shotgun,FALSE,none

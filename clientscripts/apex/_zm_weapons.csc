@@ -5,13 +5,20 @@ init()
 {
 	level.zombie_weapons = [];
 	level.zombie_weapons_upgraded = [];
+	include_weapons();
 	register_client_system("_zm_weapons", ::weapon_system_monitor);
+}
+
+include_weapons()
+{
+	add_weapon_include_callback("thundergun_zm", clientscripts\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
+	add_weapon_include_callback("tesla_gun_zm", clientscripts\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
 }
 
 //============================================================================================
 // Loading
 //============================================================================================
-weapon_system_monitor(clientnum, state, oldState)
+weapon_system_monitor(clientnum, state)
 {
 	// 0           1        2              3            4,       5,      6
 	// weapon_name,register,inventory_type,upgrade_name,alt_name,lh_name,in_box
@@ -21,6 +28,8 @@ weapon_system_monitor(clientnum, state, oldState)
 
 	if(state == "register")
 	{
+		if(clientnum != 0)
+			return;
 		if(is_weapon_included(weapon_name))
 			return;
 
@@ -45,7 +54,18 @@ weapon_system_monitor(clientnum, state, oldState)
 
 		if(in_box)
 			clientscripts\apex\_zm_magicbox::add_magicbox_cycle_weapon(weapon_name);
+
+		if(isdefined(level._zm_weapon_include_callbacks) && isdefined(level._zm_weapon_include_callbacks[weapon_name]))
+			single_thread(level, level._zm_weapon_include_callbacks[weapon_name]);
 	}
+}
+
+add_weapon_include_callback(weapon_name, callback_func)
+{
+	if(!isdefined(level._zm_weapon_include_callbacks))
+		level._zm_weapon_include_callbacks = [];
+	if(!isdefined(level._zm_weapon_include_callbacks[weapon_name]))
+		level._zm_weapon_include_callbacks[weapon_name] = callback_func;
 }
 
 //============================================================================================
@@ -60,8 +80,6 @@ get_nonalternate_weapon(altWeapon)
 
 is_weapon_included(weapon_name)
 {
-	if(!isdefined(level.zombie_weapons))
-		return false;
 	return isdefined(level.zombie_weapons[weapon_name]);
 }
 

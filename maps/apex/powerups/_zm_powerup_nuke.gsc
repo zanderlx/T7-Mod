@@ -19,7 +19,7 @@ grab_nuke(player)
 nuke_powerup(origin)
 {
 	level thread nuke_delay_spawning(3);
-	zombies = GetAISpeciesArray("axis", "all");
+	zombies = get_round_enemy_array();
 	PlayFX(level._effect["powerup_nuke_explosion"], origin);
 	level thread nuke_flash();
 	wait .5;

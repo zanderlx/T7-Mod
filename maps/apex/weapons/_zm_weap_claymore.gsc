@@ -58,7 +58,7 @@ claymore_detonation(watcher)
 
 		if(isdefined(self.owner) && ent == self.owner)
 			continue;
-		if(isdefined(ent.pers) && isdefined(ent.pers["team"]) && ent.pers["team"] != "axis")
+		if(isdefined(ent.pers) && isdefined(ent.pers["team"]) && ent.pers["team"] != level.zombie_team)
 			continue;
 		if(!self can_zombie_detonate_claymore(watcher, ent))
 			continue;

@@ -11,6 +11,7 @@ init()
 	maps\apex\_zm_melee_weapon::init();
 	maps\apex\_zm_placeable_mine::init();
 	load_weapons_for_level();
+	maps\apex\_zm_lightning_chain::init();
 	init_weapon_upgrade();
 	OnPlayerSpawned_Callback(::player_spawned);
 	level thread register_weapon_data_client_side();
@@ -19,6 +20,10 @@ init()
 include_weapons()
 {
 	add_weapon_include_callback("claymore_zm", maps\apex\weapons\_zm_weap_claymore::include_weapon_for_level);
+	add_weapon_include_callback("crossbow_explosive_zm", maps\apex\weapons\_zm_weap_crossbow::include_weapon_for_level);
+	add_weapon_include_callback("zombie_cymbal_monkey", maps\apex\weapons\_zm_weap_cymbal_monkey::include_weapon_for_level);
+	add_weapon_include_callback("tesla_gun_zm", maps\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
+	add_weapon_include_callback("thundergun_zm", maps\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
 }
 
 //============================================================================================
@@ -632,6 +637,14 @@ give_weapon(weapon, model_index)
 	self GiveWeapon(weapon, model_index, weapon_options);
 }
 
+register_zombie_weapon_callback(weapon_name, func)
+{
+	if(!isdefined(level.zombie_weapons_callbacks))
+		level.zombie_weapons_callbacks = [];
+	if(!isdefined(level.zombie_weapons_callbacks[weapon_name]))
+		level.zombie_weapons_callbacks[weapon_name] = func;
+}
+
 //============================================================================================
 // Weapon VOX
 //============================================================================================
@@ -1241,7 +1254,7 @@ load_weapon_for_level(weapon_name, stats_table)
 	}
 
 	if(isdefined(level._zm_weapon_include_callbacks) && isdefined(level._zm_weapon_include_callbacks[weapon_name]))
-		run_function(level, level._zm_weapon_include_callbacks[weapon_name]);
+		single_thread(level, level._zm_weapon_include_callbacks[weapon_name]);
 }
 
 // Stupid hack function to load a list of strings from stringtables

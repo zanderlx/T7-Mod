@@ -102,11 +102,6 @@ main()
 	maps\_zombiemode_blockers::init();
 	maps\_zombiemode_spawner::init();
 	maps\_zombiemode_user::init();
-	maps\_zombiemode_weap_cymbal_monkey::init();
-	maps\_zombiemode_weap_freezegun::init();
-	maps\_zombiemode_weap_tesla::init();
-	maps\_zombiemode_weap_thundergun::init();
-	maps\_zombiemode_weap_crossbow::init();
 //Z2	TEMP DISABLE DURING INTEGRATION
 //	maps\_zombiemode_betty::init();
 //	maps\_zombiemode_timer::init();
@@ -1155,98 +1150,6 @@ level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_forward_v2;		// slow DO
 	level._zombie_stumpy_melee["zombie"][0] = %ai_zombie_walk_on_hands_shot_a;
 	level._zombie_stumpy_melee["zombie"][1] = %ai_zombie_walk_on_hands_shot_b;
 	//level._zombie_melee_crawl["zombie"][2]		= %ai_zombie_crawl_attack_A;
-
-	// tesla deaths
-	if( !isDefined( level._zombie_tesla_death ) )
-	{
-		level._zombie_tesla_death = [];
-	}
-	level._zombie_tesla_death["zombie"] = [];
-	level._zombie_tesla_death["zombie"][0] = %ai_zombie_tesla_death_a;
-	level._zombie_tesla_death["zombie"][1] = %ai_zombie_tesla_death_b;
-	level._zombie_tesla_death["zombie"][2] = %ai_zombie_tesla_death_c;
-	level._zombie_tesla_death["zombie"][3] = %ai_zombie_tesla_death_d;
-	level._zombie_tesla_death["zombie"][4] = %ai_zombie_tesla_death_e;
-
-	if( !isDefined( level._zombie_tesla_crawl_death ) )
-	{
-		level._zombie_tesla_crawl_death = [];
-	}
-	level._zombie_tesla_crawl_death["zombie"] = [];
-	level._zombie_tesla_crawl_death["zombie"][0] = %ai_zombie_tesla_crawl_death_a;
-	level._zombie_tesla_crawl_death["zombie"][1] = %ai_zombie_tesla_crawl_death_b;
-
-	// thundergun knockdowns and getups
-	if( !isDefined( level._zombie_knockdowns ) )
-	{
-		level._zombie_knockdowns = [];
-	}
-	level._zombie_knockdowns["zombie"] = [];
-	level._zombie_knockdowns["zombie"]["front"] = [];
-
-	level._zombie_knockdowns["zombie"]["front"]["no_legs"] = [];
-	level._zombie_knockdowns["zombie"]["front"]["no_legs"][0] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["no_legs"][1] = %ai_zombie_thundergun_hit_doublebounce;
-	level._zombie_knockdowns["zombie"]["front"]["no_legs"][2] = %ai_zombie_thundergun_hit_forwardtoface;
-
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"] = [];
-
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][0] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][1] = %ai_zombie_thundergun_hit_doublebounce;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][2] = %ai_zombie_thundergun_hit_upontoback;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][3] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][4] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][5] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][6] = %ai_zombie_thundergun_hit_stumblefall;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][7] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][8] = %ai_zombie_thundergun_hit_doublebounce;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][9] = %ai_zombie_thundergun_hit_upontoback;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][10] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][11] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][12] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][13] = %ai_zombie_thundergun_hit_deadfallknee;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][14] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][15] = %ai_zombie_thundergun_hit_doublebounce;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][16] = %ai_zombie_thundergun_hit_upontoback;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][17] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][18] = %ai_zombie_thundergun_hit_armslegsforward;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][19] = %ai_zombie_thundergun_hit_forwardtoface;
-	level._zombie_knockdowns["zombie"]["front"]["has_legs"][20] = %ai_zombie_thundergun_hit_flatonback;
-
-	level._zombie_knockdowns["zombie"]["left"] = [];
-	level._zombie_knockdowns["zombie"]["left"][0] = %ai_zombie_thundergun_hit_legsout_right;
-
-	level._zombie_knockdowns["zombie"]["right"] = [];
-	level._zombie_knockdowns["zombie"]["right"][0] = %ai_zombie_thundergun_hit_legsout_left;
-
-	level._zombie_knockdowns["zombie"]["back"] = [];
-	level._zombie_knockdowns["zombie"]["back"][0] = %ai_zombie_thundergun_hit_faceplant;
-
-	if( !isDefined( level._zombie_getups ) )
-	{
-		level._zombie_getups = [];
-	}
-	level._zombie_getups["zombie"] = [];
-	level._zombie_getups["zombie"]["back"] = [];
-
-	level._zombie_getups["zombie"]["back"]["early"] = [];
-	level._zombie_getups["zombie"]["back"]["early"][0] = %ai_zombie_thundergun_getup_b;
-	level._zombie_getups["zombie"]["back"]["early"][1] = %ai_zombie_thundergun_getup_c;
-
-	level._zombie_getups["zombie"]["back"]["late"] = [];
-	level._zombie_getups["zombie"]["back"]["late"][0] = %ai_zombie_thundergun_getup_b;
-	level._zombie_getups["zombie"]["back"]["late"][1] = %ai_zombie_thundergun_getup_c;
-	level._zombie_getups["zombie"]["back"]["late"][2] = %ai_zombie_thundergun_getup_quick_b;
-	level._zombie_getups["zombie"]["back"]["late"][3] = %ai_zombie_thundergun_getup_quick_c;
-
-	level._zombie_getups["zombie"]["belly"] = [];
-
-	level._zombie_getups["zombie"]["belly"]["early"] = [];
-	level._zombie_getups["zombie"]["belly"]["early"][0] = %ai_zombie_thundergun_getup_a;
-
-	level._zombie_getups["zombie"]["belly"]["late"] = [];
-	level._zombie_getups["zombie"]["belly"]["late"][0] = %ai_zombie_thundergun_getup_a;
-	level._zombie_getups["zombie"]["belly"]["late"][1] = %ai_zombie_thundergun_getup_quick_a;
 
 	// freezegun deaths
 	if( !isDefined( level._zombie_freezegun_death ) )
