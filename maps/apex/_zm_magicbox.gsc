@@ -233,6 +233,7 @@ unregister_playertrigger_on_kill_think()
 //============================================================================================
 init_starting_chest_location()
 {
+	level.chests = array_randomize(level.chests);
 	start_chest_index = -1;
 
 	for(i = 0; i < level.chests.size; i++)
