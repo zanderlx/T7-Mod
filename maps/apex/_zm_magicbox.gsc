@@ -182,7 +182,10 @@ playertrigger_update_prompt(player)
 		return false;
 
 	if(is_true(self.stub.grab_weapon_hint))
+	{
 		self.hint_string = level.zombie_vars["zombie_magicbox_hint_trade"];
+		self.hint_param1 = level.zombie_weapons[self.stub.weapon_string].display_name;
+	}
 	else
 	{
 		self.hint_string = level.zombie_vars["zombie_magicbox_hint_buy"];
@@ -708,6 +711,19 @@ add_limited_weapon(weapon, limit)
 		level.limited_weapons[weapon] = limit;
 }
 
+is_weapon_available_in_magicbox(weapon, ignore_player)
+{
+	count = 0;
+
+	for(i = 0; i < level.chests.size; i++)
+	{
+		if(isdefined(level.chests[i].weapon_string) && level.chests[i].weapon_string == weapon)
+			count++;
+	}
+
+	return count;
+}
+
 limited_weapon_below_quota(weapon, ignore_player)
 {
 	if(isdefined(level.limited_weapons) && isdefined(level.limited_weapons[weapon]))
@@ -720,7 +736,6 @@ limited_weapon_below_quota(weapon, ignore_player)
 		count = 0;
 		limit = level.limited_weapons[weapon];
 		players = GetPlayers();
-		pap_triggers = level._zm_packapunch_machines;
 
 		for(i = 0; i < players.size; i++)
 		{
@@ -738,27 +753,7 @@ limited_weapon_below_quota(weapon, ignore_player)
 			}
 		}
 
-		for(i = 0; i < pap_triggers.size; i++)
-		{
-			if(isdefined(pap_triggers[i].current_weapon) && (pap_triggers[i].current_weapon == weapon || pap_triggers[i].current_weapon == upgrade_weapon))
-			{
-				count++;
-
-				if(count >= limit)
-					return false;
-			}
-		}
-
-		for(i = 0; i < level.chests.size; i++)
-		{
-			if(isdefined(level.chests[i].weapon_string) && level.chests[i].weapon_string == weapon)
-			{
-				count++;
-
-				if(count >= limit)
-					return false;
-			}
-		}
+		count += is_weapon_available_in_magicbox(weapon, ignore_player);
 
 		if(isdefined(level.custom_limited_weapon_checks))
 		{
@@ -772,6 +767,13 @@ limited_weapon_below_quota(weapon, ignore_player)
 		}
 	}
 	return true;
+}
+
+add_custom_limited_weapon_check(func)
+{
+	if(!isdefined(level.custom_limited_weapon_checks))
+		level.custom_limited_weapon_checks = [];
+	level.custom_limited_weapon_checks[level.custom_limited_weapon_checks.size] = func;
 }
 
 treasure_chest_CanPlayerReceiveWeapon(player, weapon)

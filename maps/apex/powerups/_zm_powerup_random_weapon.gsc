@@ -12,6 +12,8 @@ include_powerup_for_level()
 	maps\apex\_zm_powerups::powerup_set_prevent_pick_up_if_drinking("random_weapon", true);
 	maps\apex\_zm_powerups::powerup_set_can_pick_up_in_last_stand("random_weapon", false);
 	maps\apex\_zm_powerups::powerup_set_can_pick_up_in_revive_trigger("random_weapon", false);
+
+	maps\apex\_zm_magicbox::add_custom_limited_weapon_check(::is_weapon_available_in_random_weapon_powerup);
 }
 
 setup_random_weapon()
@@ -76,4 +78,21 @@ random_weapon_powerup(player)
 	player thread random_weapon_powerup_throttle();
 	player maps\apex\_zm_weapons::weapon_give(self.weapon, false, true);
 	return false;
+}
+
+is_weapon_available_in_random_weapon_powerup(weapon, ignore_player)
+{
+	count = 0;
+
+	if(isdefined(level.random_weapon_powerups) && level.random_weapon_powerups.size > 0)
+	{
+		for(i = 0; i < level.random_weapon_powerups.size; i++)
+		{
+			if(!isdefined(level.random_weapon_powerups[i]))
+				continue;
+			if(level.random_weapon_powerups[i].base_weapon == weapon || level.random_weapon[i].weapon == weapon)
+				count++;
+		}
+	}
+	return count;
 }

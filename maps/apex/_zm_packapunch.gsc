@@ -10,6 +10,7 @@ init()
 	include_packapunch();
 	precache_packapunch();
 	spawn_packapunch_machines();
+	maps\apex\_zm_magicbox::add_custom_limited_weapon_check(::is_weapon_available_in_packapunch);
 }
 
 include_packapunch()
@@ -55,6 +56,25 @@ include_t7_packapunch()
 	level.zombie_vars["zombie_packapunch_machine_model_on"] = "p7_zm_vending_packapunch_on";
 
 	level.pap_zbarrier_state_func = ::process_pap_zbarrier_state;
+}
+
+is_weapon_available_in_packapunch(weapon, ignore_player)
+{
+	count = 0;
+
+	if(isdefined(level._zm_packapunch_machines) && level._zm_packapunch_machines.size > 0)
+	{
+		for(i = 0; i < level._zm_packapunch_machines.size; i++)
+		{
+			pap = level._zm_packapunch_machines[i];
+
+			if(isdefined(pap.current_weapon) && pap.current_weapon == weapon)
+				count++;
+			if(isdefined(pap.upgrade_weapon) && pap.upgrade_weapon == weapon)
+				count++;
+		}
+	}
+	return count;
 }
 
 //============================================================================================
