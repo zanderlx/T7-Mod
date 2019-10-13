@@ -370,6 +370,15 @@ get_pack_a_punch_weapon_options(weapon)
 	return self.pack_a_punch_weapon_options[weapon];
 }
 
+get_player_weapon_with_same_base(weapon)
+{
+	base_weapon = get_base_weapon(weapon);
+
+	if(self HasWeapon(base_weapon))
+		return base_weapon;
+	return undefined;
+}
+
 //============================================================================================
 // Weapon Model
 //============================================================================================
@@ -611,6 +620,17 @@ weapon_take(weapon)
 
 	if(self HasWeapon(weapon))
 		self TakeWeapon(weapon);
+}
+
+take_all_weapons(weapons)
+{
+	if(!isdefined(weapons))
+		weapons = self GetWeaponsList();
+
+	for(i = 0 ; i < weapons.size; i++)
+	{
+		self weapon_take(weapons[i]);
+	}
 }
 
 ammo_give(weapon)
@@ -1096,8 +1116,111 @@ show_weapon_buy()
 }
 
 //============================================================================================
+// Weapon Loadout
+//============================================================================================
+crate_loadout(weapons)
+{
+	loadout = SpawnStruct();
+	loadout.weapons = [];
+
+	for(i = 0; i < weapons.size; i++)
+	{
+		if(maps\apex\_zm_powerups::is_powerup_weapon(weapons[i]))
+			continue;
+
+		loadout.weapons[loadout.weapons.size] = get_default_weapondata(weapons[i]);
+
+		if(!isdefined(loadout.current) || loadout.current == "none")
+			loadout.current = weapons[i];
+	}
+	return loadout;
+}
+
+player_get_loadout()
+{
+	loadout = SpawnStruct();
+	loadout.current = self GetCurrentWeapon();
+	loadout.weapons = [];
+	weapons = self GetWeaponsList();
+
+	for(i = 0; i < weapons.size; i++)
+	{
+		if(maps\apex\_zm_powerups::is_powerup_weapon(weapons[i]))
+			continue;
+		loadout.weapons[loadout.weapons.size] = weapons[i];
+	}
+	return loadout;
+}
+
+player_give_loadout(loadout, replace_existing)
+{
+	if(is_true(replace_existing))
+		self take_all_weapons();
+
+	for(i = 0; i < loadout.weapons.size; i++)
+	{
+		self weapondata_give(loadout.weapons[i]);
+	}
+
+	self switch_back_primary_weapon(loadout.current);
+}
+
+player_take_loadout(loadout)
+{
+	for(i = 0; i < loadout.weapons.size; i++)
+	{
+		self weapondata_take(loadout.weapons[i]);
+	}
+}
+
+is_weapon_available_in_loadout(weapon, loadout)
+{
+	count = 0;
+	upgrade_name = get_upgrade_weapon(weapon);
+
+	if(isdefined(loadout) && isdefined(loadout.weapons))
+	{
+		for(i = 0; i < loadout.weapons.size; i++)
+		{
+			loadout_weapon = loadout.weapons[i]["name"];
+
+			if(weapon == loadout_weapon || upgrade_name == loadout_weapon)
+				count++;
+		}
+	}
+	return count;
+}
+
+//============================================================================================
 // Weapon Data
 //============================================================================================
+get_default_weapondata(weapon_name)
+{
+	weapondata = [];
+	weapondata["name"] = weapon_name;
+	weapondata["dw_name"] = WeaponDualWieldWeaponName(weapondata["name"]);
+	weapondata["alt_name"] = WeaponAltWeaponName(weapondata["name"]);
+	weapondata["clip"] = WeaponClipSize(weapondata["name"]);
+	weapondata["stock"] = WeaponMaxAmmo(weapondata["name"]);
+
+	if(weapondata["dw_name"] == "none")
+		weapondata["lh_clip"] = 0;
+	else
+		weapondata["lh_clip"] = WeaponClipSize(weapondata["dw_name"]);
+
+	if(weapondata["alt_name"] == "none")
+	{
+		weapondata["alt_clip"] = 0;
+		weapondata["alt_stock"] = 0;
+	}
+	else
+	{
+		weapondata["alt_clip"] = WeaponClipSize(weapondata["alt_name"]);
+		weapondata["alt_stock"] = WeaponMaxAmmo(weapondata["alt_name"]);
+	}
+	return weapondata;
+}
+
 get_player_weapondata(weapon)
 {
 	weapondata = [];
@@ -1139,8 +1262,80 @@ get_player_weapondata(weapon)
 	return weapondata;
 }
 
+weapon_is_better(left, right)
+{
+	if(left != right)
+	{
+		left_upgraded = is_weapon_upgraded(left);
+		right_upgraded = is_weapon_upgraded(right);
+
+		if(left_upgraded && right)
+			return cointoss();
+		else if(left_upgraded)
+			return true;
+	}
+	return false;
+}
+
+merge_weapons(oldweapondata, newweapondata)
+{
+	weapondata = [];
+
+	if(weapon_is_better(oldweapondata["name"], newweapondata["name"]))
+		weapondata["name"] = oldweapondata["name"];
+	else
+		weapondata["name"] = newweapondata["name"];
+
+	weapondata["dw_name"] = WeaponDualWieldWeaponName(weapondata["name"]);
+	weapondata["alt_name"] = WeaponAltWeaponName(weapondata["name"]);
+
+	if(weapondata["name"] == "none")
+	{
+		weapondata["clip"] = 0;
+		weapondata["stock"] = 0;
+	}
+	else
+	{
+		weapondata["clip"] = newweapondata["clip"] + oldweapondata["clip"];
+		weapondata["clip"] = Int(Min(weapondata["clip"], WeaponClipSize(weapondata["name"])));
+		weapondata["stock"] = newweapondata["stock"] + oldweapondata["stock"];
+		weapondata["stock"] = Int(Min(weapondata["stock"], WeaponMaxAmmo(weapondata["name"])));
+	}
+
+	if(weapondata["dw_name"] == "none")
+		weapondata["lh_clip"] = 0;
+	else
+	{
+		weapondata["lh_clip"] = newweapondata["lh_clip"] + oldweapondata["lh_clip"];
+		weapondata["lh_clip"] = Int(Min(weapondata["lh_clip"], WeaponClipSize(weapondata["dw_name"])));
+	}
+
+	if(weapondata["alt_name"] == "none")
+	{
+		weapondata["alt_clip"] = 0;
+		weapondata["alt_stock"] = 0;
+	}
+	else
+	{
+		weapondata["alt_clip"] = newweapondata["alt_clip"] + oldweapondata["alt_clip"];
+		weapondata["alt_clip"] = Int(Min(weapondata["alt_clip"], WeaponClipSize(weapondata["alt_name"])));
+		weapondata["alt_stock"] = newweapondata["alt_stock"] + oldweapondata["alt_stock"];
+		weapondata["alt_stock"] = Int(Min(weapondata["alt_stock"], WeaponMaxAmmo(weapondata["alt_name"])));
+	}
+	return weapondata;
+}
+
 weapondata_give(weapondata)
 {
+	current = self get_player_weapon_with_same_base(weapondata["name"]);
+
+	if(isdefined(current))
+	{
+		curweapondata = self get_player_weapondata(current);
+		self weapon_take(current);
+		weapondata = merge_weapons(curweapondata, weapondata);
+	}
+
 	self weapon_give(weapondata["name"], false, true);
 
 	self SetWeaponAmmoStock(weapondata["name"], weapondata["stock"]);
@@ -1154,6 +1349,13 @@ weapondata_give(weapondata)
 		self SetWeaponAmmoStock(weapondata["alt_name"], weapondata["alt_stock"]);
 		self SetWeaponAmmoClip(weapondata["alt_name"], weapondata["alt_clip"]);
 	}
+}
+
+weapondata_take(weapondata)
+{
+	self weapon_take(weapondata["name"]);
+	self weapon_take(weapondata["dw_name"]);
+	self weapon_take(weapondata["alt_name"]);
 }
 
 //============================================================================================

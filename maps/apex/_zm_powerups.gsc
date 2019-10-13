@@ -961,6 +961,21 @@ is_weapon_powerup(powerup_name)
 	return level.zombie_powerup_weapon[powerup_name] != "none";
 }
 
+is_powerup_weapon(weapon_name)
+{
+	if(isdefined(level.zombie_powerup_weapon))
+	{
+		keys = GetArrayKeys(level.zombie_powerup_weapon);
+
+		for(i = 0; i < keys.size; i++)
+		{
+			if(level.zombie_powerup_weapon[keys[i]] == weapon_name)
+				return true;
+		}
+	}
+	return false;
+}
+
 weapon_powerup(powerup_name)
 {
 	self notify("replace_weapon_powerup");
