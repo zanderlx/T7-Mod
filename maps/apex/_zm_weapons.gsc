@@ -1142,9 +1142,9 @@ load_weapons_for_level(weapons_list_table, stats_table)
 	mapname = get_mapname();
 
 	if(!isdefined(weapons_list_table))
-		weapons_list_table = "weapons/" + mapname + ".csv";
+		weapons_list_table = "gamedata/weapons/" + mapname + ".csv";
 	if(!isdefined(stats_table))
-		stats_table = "weapons/stats.csv";
+		stats_table = "gamedata/weapons/stats.csv";
 
 	/# PrintLn("Loading weapons for level '" + mapname + "' (" + weapons_list_table + ")"); #/
 	weapons_list = load_weapons_list_for_level(weapons_list_table);
@@ -1161,7 +1161,7 @@ load_weapon_for_level(weapon_name, stats_table)
 	Assert(!isdefined(level.zombie_weapons[weapon_name]));
 
 	if(!isdefined(stats_table))
-		stats_table = "weapons/stats.csv";
+		stats_table = "gamedata/weapons/stats.csv";
 
 	/# PrintLn("Loading weapon '" + weapon_name + "' (" + stats_table + ")"); #/
 
@@ -1263,7 +1263,7 @@ load_weapons_list_for_level(weapons_list_table)
 	mapname = get_mapname();
 
 	if(!isdefined(weapons_list_table))
-		weapons_list_table = "weapons/" + mapname + ".csv";
+		weapons_list_table = "gamedata/weapons/" + mapname + ".csv";
 
 	/# PrintLn("Loading weapons list for level '" + mapname + "' (" + weapons_list_table + ")"); #/
 
