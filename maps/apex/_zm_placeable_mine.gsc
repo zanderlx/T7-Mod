@@ -17,7 +17,7 @@ load_mine_for_level(weapon_name)
 		0           1                2
 		weapon_name,retrievable_hint,howto_hint
 	*/
-	placeable_mine_table = "weapons/placeable_mines.csv";
+	placeable_mine_table = "gamedata/weapons/placeable_mines.csv";
 	test = TableLookup(placeable_mine_table, 0, weapon_name, 0);
 
 	// ensure data exists in table

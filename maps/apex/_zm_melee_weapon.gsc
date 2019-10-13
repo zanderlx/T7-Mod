@@ -15,7 +15,7 @@ load_melee_weapon(melee_weapon)
 {
 	// 0           1             2               3
 	// melee_weapon,flourish_name,ballistic_name,fallback_name
-	melee_weapon_table = "weapons/melee_weapons.csv";
+	melee_weapon_table = "gamedata/weapons/melee_weapons.csv";
 	/# PrintLn("Loading melee weapon '" + melee_weapon + "' (" + melee_weapon_table + ")"); #/
 
 	test = TableLookup(melee_weapon_table, 0, melee_weapon, 0);
@@ -110,7 +110,10 @@ give_melee_weapon(weapon)
 	melee_weapon = find_melee_weapon(weapon);
 
 	if(!isdefined(melee_weapon) || melee_weapon.flourish_name == "none")
+	{
+		IPrintLnBold("could not find flourish weapon");
 		return;
+	}
 
 	original_weapon = self do_melee_weapon_flourish_begin(melee_weapon.flourish_name);
 	self maps\apex\_zm_weapons::play_weapon_vo(weapon, false);
