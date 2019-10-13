@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("nuke", "zombie_bomb", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("nuke", "p7_zm_power_up_nuke", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("nuke", undefined, ::grab_nuke, undefined, maps\apex\_zm_powerups::func_should_always_drop);
 
 	level._effect["powerup_nuke_explosion"] = LoadFX("misc/fx_zombie_mini_nuke");

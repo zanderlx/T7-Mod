@@ -5,10 +5,10 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("lose_points_team", "zombie_z_money_icon", "powerup_red");
+	maps\apex\_zm_powerups::register_basic_powerup("lose_points_team", "p7_zm_power_up_z_money_icon", "powerup_red");
 	maps\apex\_zm_powerups::register_powerup_funcs("lose_points_team", undefined, ::grab_lose_points_team, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 
-	maps\apex\_zm_powerups::register_basic_powerup("lose_points_player", "zombie_z_money_icon", "powerup_red"); // TODO: powerup_<>? bad powerup that affects grabber, what color to use?
+	maps\apex\_zm_powerups::register_basic_powerup("lose_points_player", "p7_zm_power_up_z_money_icon", "powerup_red"); // TODO: powerup_<>? bad powerup that affects grabber, what color to use?
 	maps\apex\_zm_powerups::register_powerup_funcs("lose_points_player", undefined, ::grab_lose_points_player, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 	maps\apex\_zm_powerups::powerup_set_can_pick_up_in_last_stand("lose_points_player", true);
 }

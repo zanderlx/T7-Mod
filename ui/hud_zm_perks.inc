@@ -32,7 +32,7 @@ DRAW_PERK_SLOT("speed_cola")
 DRAW_PERK_SLOT("divetonuke")
 DRAW_PERK_SLOT("marathon")
 DRAW_PERK_SLOT("deadshot")
-DRAW_PERK_SLOT("additionalprimaryweapon")
+DRAW_PERK_SLOT("mule_kick")
 
 // Black Ops 2
 DRAW_PERK_SLOT("tombstone")

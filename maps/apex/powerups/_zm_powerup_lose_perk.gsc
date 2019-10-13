@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("lose_perk", "zombie_pickup_perk_bottle", "powerup_red");
+	maps\apex\_zm_powerups::register_basic_powerup("lose_perk", "p7_zm_power_up_perk_bottle", "powerup_red");
 	maps\apex\_zm_powerups::register_powerup_funcs("lose_perk", undefined, ::grab_lose_perk, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 	maps\apex\_zm_powerups::powerup_set_prevent_pick_up_if_drinking("lose_perk", true);
 }

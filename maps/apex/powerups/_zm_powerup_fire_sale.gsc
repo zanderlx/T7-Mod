@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("fire_sale", "zombie_firesale", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("fire_sale", "p7_zm_power_up_firesale", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("fire_sale", undefined, undefined, undefined, ::func_should_drop_fire_sale);
 	maps\apex\_zm_powerups::register_timed_powerup("fire_sale", false, "specialty_firesale_zombies", "zombie_powerup_fire_sale_time", "zombie_powerup_fire_sale_on");
 	maps\apex\_zm_powerups::register_timed_powerup_funcs("fire_sale", ::fire_sale_start, undefined, ::fire_sale_stop);

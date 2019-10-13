@@ -5,11 +5,11 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("bonus_points_player", "zombie_z_money_icon", "powerup_blue");
+	maps\apex\_zm_powerups::register_basic_powerup("bonus_points_player", "p7_zm_power_up_z_money_icon", "powerup_blue");
 	maps\apex\_zm_powerups::register_powerup_funcs("bonus_points_player", undefined, ::grab_bonus_points_player, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 	maps\apex\_zm_powerups::powerup_set_can_pick_up_in_last_stand("bonus_points_player", true);
 
-	maps\apex\_zm_powerups::register_basic_powerup("bonus_points_team", "zombie_z_money_icon", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("bonus_points_team", "p7_zm_power_up_z_money_icon", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("bonus_points_team", undefined, ::grab_bonus_points_team, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 }
 

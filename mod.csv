@@ -114,54 +114,63 @@ fx,misc\fx_zombie_powerup_solo_on
 // Max Ammo
 rawfile,clientscripts\apex\powerups\_zm_powerup_full_ammo.csc
 rawfile,maps\apex\powerups\_zm_powerup_full_ammo.gsc
-xmodel,zombie_ammocan
+// xmodel,zombie_ammocan
+xmodel,p7_zm_power_up_max_ammo
 
 // Carpenter
 rawfile,clientscripts\apex\powerups\_zm_powerup_carpenter.csc
 rawfile,maps\apex\powerups\_zm_powerup_carpenter.gsc
-xmodel,zombie_carpenter
+// xmodel,zombie_carpenter
+xmodel,p7_zm_power_up_carpenter
 
 // Insta Kill
 rawfile,clientscripts\apex\powerups\_zm_powerup_insta_kill.csc
 rawfile,maps\apex\powerups\_zm_powerup_insta_kill.gsc
-xmodel,zombie_skull
+// xmodel,zombie_skull
+xmodel,p7_zm_power_up_insta_kill
 material,specialty_instakill_zombies
 
 // Nuke
 rawfile,clientscripts\apex\powerups\_zm_powerup_nuke.csc
 rawfile,maps\apex\powerups\_zm_powerup_nuke.gsc
-xmodel,zombie_bomb
+// xmodel,zombie_bomb
+xmodel,p7_zm_power_up_nuke
 fx,misc\fx_zombie_mini_nuke
 
 // Double Points
 rawfile,clientscripts\apex\powerups\_zm_powerup_double_points.csc
 rawfile,maps\apex\powerups\_zm_powerup_double_points.gsc
-xmodel,zombie_x2_icon
+// xmodel,zombie_x2_icon
+xmodel,p7_zm_power_up_double_points
 material,specialty_2x_zombies
 
 // Fire Sale
 rawfile,clientscripts\apex\powerups\_zm_powerup_fire_sale.csc
 rawfile,maps\apex\powerups\_zm_powerup_fire_sale.gsc
-xmodel,zombie_firesale
+// xmodel,zombie_firesale
+xmodel,p7_zm_power_up_firesale
 material,specialty_firesale_zombies
 
 // Bonfire Sale
 rawfile,clientscripts\apex\powerups\_zm_powerup_bonfire_sale.csc
 rawfile,maps\apex\powerups\_zm_powerup_bonfire_sale.gsc
-xmodel,zombie_pickup_bonfire
+// xmodel,zombie_pickup_bonfire
+xmodel,p7_zm_power_up_bonfire
 material,zom_icon_bonfire
 
 // MiniGun
 rawfile,clientscripts\apex\powerups\_zm_powerup_minigun.csc
 rawfile,maps\apex\powerups\_zm_powerup_minigun.gsc
-xmodel,zombie_pickup_minigun
+// xmodel,zombie_pickup_minigun
+xmodel,p7_zm_power_up_minigun
 weapon,sp\minigun_zm
 material,zom_icon_minigun
 
 // Tesla
 rawfile,clientscripts\apex\powerups\_zm_powerup_tesla.csc
 rawfile,maps\apex\powerups\_zm_powerup_tesla.gsc
-xmodel,zombie_pickup_minigun
+// xmodel,zombie_pickup_minigun
+xmodel,p7_zm_power_up_minigun
 weapon,sp\tesla_gun_zm
 material,zom_icon_minigun
 
@@ -172,27 +181,32 @@ rawfile,maps\apex\powerups\_zm_powerup_random_weapon.gsc
 // Bonus Points (Player / Team)
 rawfile,clientscripts\apex\powerups\_zm_powerup_bonus_points.csc
 rawfile,maps\apex\powerups\_zm_powerup_bonus_points.gsc
-xmodel,zombie_z_money_icon
+// xmodel,zombie_z_money_icon
+xmodel,p7_zm_power_up_z_money_icon
 
 // Empty Clip
 rawfile,clientscripts\apex\powerups\_zm_powerup_empty_clip.csc
 rawfile,maps\apex\powerups\_zm_powerup_empty_clip.gsc
-xmodel,zombie_ammocan
+// xmodel,zombie_ammocan
+xmodel,p7_zm_power_up_max_ammo
 
 // Free Perk
 rawfile,clientscripts\apex\powerups\_zm_powerup_free_perk.csc
 rawfile,maps\apex\powerups\_zm_powerup_free_perk.gsc
-xmodel,zombie_pickup_perk_bottle
+// xmodel,zombie_pickup_perk_bottle
+xmodel,p7_zm_power_up_perk_bottle
 
 // Lose Points (Player / Team)
 rawfile,clientscripts\apex\powerups\_zm_powerup_lose_points.csc
 rawfile,maps\apex\powerups\_zm_powerup_lose_points.gsc
-xmodel,zombie_z_money_icon
+// xmodel,zombie_z_money_icon
+xmodel,p7_zm_power_up_z_money_icon
 
 // Lose Perk
 rawfile,clientscripts\apex\powerups\_zm_powerup_lose_perk.csc
 rawfile,maps\apex\powerups\_zm_powerup_lose_perk.gsc
-xmodel,zombie_pickup_perk_bottle
+// xmodel,zombie_pickup_perk_bottle
+xmodel,p7_zm_power_up_perk_bottle
 
 //============================================================================================
 // New Perk System

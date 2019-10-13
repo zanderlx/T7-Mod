@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("carpenter", "zombie_carpenter", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("carpenter", "p7_zm_power_up_carpenter", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("carpenter", undefined, ::grab_carpenter, undefined, ::func_should_drop_carpenter);
 }
 

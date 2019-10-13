@@ -7,7 +7,7 @@ include_powerup_for_level()
 {
 	PrecacheString(&"ZOMBIE_POWERUP_MAX_AMMO");
 
-	maps\apex\_zm_powerups::register_basic_powerup("full_ammo", "zombie_ammocan", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("full_ammo", "p7_zm_power_up_max_ammo", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("full_ammo", undefined, ::grab_full_ammo, undefined, maps\apex\_zm_powerups::func_should_always_drop);
 }
 

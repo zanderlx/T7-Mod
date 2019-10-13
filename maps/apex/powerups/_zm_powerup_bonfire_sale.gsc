@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("bonfire_sale", "zombie_pickup_bonfire", "powerup_green");
+	maps\apex\_zm_powerups::register_basic_powerup("bonfire_sale", "p7_zm_power_up_bonfire", "powerup_green");
 	maps\apex\_zm_powerups::register_powerup_funcs("bonfire_sale", undefined, undefined, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 	maps\apex\_zm_powerups::register_timed_powerup("bonfire_sale", false, "zom_icon_bonfire", "zombie_powerup_bonfire_sale_time", "zombie_powerup_bonfire_sale_on");
 	maps\apex\_zm_powerups::register_timed_powerup_funcs("bonfire_sale", ::bonfire_sale_start, undefined, ::bonfire_sale_stop);

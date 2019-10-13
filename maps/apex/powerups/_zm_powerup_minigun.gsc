@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("minigun", "zombie_pickup_minigun", "powerup_blue");
+	maps\apex\_zm_powerups::register_basic_powerup("minigun", "p7_zm_power_up_minigun", "powerup_blue");
 	maps\apex\_zm_powerups::register_powerup_funcs("minigun", undefined, undefined, undefined, ::func_should_drop_minigun);
 	maps\apex\_zm_powerups::register_timed_powerup("minigun", true, "zom_icon_minigun", "zombie_powerup_minigun_time", "zombie_powerup_minigun_on");
 	maps\apex\_zm_powerups::register_timed_powerup_funcs("minigun", undefined, undefined, undefined);

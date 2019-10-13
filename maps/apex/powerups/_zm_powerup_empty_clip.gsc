@@ -5,7 +5,7 @@
 
 include_powerup_for_level()
 {
-	maps\apex\_zm_powerups::register_basic_powerup("empty_clip", "zombie_ammocan", "powerup_red");
+	maps\apex\_zm_powerups::register_basic_powerup("empty_clip", "p7_zm_power_up_max_ammo", "powerup_red");
 	maps\apex\_zm_powerups::register_powerup_funcs("empty_clip", undefined, ::grab_empty_clip, undefined, maps\apex\_zm_powerups::func_should_never_drop);
 }
 
