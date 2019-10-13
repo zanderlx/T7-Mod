@@ -55,9 +55,15 @@ Support for other maps will come once the base mod and all major function / scri
 		- Removed the need for each level to manually include weapons both client and server side
 		- Auto registeres and loads correct weapons on the client side
 		- Auto registeres correct weapons offhand types
+		- Added callback, which allows loading a script for a specific weapon
 	- Many weapon utility functions downported from Black Ops III
 	- `weapon_give()` now supports any weapon type, not just primary and melee weapons
 		- Swaps out lethal, tactical, melee weapons automaticly
+	- Downported `_zm_lighning_chain` script
+		- Allows for custom lightning chains, mainly used for Wunderwaffe and Dead wire
+	- Downported `_zm_melee_weapons` script
+		- Automaticly handles, changing knife and ballistic knife weapons
+		- [Adds `fallback` weapons, that are given when the player has no primary weapons](https://streamable.com/iodg6)
 
 ## Credits
 - **_ApexModder_** - Mod Owner
