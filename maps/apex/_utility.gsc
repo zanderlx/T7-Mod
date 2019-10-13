@@ -45,12 +45,8 @@ get_player_weapon_limit()
 
 	weapon_limit = 2;
 
-	// TODO:
-	/*
-	if(player has_perk("mule_kick"))
+	if(self has_perk("mule_kick"))
 		weapon_limit = level.additionalprimaryweapon_limit;
-	*/
-
 	return weapon_limit;
 }
 
