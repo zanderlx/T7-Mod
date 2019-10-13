@@ -20,6 +20,7 @@ localize,mod
 // Weapons
 //============================================================================================
 rawfile,clientscripts\apex\_zm_weapons.csc
+rawfile,maps\apex\weapons\_zm_weap_claymore.gsc
 rawfile,maps\apex\_zm_melee_weapon.gsc
 rawfile,maps\apex\_zm_placeable_mine.gsc
 rawfile,maps\apex\_zm_weapons.gsc

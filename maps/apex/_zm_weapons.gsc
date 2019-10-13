@@ -7,12 +7,18 @@ init()
 {
 	level.zombie_weapons = [];
 	level.zombie_weapons_upgraded = [];
+	include_weapons();
 	maps\apex\_zm_melee_weapon::init();
 	maps\apex\_zm_placeable_mine::init();
 	load_weapons_for_level();
 	init_weapon_upgrade();
 	OnPlayerSpawned_Callback(::player_spawned);
 	level thread register_weapon_data_client_side();
+}
+
+include_weapons()
+{
+	add_weapon_include_callback("claymore_zm", maps\apex\weapons\_zm_weap_claymore::include_weapon_for_level);
 }
 
 //============================================================================================
@@ -1233,6 +1239,9 @@ load_weapon_for_level(weapon_name, stats_table)
 		PrecacheItem(lh_weapon);
 		PrecacheModel(GetWeaponModel(lh_weapon));
 	}
+
+	if(isdefined(level._zm_weapon_include_callbacks) && isdefined(level._zm_weapon_include_callbacks[weapon_name]))
+		run_function(level, level._zm_weapon_include_callbacks[weapon_name]);
 }
 
 // Stupid hack function to load a list of strings from stringtables
@@ -1290,4 +1299,12 @@ register_weapon_data_client_side()
 
 		set_client_system_state("_zm_weapons", weapon_name + ",register," + inventory_type + "," + upgrade_name + "," + alt_weapon + "," + lh_weapon + "," + bool_to_string(in_box), level);
 	}
+}
+
+add_weapon_include_callback(weapon_name, callback_func)
+{
+	if(!isdefined(level._zm_weapon_include_callbacks))
+		level._zm_weapon_include_callbacks = [];
+	if(!isdefined(level._zm_weapon_include_callbacks[weapon_name]))
+		level._zm_weapon_include_callbacks[weapon_name] = callback_func;
 }
