@@ -98,8 +98,6 @@ main()
 
 	// Call the other zombiemode scripts
 	maps\_zombiemode_audio::audio_init();
-	maps\_zombiemode_claymore::init();
-	maps\_zombiemode_weapons::init();
 	maps\_zombiemode_equipment::init();
 	maps\_zombiemode_blockers::init();
 	maps\_zombiemode_spawner::init();
@@ -110,7 +108,6 @@ main()
 	maps\_zombiemode_weap_thundergun::init();
 	maps\_zombiemode_weap_crossbow::init();
 //Z2	TEMP DISABLE DURING INTEGRATION
-	maps\_zombiemode_bowie::bowie_init();
 //	maps\_zombiemode_betty::init();
 //	maps\_zombiemode_timer::init();
 //	maps\_zombiemode_auto_turret::init();

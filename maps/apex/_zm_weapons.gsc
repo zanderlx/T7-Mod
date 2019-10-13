@@ -8,7 +8,9 @@ init()
 	level.zombie_weapons = [];
 	level.zombie_weapons_upgraded = [];
 	maps\apex\_zm_melee_weapon::init();
+	maps\apex\_zm_placeable_mine::init();
 	load_weapons_for_level();
+	init_weapon_upgrade();
 	OnPlayerSpawned_Callback(::player_spawned);
 	level thread register_weapon_data_client_side();
 }
@@ -476,29 +478,17 @@ weapon_give(weapon, magic_box, nosound)
 		current_weapon = self maps\apex\_zm_melee_weapon::change_melee_weapon(weapon, current_weapon);
 	else if(is_lethal_grenade(weapon))
 	{
-		old_lethal = self get_player_lethal_grenade();
-
-		if(old_lethal != "none")
-			self weapon_take(old_lethal);
-
+		self weapon_take(self get_player_lethal_grenade());
 		self set_player_lethal_grenade(weapon);
 	}
 	else if(is_tactical_grenade(weapon))
 	{
-		old_tactical = self get_player_tactical_grenade();
-
-		if(old_tactical != "none")
-			self weapon_take(old_tactical);
-
+		self weapon_take(self get_player_tactical_grenade());
 		self set_player_tactical_grenade(weapon);
 	}
 	else if(is_placeable_mine(weapon))
 	{
-		old_mine = self get_player_placeable_mine();
-
-		if(old_mine != "none")
-			self weapon_take(old_mine);
-
+		self weapon_take(self get_player_placeable_mine());
 		self set_player_placeable_mine(weapon);
 	}
 
@@ -512,7 +502,7 @@ weapon_give(weapon, magic_box, nosound)
 
 		if(isdefined(current_weapon))
 		{
-			if(!is_offhand_weapon(current_weapon))
+			if(!is_offhand_weapon(weapon))
 				self weapon_take(current_weapon);
 		}
 	}
@@ -530,7 +520,7 @@ weapon_give(weapon, magic_box, nosound)
 		weapon = maps\apex\_zm_melee_weapon::give_ballistic_knife(weapon, is_weapon_upgraded(weapon));
 	else if(is_placeable_mine(weapon))
 	{
-		self thread maps\_zombiemode_claymore::claymore_setup();
+		self thread maps\apex\_zm_placeable_mine::give_placeable_mine(weapon, true);
 
 		if(!is_true(nosound))
 			self play_weapon_vo(weapon, magic_box);
@@ -572,10 +562,20 @@ weapon_give(weapon, magic_box, nosound)
 
 weapon_take(weapon)
 {
+	if(!isdefined(weapon) || weapon == "none")
+		return;
+
 	self notify("weapon_take", weapon);
 
 	if(maps\apex\_zm_melee_weapon::is_ballistic_knife(weapon))
 		self notify("zmb_lost_knife");
+	else if(is_lethal_grenade("none"))
+		self set_player_lethal_grenade("none");
+	else if(is_tactical_grenade(weapon))
+		self set_player_tactical_grenade("none");
+	else if(is_placeable_mine(weapon))
+		self set_player_placeable_mine("none");
+
 	if(self HasWeapon(weapon))
 		self TakeWeapon(weapon);
 }
@@ -681,6 +681,377 @@ weapon_type_check(weapon)
 get_player_index()
 {
 	return self.entity_num;
+}
+
+//============================================================================================
+// Wallbuys
+//============================================================================================
+init_weapon_upgrade()
+{
+	PrecacheModel("grenade_bag");
+	set_zombie_var("zombie_weapons_upgrade_ammo_cost", 4500);
+
+	spawn_list = GetStructArray("weapon_upgrade", "targetname");
+	spawn_list = array_combine(spawn_list, GetStructArray("bowie_upgrade", "targetname"));
+	spawn_list = array_combine(spawn_list, GetStructArray("sickle_upgrade", "targetname"));
+	spawn_list = array_combine(spawn_list, GetStructArray("tazer_upgrade", "targetname"));
+	spawn_list = array_combine(spawn_list, GetStructArray("claymore_purchase", "targetname"));
+	spawn_list = array_combine(spawn_list, convert_legacy_wall_buys());
+
+	if(!isdefined(spawn_list) || spawn_list.size == 0)
+		return;
+
+	for(i = 0; i < spawn_list.size; i++)
+	{
+		stub = spawn_list[i];
+		weapon = stub.zombie_weapon_upgrade;
+
+		if(!is_weapon_included(weapon))
+			continue;
+
+		if(isdefined(stub.model_override))
+		{
+			stub.model = stub.model_override;
+
+			if(is_placeable_mine(weapon))
+			{
+				// legacy placeable mine models are weirdly offset
+				stub.model.show_angles = stub.model.angles;
+				stub.model.angles += (90, 0, 0);
+				stub.model.origin += (0, 0, 4.5);
+			}
+		}
+		else
+			stub.model = spawn_model("tag_origin", stub.origin, stub.angles);
+
+		if(is_lethal_grenade(weapon))
+			stub.model SetModel("grenade_bag");
+		else
+		{
+			stub.model SetModel(GetWeaponModel(weapon));
+			stub.model UseWeaponHideTags(weapon);
+		}
+
+		stub.model Hide();
+
+		stub.script_unitrigger_type = "playertrigger_radius_use";
+		stub.radius = 20;
+		stub.height = 20;
+		stub.origin -= AnglesToRight(stub.angles) * 10;
+		stub.weapon = weapon;
+		stub.require_look_at = true;
+		stub.first_time_triggered = false;
+		stub.clientFieldName = stub.zombie_weapon_upgrade + "_" + stub.origin;
+		stub.prompt_and_visibility_func = ::wall_weapon_update_prompt;
+		register_playertrigger(stub, ::weapon_spawn_think);
+	}
+	level._spawned_wallbuys = spawn_list;
+}
+
+convert_legacy_wall_buys()
+{
+	converted = [];
+
+	// Bowie
+	triggers = GetEntArray("bowie_upgrade", "targetname");
+
+	for(i = 0; i < triggers.size; i++)
+	{
+		trigger = triggers[i];
+		model = GetEnt(trigger.target, "targetname");
+
+		struct = SpawnStruct();
+		struct.origin = trigger.origin;
+		struct.angles = model.angles;
+		struct.zombie_weapon_upgrade = "bowie_knife_zm";
+		struct.model_override = model;
+
+		converted[converted.size] = struct;
+
+		// model Delete();
+		trigger Delete();
+	}
+
+	// Sickle
+	triggers = GetEntArray("sickle_upgrade", "targetname");
+
+	for(i = 0; i < triggers.size; i++)
+	{
+		trigger = triggers[i];
+		model = GetEnt(trigger.target, "targetname");
+
+		struct = SpawnStruct();
+		struct.origin = trigger.origin;
+		struct.angles = model.angles;
+		struct.zombie_weapon_upgrade = "sickle_knife_zm";
+		struct.model_override = model;
+
+		converted[converted.size] = struct;
+
+		// model Delete();
+		trigger Delete();
+	}
+
+	// Claymore
+	triggers = GetEntArray("claymore_purchase", "targetname");
+
+	for(i = 0; i < triggers.size; i++)
+	{
+		trigger = triggers[i];
+		model = GetEnt(trigger.target, "targetname");
+
+		struct = SpawnStruct();
+		struct.origin = trigger.origin;
+		struct.angles = model.angles - (0, 90, 0);
+		struct.zombie_weapon_upgrade = "claymore_zm";
+		struct.model_override = model;
+
+		converted[converted.size] = struct;
+
+		// model Delete();
+		trigger Delete();
+	}
+
+	// Spikemore
+	triggers = GetEntArray("spikemore_purchase", "targetname");
+
+	for(i = 0; i < triggers.size; i++)
+	{
+		trigger = triggers[i];
+		model = GetEnt(trigger.target, "targetname");
+
+		struct = SpawnStruct();
+		struct.origin = trigger.origin;
+		struct.angles = model.angles - (0, 90, 0);
+		struct.zombie_weapon_upgrade = "spikemore_zm";
+		struct.model_override = model;
+
+		converted[converted.size] = struct;
+
+		// model Delete();
+		trigger Delete();
+	}
+
+	// Wallbuys
+	triggers = GetEntArray("weapon_upgrade", "targetname");
+
+	for(i = 0; i < triggers.size; i++)
+	{
+		trigger = triggers[i];
+		model = GetEnt(trigger.target, "targetname");
+
+		struct = SpawnStruct();
+		struct.origin = trigger.origin;
+		struct.angles = model.angles;
+		struct.zombie_weapon_upgrade = trigger.zombie_weapon_upgrade;
+		struct.model_override = model;
+
+		if(WeaponType(trigger.zombie_weapon_upgrade) == "grenade")
+			struct.angles -= (0, 180, 0);
+
+		converted[converted.size] = struct;
+
+		// model Delete();
+		trigger Delete();
+	}
+
+	return converted;
+}
+
+wall_weapon_update_prompt(player)
+{
+	self.hint_string = undefined;
+	self.hint_param1 = undefined;
+	self.hint_param2 = undefined;
+	self.hint_param3 = undefined;
+	self.hint_param4 = undefined;
+
+	weapon = self.stub.weapon;
+
+	if(!player can_buy_weapon())
+		return false;
+	if(is_placeable_mine(weapon) && player placeable_mine_can_buy_weapon_extra_check(weapon))
+		return false;
+	if(is_melee_weapon(weapon) && player melee_weapon_can_buy_weapon_extra_check(weapon))
+		return false;
+
+	if(is_offhand_weapon(weapon))
+	{
+		self.hint_string = &"ZOMBIE_DYN_WEAPONCOST";
+		self.hint_param1 = level.zombie_weapons[weapon].display_name;
+		self.hint_param2 = level.zombie_weapons[weapon].cost;
+	}
+	else
+	{
+		if(isdefined(level.func_override_wallbuy_prompt))
+		{
+			if(!run_function(self, level.func_override_wallbuy_prompt, player))
+				return false;
+		}
+
+		cost = level.zombie_weapons[weapon].cost;
+		self.hint_string = &"ZOMBIE_DYN_WEAPONCOST";
+		self.hint_param1 = level.zombie_weapons[weapon].display_name;
+		self.hint_param2 = cost;
+
+		if(player has_weapon_or_upgrade(weapon))
+		{
+			self.hint_param3 = Int(cost / 2);
+
+			if(can_upgrade_weapon(weapon))
+			{
+				self.hint_string = &"ZOMBIE_DYN_WEAPONCOSTAMMO_UPGRADE";
+				self.hint_param4 = level.zombie_vars["zombie_weapons_upgrade_ammo_cost"];
+			}
+			else
+				self.hint_string = &"ZOMBIE_DYN_WEAPONCOSTAMMO";
+		}
+	}
+	return true;
+}
+
+placeable_mine_can_buy_weapon_extra_check(weapon)
+{
+	mine = self get_player_placeable_mine();
+
+	if(isdefined(weapon) && is_equal(mine, weapon))
+		return true;
+	return false;
+}
+
+melee_weapon_can_buy_weapon_extra_check(weapon)
+{
+	melee_weapon = self get_player_melee_weapon();
+
+	if(isdefined(weapon) && is_equal(melee_weapon, weapon))
+		return true;
+	return false;
+}
+
+weapon_spawn_think()
+{
+	self endon("kill_trigger");
+
+	for(;;)
+	{
+		self waittill("trigger", player);
+		weapon = self.stub.weapon;
+		cost = player get_wallbuy_cost(weapon, self.stub.hacked);
+
+		if(isdefined(player.check_override_wallbuy_purchase))
+		{
+			if(run_function(player, player.check_override_wallbuy_purchase, weapon, self))
+				continue;
+		}
+
+		if(player.score < cost)
+		{
+			self play_sound_on_ent("no_purchase");
+			player maps\_zombiemode_audio::create_and_play_dialog("general", "no_money", undefined, 1);
+			continue;
+		}
+
+		if(player has_weapon_or_upgrade(weapon))
+		{
+			if(player has_upgrade(weapon))
+				success = player ammo_give(get_upgrade_weapon(weapon));
+			else
+				success = player ammo_give(weapon);
+		}
+		else
+		{
+			success = true;
+
+			if(is_melee_weapon(weapon))
+				player thread maps\apex\_zm_melee_weapon::give_melee_weapon(weapon);
+			else
+				player thread weapon_give(weapon, false, false);
+		}
+
+		if(success)
+		{
+			if(!is_true(self.stub.first_time_triggered))
+				self.stub thread show_all_weapon_buys();
+
+			player maps\_zombiemode_score::minus_to_player_score(cost);
+		}
+	}
+}
+
+get_wallbuy_cost(weapon, hacked)
+{
+	if(self has_weapon_or_upgrade(weapon))
+	{
+		if(is_true(hacked))
+		{
+			if(self has_upgrade(weapon))
+				return Int(level.zombie_weapons[weapon].cost / 2);
+			else
+				return level.zombie_vars["zombie_weapons_upgrade_ammo_cost"];
+		}
+		else
+		{
+			if(self has_upgrade(weapon))
+				return level.zombie_vars["zombie_weapons_upgrade_ammo_cost"];
+			else
+				return Int(level.zombie_weapons[weapon].cost / 2);
+		}
+	}
+	else
+		return level.zombie_weapons[weapon].cost;
+}
+
+show_all_weapon_buys()
+{
+	self show_weapon_buy();
+
+	if(!is_true(level.dont_link_common_wallbuys) && isdefined(level._spawned_wallbuys))
+	{
+		for(i = 0; i < level._spawned_wallbuys.size; i++)
+		{
+			wallbuy = level._spawned_wallbuys[i];
+
+			if(is_true(wallbuy.first_time_triggered))
+				continue;
+			if(is_equal(wallbuy, self))
+				continue;
+			if(is_equal(wallbuy.weapon, self.weapon))
+				wallbuy show_weapon_buy();
+		}
+	}
+}
+
+show_weapon_buy()
+{
+	if(is_true(self.first_time_triggered))
+		return;
+
+	self.first_time_triggered = true;
+
+	// if(isdefined(self.clientFieldName))
+	// 	set_client_system_state(self.clientFieldName, "1");
+
+	model = self.model;
+	model_origin = model.origin;
+	model_angles = model.angles;
+
+	angles = VectortoAngles(self.origin - model_origin);
+	yaw_diff = AngleClamp180(angles[1] - model_angles[1]);
+
+	if(yaw_diff > 0)
+		yaw = model_angles[1] - 90;
+	else
+		yaw = model_angles[1] + 90;
+
+	if(is_placeable_mine(self.weapon))
+		self.model.origin = model_origin - (AnglesToRight((0, yaw, 0)) * 8);
+	else
+		self.model.origin = model_origin + (AnglesToForward((0, yaw, 0)) * 8);
+
+	wait .05;
+	self.model Show();
+	play_sound_at_pos("weapon_show", model_origin, self.model);
+	self.model MoveTo(model_origin, 1);
 }
 
 //============================================================================================
@@ -824,13 +1195,7 @@ load_weapon_for_level(weapon_name, stats_table)
 			break;
 
 		case "mine":
-			register_placeable_mine_for_level(weapon_name);
-			// maps\_zm_placeable_mine::load_mine_for_level(weapon_name);
-			break;
-
-		case "ballistic":
-			// register_lethal_grenade_for_level(weapon_name);
-			// maps\_zm_melee_weapon::load_ballistic_knife(weapon_name);
+			maps\apex\_zm_placeable_mine::load_mine_for_level(weapon_name);
 			break;
 
 		case "melee":
