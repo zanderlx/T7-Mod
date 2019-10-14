@@ -25,6 +25,22 @@ Support for other maps will come once the base mod and all major function / scri
 	- All powerup logic automated, individual powerups just speciy what happens during 'onGrab' 'onTimeout' 'onTimedPowerupStart' etc
 	- All powerupes seperated in to a script per powerup
 	- [Black Ops III powerup hud logic downported](https://streamable.com/ny2kn)
+	- Supported Powerups:
+		* Bonfire Sale
+		* Bonus Points
+		* Carpenter
+		* Double Points
+		* Empty Clip
+		* Fire Sale
+		* Free Perk
+		* Max Ammo
+		* Insta Kill
+		* Lose Perk
+		* Lose Points (Player / Team)
+		* Minigun
+		* Nuke
+		* Random Weapon
+		* Tesla
 
 - Rewritten Perk System
 	- Perks are no longer required to be named `specialty_`
@@ -37,6 +53,20 @@ Support for other maps will come once the base mod and all major function / scri
 	- All perks seperated in to a script per perk
 	- Perk machines now use `PlayerTriggers`
 	- Perk machines now use Black Ops II / III models
+	- Supported Perks:
+		* Juggernog
+		* Double Tap 2.0
+		* Speed Cola
+		* Quick Revive
+		* PHD Flopper
+		* Stamin Up
+		* Deadshot
+		* Mule Kick
+		* Tombstone
+		* Whos Who
+		* Vulture Aid
+		* Electric Cherry
+		* Widows Wine
 
 - Rewritten Pack-A-Punch
 	- Pack-A-Punch now uses state based xanims
