@@ -59,11 +59,11 @@ default_include_perks()
 	maps\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
 
 	maps\apex\perks\_zm_perk_tombstone::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_chugabud::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_vulture::include_perk_for_level();
+	maps\apex\perks\_zm_perk_chugabud::include_perk_for_level();
+	maps\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	maps\apex\perks\_zm_perk_vulture_aid::include_perk_for_level();
 
-	// maps\apex\perks\_zm_perk_widows_wine::include_perk_for_level();
+	maps\apex\perks\_zm_perk_widows_wine::include_perk_for_level();
 }
 
 precache_perks()
@@ -422,16 +422,7 @@ vending_trigger_give_perk(stub)
 	if(isdefined(level._custom_perks[perk].sting))
 		stub.machine thread maps\_zombiemode_audio::play_jingle_or_stinger(level._custom_perks[perk].sting);
 
-	self drink_from_perk_bottle(perk);
-
-	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
-		return;
-
-	if(isdefined(level.perk_bought_func))
-		run_function(self, level.perk_bought_func, perk);
-
-	self.perk_purchased = undefined;
-	self give_perk(perk, true);
+	self thread drink_and_give_perk(perk, true);
 }
 
 get_perk_machines(perk)
@@ -674,13 +665,28 @@ should_ratain_perk(perk)
 	return false;
 }
 
+wait_give_perk(perk, bought)
+{
+	self endon("player_downed");
+	self endon("disconnect");
+	self endon("perk_abort_drinking");
+	level endon("end_game");
+
+	self waittill_any_or_timeout(.5, "burp");
+
+	if(isdefined(level.perk_bought_func))
+		run_function(self, level.perk_bought_func, perk);
+
+	self give_perk(perk, bought);
+}
+
 //============================================================================================
 // Perk Bottle Drink Anim
 //============================================================================================
 drink_from_perk_bottle(perk)
 {
 	gun = self do_perk_bottle_drink_start(perk);
-	result = self waittill_any("fake_death", "death", "player_downed", "weapon_change_complete");
+	self waittill_any("fake_death", "death", "player_downed", "weapon_change_complete", "perk_abort_drinking");
 	self do_perk_bottle_drink_end(perk, gun);
 }
 
@@ -883,6 +889,27 @@ get_perk_from_speciality(specialty)
 			return perks[i];
 	}
 	return undefined;
+}
+
+drink_and_give_perk(perk, bought)
+{
+	self endon("disconnect");
+	level endon("end_game");
+	self endon("perk_abort_drinking");
+
+	gun = self do_perk_bottle_drink_start(perk);
+	result = self waittill_any_return("fake_death", "death", "player_downed", "weapon_change_complete", "perk_abort_drinking");
+
+	if(result == "weapon_change_complete")
+		self thread wait_give_perk(perk, bought);
+
+	self do_perk_bottle_drink_end(perk, gun);
+
+	if(self maps\_laststand::player_is_in_laststand() || is_true(self.intermission))
+		return;
+
+	self notify("burp");
+	self.perk_purchased = undefined;
 }
 
 give_perk(perk, bought)

@@ -13,6 +13,19 @@ has_perk(perk)
 	return IsInArray(self._obtained_perks, perk);
 }
 
+perk_abort_drinking(post_delay)
+{
+	if(isdefined(self.is_drinking) && self is_drinking())
+	{
+		self notify("perk_abort_drinking");
+		self decrement_is_drinking();
+		self enable_player_move_states();
+
+		if(isdefined(post_delay) && post_delay > 0)
+			wait post_delay;
+	}
+}
+
 get_player_perk_purchase_limit()
 {
 	perk_limit = level.zombie_vars["zombie_perk_limit"];
@@ -322,7 +335,7 @@ IsInArray(array, value)
 	return is_in_array(array, value);
 }
 
-GetNodesInRadiusSorted(origin, max_radius, min_radius, max_height/*, node_type, max_nodes*/)
+GetNodesInRadiusSorted(origin, max_radius, min_radius, max_height, node_type/*, max_nodes*/)
 {
 	nodes = GetAllNodes();
 	valid_nodes = [];

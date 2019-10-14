@@ -13,11 +13,7 @@ spawn_player_clone(player, origin, forceWeapon, forceModel)
 		model = player.model;
 
 	clone = spawn_model(model, origin, player.angles);
-
-	if(isdefined(forceWeapon) && forceWeapon != "none")
-		clone maps\apex\_zm_weapons::attach_weapon_model(forceWeapon, undefined, undefined, player);
-	else
-		clone maps\apex\_zm_weapons::attach_weapon_model(player GetCurrentWeapon(), undefined, undefined, player);
+	clone clone_give_weapon(forceWeapon, player);
 
 	if(isdefined(player.headModel))
 	{
@@ -33,6 +29,25 @@ spawn_player_clone(player, origin, forceWeapon, forceModel)
 
 	clone thread ballistic_knife_revive();
 	return clone;
+}
+
+clone_give_weapon(weapon, player)
+{
+	if(!isdefined(weapon) || weapon == "" || weapon == "none")
+		weapon = player GetCurrentWeapon();
+	if(!isdefined(weapon) || weapon == "" || weapon == "none")
+		return;
+
+	if(isdefined(self.weapon))
+	{
+		if(weapon == self.weapon)
+			return;
+
+		self maps\apex\_zm_weapons::detach_weapon_model(self.weapon, "tag_weapon_right", "tag_weapon_left", player);
+	}
+
+	self.weapon = weapon;
+	self maps\apex\_zm_weapons::attach_weapon_model(weapon, "tag_weapon_right", "tag_weapon_left", player);
 }
 
 ballistic_knife_revive()

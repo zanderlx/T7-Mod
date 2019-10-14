@@ -314,6 +314,56 @@ xmodel,ch_tombstone1
 xmodel,zombie_vending_tombstone
 xmodel,zombie_vending_tombstone_on
 
+// Whos Who
+rawfile,clientscripts\apex\perks\_zm_perk_chugabud.csc
+rawfile,maps\apex\perks\_zm_perk_chugabud.gsc
+material,minimap_icon_chugabud
+material,mtl_zombie_perk_bottle_whoswho
+xmodel,p6_zm_vending_chugabud
+xmodel,p6_zm_vending_chugabud_on
+rawfile,vision\_xS78_whoswho.vision
+// fx,apex\weapon\quantum_bomb\fx_player_position_effect
+// fx,apex\weapon\quantum_bomb\fx_player_position_effect
+
+// Electric Cherry
+rawfile,clientscripts\apex\perks\_zm_perk_electric_cherry.csc
+rawfile,maps\apex\perks\_zm_perk_electric_cherry.gsc
+material,minimap_icon_electric_cherry
+material,mtl_zombie_perk_bottle_cherry
+xmodel,p6_zm_vending_electric_cherry_off
+xmodel,p6_zm_vending_electric_cherry_on
+// fx,sanchez\electric_cherry\cherry_shock_death
+// fx,sanchez\electric_cherry\cherry_shock_small
+// fx,sanchez\electric_cherry\cherry_shock_medium
+// fx,sanchez\electric_cherry\cherry_shock_large
+
+// Vulture Aid
+rawfile,clientscripts\apex\perks\_zm_perk_vulture_aid.csc
+rawfile,maps\apex\perks\_zm_perk_vulture_aid.gsc
+material,specialty_vulture_zombies
+material,mtl_zombie_perk_bottle_vulture
+xmodel,p6_zm_vending_vultureaid
+xmodel,p6_zm_vending_vultureaid_on
+xmodel,p6_zm_perk_vulture_ammo
+xmodel,p6_zm_perk_vulture_points
+
+// Widows Wine
+rawfile,clientscripts\apex\perks\_zm_perk_widows_wine.csc
+rawfile,maps\apex\perks\_zm_perk_widows_wine.gsc
+material,specialty_widows_wine_zombies
+material,mtl_zombie_perk_bottle_wido
+xmodel,p7_zm_power_up_widows_wine
+xmodel,p7_zm_vending_widows_wine
+xmodel,p7_zm_vending_widows_wine_on
+
+// Der Wonderfizz
+material,mtl_zombie_perk_bottle_bear
+
+//============================================================================================
+// Overriden Zommon Assets
+//============================================================================================
+rawfile,maps\_laststand.gsc
+
 //============================================================================================
 // Overriden Zombiemode Assets
 //============================================================================================

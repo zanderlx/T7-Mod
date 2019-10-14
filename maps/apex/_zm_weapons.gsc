@@ -1118,7 +1118,7 @@ show_weapon_buy()
 //============================================================================================
 // Weapon Loadout
 //============================================================================================
-crate_loadout(weapons)
+create_loadout(weapons)
 {
 	loadout = SpawnStruct();
 	loadout.weapons = [];
@@ -1147,7 +1147,7 @@ player_get_loadout()
 	{
 		if(maps\apex\_zm_powerups::is_powerup_weapon(weapons[i]))
 			continue;
-		loadout.weapons[loadout.weapons.size] = weapons[i];
+		loadout.weapons[loadout.weapons.size] = self get_player_weapondata(weapons[i]);
 	}
 	return loadout;
 }

@@ -93,12 +93,7 @@ PlayerLastStand( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 		return;
 	}
 
-	//CODER_MOD: TOMMYK 06/26/2008 - For coop scoreboards
-	self.downs++;
-	//stat tracking
-	self.stats["downs"] = self.downs;
-	dvarName = "player" + self GetEntityNumber() + "downs";
-	setdvar( dvarName, self.downs );
+	self maps\apex\_utility::increment_downed_stat();
 
 	//PI CHANGE: player shouldn't be able to jump while in last stand mode (only was a problem in water) - specifically disallow this
 	self AllowJump(false);
@@ -514,7 +509,8 @@ revive_trigger_think()
 			reviver revive_give_back_weapons( gun );
 
 			//PI CHANGE: player couldn't jump - allow this again now that they are revived
-			self AllowJump(true);
+			if(IsPlayer(self))
+				self AllowJump(true);
 			//END PI CHANGE
 
 			if ( revive_success )
@@ -666,7 +662,8 @@ revive_do_revive( playerBeingRevived, reviverGun )
 
 	playerBeingRevived.revivetrigger setHintString( "" );
 
-	playerBeingRevived startrevive( self );
+	if(IsPlayer(playerBeingRevived))
+		playerBeingRevived startrevive( self );
 
 	if( !isdefined(self.reviveProgressBar) )
 	{
@@ -740,7 +737,8 @@ revive_do_revive( playerBeingRevived, reviverGun )
 	}
 	else if( !revived )
 	{
-		playerBeingRevived stoprevive( self );
+		if(IsPlayer(playerBeingRevived))
+			playerBeingRevived stoprevive( self );
 	}
 
 	//CODER_MOD: TOMMYK 07/13/2008
@@ -832,6 +830,12 @@ remote_revive( reviver )
 
 revive_success( reviver )
 {
+	if(!IsPlayer(self))
+	{
+		self notify("player_revived", reviver);
+		return;
+	}
+
 	self notify ( "player_revived", reviver );
 	self reviveplayer();
 

@@ -550,18 +550,25 @@ theater_include_perks()
 	maps\apex\perks\_zm_perk_deadshot::include_perk_for_level();
 	maps\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
 
-	// maps\apex\perks\_zm_perk_tombstone::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_chugabud::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
-	// maps\apex\perks\_zm_perk_vulture::include_perk_for_level();
+	maps\apex\perks\_zm_perk_tombstone::include_perk_for_level();
+	maps\apex\perks\_zm_perk_chugabud::include_perk_for_level();
+	maps\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
+	maps\apex\perks\_zm_perk_vulture_aid::include_perk_for_level();
 
-	// maps\apex\perks\_zm_perk_widows_wine::include_perk_for_level();
+	maps\apex\perks\_zm_perk_widows_wine::include_perk_for_level();
 
 	place_theater_perk_spawn_structs();
 }
 
 place_theater_perk_spawn_structs()
 {
+	// TODO: Remove later
+	// These perks are here for testing
+	// Wont be on kino on release
+	maps\apex\_zm_perks::generate_perk_spawn_struct("tombstone", (0, 0, 0), (0, 0, 0));
+	maps\apex\_zm_perks::generate_perk_spawn_struct("chugabud", (0, 128, 0), (0, 0, 0));
+	maps\apex\_zm_perks::generate_perk_spawn_struct("widows", (0, 256, 0), (0, 0, 0));
+
 	maps\apex\_zm_perks::generate_perk_spawn_struct("divetonuke", (-1130.9, 1261.31, -15.875), (0, 0, 0)); // xSanchez78 - Kino Mod Divetonuk Location
 	maps\apex\_zm_perks::generate_perk_spawn_struct("marathon", (823.653, 1020.54, -15.875), (0, 0, 0)); // xSanchez78 - Kino Mod Marathon Location
 	maps\apex\_zm_perks::generate_perk_spawn_struct("deadshot", (630.073, 1239.64, -15.875), (0, 90, 0)); // xSanchez78 - Kino Mod Deadshot Location

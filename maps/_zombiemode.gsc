@@ -4523,6 +4523,17 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 		level waittill( "forever" );
 	}
 
+	if(self maps\apex\_utility::has_perk("chugabud"))
+	{
+		self.lives--;
+
+		if(isdefined(level.chugabud_laststand))
+		{
+			maps\apex\_utility::run_function(self, level.chugabud_laststand);
+			return 0;
+		}
+	}
+
 	players = get_players();
 	count = 0;
 	for( i = 0; i < players.size; i++ )
