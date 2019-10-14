@@ -68,6 +68,13 @@ Support for other maps will come once the base mod and all major function / scri
 		* Electric Cherry
 		* Widows Wine
 
+- Placeable Mine system
+	- Allows for easy regisration of custom placeable mines
+
+- Melee Weapons system
+	- Automaticly handles swapping melee weapons / ballistic knives based on what youve purchased.
+	- [Adds fallback weapons, that are given when you have no primary weapons.](https://streamable.com/iodg6)
+
 - Rewritten Pack-A-Punch
 	- Pack-A-Punch now uses state based xanims
 	- Pack-A-Punch now uses `PlayerTriggers`
