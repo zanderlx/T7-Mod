@@ -58,7 +58,7 @@ default_include_perks()
 	maps\apex\perks\_zm_perk_deadshot::include_perk_for_level();
 	maps\apex\perks\_zm_perk_additionalprimaryweapon::include_perk_for_level();
 
-	// maps\apex\perks\_zm_perk_tombstone::include_perk_for_level();
+	maps\apex\perks\_zm_perk_tombstone::include_perk_for_level();
 	// maps\apex\perks\_zm_perk_chugabud::include_perk_for_level();
 	// maps\apex\perks\_zm_perk_electric_cherry::include_perk_for_level();
 	// maps\apex\perks\_zm_perk_vulture::include_perk_for_level();

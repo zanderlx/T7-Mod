@@ -224,6 +224,18 @@ powerup_wobble()
 	self endon("powerup_cleanup");
 	self endon("death");
 
+	if(isdefined(level.powerup_wobble_func))
+	{
+		single_thread(self, level.powerup_wobble_func);
+		return;
+	}
+
+	if(isdefined(self.powerup_wobble_func))
+	{
+		single_thread(self, self.powerup_wobble_func);
+		return;
+	}
+
 	for(;;)
 	{
 		waittime = RandomFloatRange(2.5, 5);

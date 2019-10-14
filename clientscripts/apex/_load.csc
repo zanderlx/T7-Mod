@@ -7,8 +7,8 @@ main()
 
 	clientscripts\apex\_zm_weapons::init();
 	clientscripts\apex\_zm_magicbox::init();
+	clientscripts\apex\_zm_perks::init();
 	clientscripts\apex\_zm_powerups::init();
 	clientscripts\apex\_zm_power::init();
-	clientscripts\apex\_zm_perks::init();
 	clientscripts\apex\_zm_packapunch::init();
 }

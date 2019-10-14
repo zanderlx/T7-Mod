@@ -10,9 +10,9 @@ main()
 	level thread solo_game_init();
 	maps\apex\_zm_weapons::init();
 	maps\apex\_zm_magicbox::init();
+	maps\apex\_zm_perks::init();
 	maps\apex\_zm_powerups::init();
 	maps\apex\_zm_power::init();
-	maps\apex\_zm_perks::init();
 	maps\apex\_zm_packapunch::init();
 	level thread power_off_zones_init();
 	OnPlayerConnect_Callback(::onPlayerSpawned);
