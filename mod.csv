@@ -392,29 +392,87 @@ rawfile,maps\_laststand.gsc
 //============================================================================================
 // Overriden Zombiemode Assets
 //============================================================================================
+rawfile,clientscripts\_zombiemode_ai_director.csc
+rawfile,clientscripts\_zombiemode_ai_napalm.csc
+rawfile,clientscripts\_zombiemode_ai_sonic.csc
+rawfile,clientscripts\_zombiemode_deathcard.csc
+rawfile,clientscripts\_zombiemode_dissolve.csc
+rawfile,clientscripts\_zombiemode_equip_gasmask.csc
+rawfile,clientscripts\_zombiemode_equip_hacker.csc
+rawfile,clientscripts\_zombiemode_equipment.csc
+rawfile,clientscripts\_zombiemode_ffotd.csc
+rawfile,clientscripts\_zombiemode_spikemore.csc
+rawfile,clientscripts\_zombiemode_weap_black_hole_bomb.csc
 rawfile,clientscripts\_zombiemode_weap_freezegun.csc
+rawfile,clientscripts\_zombiemode_weap_humangun.csc
+rawfile,clientscripts\_zombiemode_weap_microwavegun.csc
+rawfile,clientscripts\_zombiemode_weap_quantum_bomb.csc
+rawfile,clientscripts\_zombiemode_weap_sniper_explosive.csc
 rawfile,clientscripts\_zombiemode_weap_tesla.csc
 rawfile,clientscripts\_zombiemode_weap_thundergun.csc
 rawfile,clientscripts\_zombiemode_weapons.csc
 rawfile,clientscripts\_zombiemode.csc
 
+rawfile,maps\_zombiemode_ai_ape.gsc
+rawfile,maps\_zombiemode_ai_astro.gsc
+rawfile,maps\_zombiemode_ai_director.gsc
 rawfile,maps\_zombiemode_ai_dogs.gsc
+rawfile,maps\_zombiemode_ai_faller.gsc
+rawfile,maps\_zombiemode_ai_monkey.gsc
+rawfile,maps\_zombiemode_ai_napalm.gsc
+rawfile,maps\_zombiemode_ai_quad.gsc
+rawfile,maps\_zombiemode_ai_sonic.gsc
+rawfile,maps\_zombiemode_ai_thief.gsc
 rawfile,maps\_zombiemode_audio.gsc
 rawfile,maps\_zombiemode_auto_turret.gsc
+rawfile,maps\_zombiemode_betty.gsc
 rawfile,maps\_zombiemode_bowie.gsc
 rawfile,maps\_zombiemode_blockers.gsc
 rawfile,maps\_zombiemode_claymore.gsc
+rawfile,maps\_zombiemode_deathcard.gsc
 rawfile,maps\_zombiemode_devgui.gsc
+rawfile,maps\_zombiemode_equip_gasmask.gsc
+rawfile,maps\_zombiemode_equip_hacker.gsc
+rawfile,maps\_zombiemode_equipment.gsc
+rawfile,maps\_zombiemode_ffotd.gsc
+rawfile,maps\_zombiemode_hackables_boards.gsc
+rawfile,maps\_zombiemode_hackables_box.gsc
+rawfile,maps\_zombiemode_hackables_doors.gsc
+rawfile,maps\_zombiemode_hackables_packapunch.gsc
+rawfile,maps\_zombiemode_hackables_perks.gsc
+rawfile,maps\_zombiemode_hackables_powerups.gsc
+rawfile,maps\_zombiemode_hackables_wallbuys.gsc
+rawfile,maps\_zombiemode_jump_pad.gsc
+rawfile,maps\_zombiemode_money.gsc
+rawfile,maps\_zombiemode_net.gsc
 rawfile,maps\_zombiemode_perks.gsc
+rawfile,maps\_zombiemode_player_zipline.gsc
+rawfile,maps\_zombiemode_powercell.gsc
 rawfile,maps\_zombiemode_powerups.gsc
+rawfile,maps\_zombiemode_score.gsc
+rawfile,maps\_zombiemode_server_throttle.gsc
+rawfile,maps\_zombiemode_sidequests.gsc
 rawfile,maps\_zombiemode_spawner.gsc
+rawfile,maps\_zombiemode_spikemore.gsc
+rawfile,maps\_zombiemode_timer.gsc
 rawfile,maps\_zombiemode_traps.gsc
+rawfile,maps\_zombiemode_user.gsc
+rawfile,maps\_zombiemode_utility_raven.gsc
 rawfile,maps\_zombiemode_utility.gsc
+rawfile,maps\_zombiemode_weap_black_hole_bomb.gsc
 rawfile,maps\_zombiemode_weap_crossbow.gsc
 rawfile,maps\_zombiemode_weap_cymbal_monkey.gsc
 rawfile,maps\_zombiemode_weap_freezegun.gsc
+rawfile,maps\_zombiemode_weap_humangun.gsc
+rawfile,maps\_zombiemode_weap_microwavegun.gsc
+rawfile,maps\_zombiemode_weap_nesting_dolls.gsc
+rawfile,maps\_zombiemode_weap_quantum_bomb.gsc
+rawfile,maps\_zombiemode_weap_shrink_ray.gsc
+rawfile,maps\_zombiemode_weap_sickle.gsc
+rawfile,maps\_zombiemode_weap_sniper_explosive.gsc
 rawfile,maps\_zombiemode_weap_tesla.gsc
 rawfile,maps\_zombiemode_weap_thundergun.gsc
+rawfile,maps\_zombiemode_weapon_box.gsc
 rawfile,maps\_zombiemode_weapons.gsc
 rawfile,maps\_zombiemode.gsc
 
@@ -435,8 +493,55 @@ rawfile,animtrees\zombie_theater.atr
 xanim,o_zombie_theatre_curtain_close
 
 //============================================================================================
-// Not Needed But required as game crashes without them
+// Custom / Overriden zombie_pentagon Assets
 //============================================================================================
-// Mainmenu dies
-rawfile,clientscripts\_zombiemode_dissolve.csc
-rawfile,clientscripts\_zombiemode_ffotd.csc
+rawfile,clientscripts\zombie_pentagon.csc
+rawfile,maps\zombie_pentagon.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_cosmodrome Assets
+//============================================================================================
+rawfile,clientscripts\zombie_cosmodrome.csc
+rawfile,maps\zombie_cosmodrome.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_coast Assets
+//============================================================================================
+rawfile,clientscripts\zombie_coast.csc
+rawfile,maps\zombie_coast.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_temple Assets
+//============================================================================================
+rawfile,clientscripts\zombie_temple.csc
+rawfile,maps\zombie_temple.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_moon Assets
+//============================================================================================
+rawfile,clientscripts\zombie_moon.csc
+rawfile,maps\zombie_moon.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_cod5_prototype Assets
+//============================================================================================
+rawfile,clientscripts\zombie_cod5_prototype.csc
+rawfile,maps\zombie_cod5_prototype.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_cod5_asylum Assets
+//============================================================================================
+rawfile,clientscripts\zombie_cod5_asylum.csc
+rawfile,maps\zombie_cod5_asylum.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_cod5_sumpf Assets
+//============================================================================================
+rawfile,clientscripts\zombie_cod5_sumpf.csc
+rawfile,maps\zombie_cod5_sumpf.gsc
+
+//============================================================================================
+// Custom / Overriden zombie_cod5_factory Assets
+//============================================================================================
+rawfile,clientscripts\zombie_cod5_factory.csc
+rawfile,maps\zombie_cod5_factory.gsc
