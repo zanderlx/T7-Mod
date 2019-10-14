@@ -783,6 +783,8 @@ perk_hud_destroy_menu(perk)
 	if(!isdefined(self.perk_hud[perk]))
 		return;
 
+	self.perk_hud[perk] = undefined;
+
 	self SetClientDvars(
 		"ui_zm_perk_" + perk + "_x", 0,
 		"ui_zm_perk_" + perk + "_alpha", 0
