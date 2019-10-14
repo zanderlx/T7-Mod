@@ -18,6 +18,7 @@ include_perk_for_level()
 	init_widows_wine();
 
 	level.zombiemode_using_widows_perk = true;
+	level._ZOMBIE_ACTOR_WIDOWS_WINE_WRAPPING = 2;
 }
 
 give_widows()
