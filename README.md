@@ -99,6 +99,8 @@ Support for other maps will come once the base mod and all major function / scri
 - **_ApexModder_** - Mod Owner
 - **_xSanchez78_**
 	- Ported **Black Ops 3** models and anims to **Black Ops 1**
+	- Created FX for various perks from scratch
+	- Help with soundaliases
 	- **Huge** scripting help
 		- VisionSet System
 		- PlayerTrigger System
@@ -106,3 +108,5 @@ Support for other maps will come once the base mod and all major function / scri
 - **_MotoLegacy_** - HD Black Ops 1 styled Perk & Powerup shaders
 - **_Scobalula_** - For developing and releasing various of his tools (**Greyhound**, **HydraX**)
 - **_Tom BMX_** - For developing and releasing **FF Extractor**
+- **_DTZxPorter_** - For developing and release **BassDrop**
+	- Thanks to **_Papa Pop_** in the **LinkerMod** discord server. For helping fix issues with sounds.
