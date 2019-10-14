@@ -495,7 +495,9 @@ xanim,o_zombie_theatre_curtain_close
 //============================================================================================
 // Custom / Overriden zombie_pentagon Assets
 //============================================================================================
+rawfile,clientscripts\zombie_pentagon_fx.csc
 rawfile,clientscripts\zombie_pentagon.csc
+
 rawfile,maps\zombie_pentagon.gsc
 
 //============================================================================================
