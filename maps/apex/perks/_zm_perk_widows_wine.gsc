@@ -11,6 +11,8 @@ include_perk_for_level()
 	maps\apex\_zm_perks::register_perk_threads("widows", ::give_widows, ::take_widows);
 	maps\apex\_zm_perks::register_perk_sounds("widows", "mus_perks_widows_sting", "mus_perks_widows_jingle", undefined);
 
+	maps\apex\powerups\_zm_powerup_ww_grenade::include_powerup_for_level();
+
 	level._effect["widows_wine_wrap" ] = LoadFX("sanchez/widows_wine/fx_widows_wine_zombie");
 	level._effect["widows_wine_exp_1p" ] = LoadFX("sanchez/widows_wine/fx_widows_wine_explode");
 	init_widows_wine();
