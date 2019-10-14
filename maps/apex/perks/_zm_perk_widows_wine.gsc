@@ -153,6 +153,8 @@ widows_wine_zombie_damage_response(str_mod, str_hit_location, v_hit_origin, e_pl
 
 widows_wine_damage_callback(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
+	if(!self has_perk("widows"))
+		return undefined;
 	if(sWeapon == level.w_widows_wine_grenade)
 		return 0;
 
