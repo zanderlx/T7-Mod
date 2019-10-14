@@ -19,6 +19,37 @@ init_apex_utility()
 }
 
 //============================================================================================
+// Delay Thread / Notify - xSanchez78
+//============================================================================================
+_delay_notify_proc(str_notify, n_delay, str_endon)
+{
+	self endon("death");
+
+	if(isdefined(str_endon))
+		self endon(str_endon);
+
+	if(n_delay > 0)
+		wait n_delay;
+
+	self notify(str_notify);
+}
+
+_delay_thread_proc(time_or_notify, str_endon, func, arg1, arg2, arg3, arg4, arg5, arg6)
+{
+	self endon("death");
+
+	if(isdefined(str_endon))
+		self endon(str_endon);
+
+	if(IsString(time_or_notify))
+		self waittill(time_or_notify);
+	else
+		wait time_or_notify;
+
+	single_thread(self, func, arg1, arg2, arg3, arg4, arg5, arg6);
+}
+
+//============================================================================================
 // PlayerTrigger - xSanchez78
 //============================================================================================
 playertrigger_init()

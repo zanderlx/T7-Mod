@@ -346,6 +346,27 @@ xmodel,p6_zm_vending_vultureaid
 xmodel,p6_zm_vending_vultureaid_on
 xmodel,p6_zm_perk_vulture_ammo
 xmodel,p6_zm_perk_vulture_points
+// fx,sanchez\vulture_aid\vulture_smell_idle
+// fx,sanchez\vulture_aid\vulture_smell_trail
+// fx,sanchez\vulture_aid\vulture_powerup_on
+// fx,misc\fx_zombie_powerup_grab
+// fx,sanchez\vulture_aid\vulture_wallgun_glow
+// fx,sanchez\vulture_aid\vulture_dtap_glow
+// fx,sanchez\vulture_aid\vulture_jugg_glow
+// fx,sanchez\vulture_aid\vulture_revive_glow
+// fx,sanchez\vulture_aid\vulture_speed_glow
+// fx,sanchez\vulture_aid\vulture_stamin_glow
+// fx,sanchez\vulture_aid\vulture_mule_glow
+// fx,sanchez\vulture_aid\vulture_pap_glow
+// fx,sanchez\vulture_aid\vulture_aid_glow
+// fx,sanchez\vulture_aid\vulture_cherry_glow
+// fx,sanchez\vulture_aid\vulture_fizz_glow
+// fx,sanchez\vulture_aid\vulture_phd_glow
+// fx,sanchez\vulture_aid\vulture_whoswho_glow
+// fx,sanchez\vulture_aid\vulture_widows_glow
+// fx,sanchez\vulture_aid\vulture_box_glow
+// fx,sanchez\vulture_aid\vulture_powerup_glow
+// fx,misc\fx_zombie_eye_vulture
 
 // Widows Wine
 rawfile,clientscripts\apex\perks\_zm_perk_widows_wine.csc

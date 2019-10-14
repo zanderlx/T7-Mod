@@ -279,6 +279,30 @@ GetDebugDvarBool(dvar_name, default_value)
 }
 #/
 
+Pow(n, k)
+{
+	newnum = n;
+
+	for(i = 1; i < k; i++)
+	{
+		newnum *= n;
+	}
+
+	return newnum;
+
+	// inf loop
+	// if(n == 0)
+	// 	return 1;
+	// if(k == 1)
+	// 	return n;
+
+	// for(i = 0; i < (k - 1); k++)
+	// {
+	// 	n *= n;
+	// }
+	// return n;
+}
+
 PlaySoundToTeam(aliasname, teamname, ignoreplayer)
 {
 	players = GetPlayers();
@@ -363,6 +387,19 @@ GetNodesInRadiusSorted(origin, max_radius, min_radius, max_height, node_type/*, 
 GetAITeamArray(team)
 {
 	return GetAISpeciesArray(team, "all");
+}
+
+//============================================================================================
+// Delay Thread / Notify - xSanchez78
+//============================================================================================
+delay_notify(str_notify, n_delay, str_endon)
+{
+	self thread _delay_notify_proc(str_notify, n_delay, str_endon);
+}
+
+delay_thread(time_or_notify, str_endon, func, arg1, arg2, arg3, arg4, arg5, arg6)
+{
+	self thread _delay_thread_proc(time_or_notify, str_endon, func, arg1, arg2, arg3, arg4, arg5, arg6);
 }
 
 //============================================================================================
