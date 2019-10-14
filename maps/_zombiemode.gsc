@@ -4458,6 +4458,7 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 		    }
 		}
 	}
+	iDamage = self maps\apex\_zm_perks::process_player_perk_damage_override(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 	finalDamage = iDamage;
 
 	// claymores and freezegun shatters, like bouncing betties, harm no players

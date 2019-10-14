@@ -376,6 +376,8 @@ material,mtl_zombie_perk_bottle_wido
 xmodel,p7_zm_power_up_widows_wine
 xmodel,p7_zm_vending_widows_wine
 xmodel,p7_zm_vending_widows_wine_on
+// fx,sanchez\widows_wine\fx_widows_wine_zombie
+// fx,sanchez\widows_wine\fx_widows_wine_explode
 
 // Der Wonderfizz
 material,mtl_zombie_perk_bottle_bear

@@ -1042,6 +1042,34 @@ award_free_solo_revive()
 }
 
 //============================================================================================
+// Perk Damager Overrides
+//============================================================================================
+register_perk_damage_override_func(func_damage_override)
+{
+	if(!isdefined(level.perk_damage_override))
+		level.perk_damage_override = [];
+	if(!IsInArray(level.perk_damage_override, func_damage_override))
+		level.perk_damage_override[level.perk_damage_override.size] = func_damage_override;
+}
+
+process_player_perk_damage_override(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
+{
+	if(isdefined(level.perk_damage_override))
+	{
+		for(i = 0; i < level.perk_damage_override.size; i++)
+		{
+			// too many args for run_function
+			// n_damage = run_function(self, level.perk_damage_override[i], eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
+			n_damage = self [[level.perk_damage_override[i]]](eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
+
+			if(isdefined(n_damage))
+				iDamage = n_damage;
+		}
+	}
+	return iDamage;
+}
+
+//============================================================================================
 // Registry
 //============================================================================================
 is_perk_valid(perk)
