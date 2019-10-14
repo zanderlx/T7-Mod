@@ -15,6 +15,7 @@ rawfile,maps\apex\_zm_power.gsc
 rawfile,animtrees\zm_ally.atr
 menufile,ui\hud_test.menu
 localize,mod
+sound,mod
 
 //============================================================================================
 // Weapons

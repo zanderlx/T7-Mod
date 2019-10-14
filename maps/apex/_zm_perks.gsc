@@ -415,7 +415,7 @@ vending_trigger_give_perk(stub)
 		return;
 	}
 
-	PlaySoundAtPosition("evt_bottle_dispsense", stub.origin);
+	PlaySoundAtPosition("evt_bottle_dispense", stub.origin);
 	self maps\_zombiemode_score::minus_to_player_score(cost);
 	self.perk_purchased = perk;
 
