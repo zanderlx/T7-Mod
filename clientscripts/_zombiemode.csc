@@ -1,11 +1,8 @@
 #include clientscripts\_music;
 #include clientscripts\_utility;
-#include clientscripts\_zombiemode_dissolve;
 
 main()
 {
-	level thread clientscripts\_zombiemode_ffotd::main_start();
-
 	level.zombiemode = true;
 	level.swimmingFeature = false;
 
@@ -45,11 +42,7 @@ main()
 
 	OnPlayerConnect_Callback( ::on_player_connect );
 
-	clientscripts\_zombiemode_weap_freezegun::init();
-
 	level thread init_local_player_count();
-
-	level thread clientscripts\_zombiemode_ffotd::main_end();
 }
 
 init_local_player_count()

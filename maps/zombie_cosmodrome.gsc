@@ -2,13 +2,13 @@
 #include common_scripts\utility;
 #include maps\_utility;
 #include maps\_zombiemode_utility;
-#include maps\_zombiemode_zone_manager; 
+#include maps\_zombiemode_zone_manager;
 //#include maps\_zombiemode_protips;
 
 main()
 {
 	level thread maps\zombie_cosmodrome_ffotd::main_start();
-	
+
 	// viewmodel arms for the level
 	PreCacheModel( "viewmodel_usa_pow_arms" ); // Dempsey
 	PreCacheModel( "viewmodel_rus_prisoner_arms" ); // Nikolai
@@ -17,11 +17,11 @@ main()
 
 
 	// Light model cacheing for Gantry
-	
+
 	PreCacheModel("p_rus_rb_lab_warning_light_01");
   PreCacheModel("p_rus_rb_lab_warning_light_01_off");
   PreCacheModel("p_rus_rb_lab_light_core_on");
-  PreCacheModel("p_rus_rb_lab_light_core_off");            
+  PreCacheModel("p_rus_rb_lab_light_core_off");
 
 
 	//needs to be first for create fx
@@ -60,7 +60,7 @@ main()
 	level.random_pandora_box_start = false;
 
 	level thread maps\_callbacksetup::SetupCallbacks();
-	
+
 	level.quad_move_speed = 35;
 
 	level.dog_spawn_func = maps\_zombiemode_ai_dogs::dog_spawn_factory_logic;
@@ -71,12 +71,7 @@ main()
 
 	level.door_dialog_function = maps\_zombiemode::play_door_dialog;
 
-	include_weapons();
-	include_powerups();
-
 	level.use_zombie_heroes = true;
-	level.zombiemode_using_marathon_perk = true;
-	level.zombiemode_using_divetonuke_perk = true;
 
 	// Jluyties(02/22/10) added new lunar landing for intro of level.
 	// MMaestas - this needs to be defined about _zombiemode::main
@@ -85,24 +80,22 @@ main()
 	level.zombiemode_precache_player_model_override = ::precache_player_model_override;
 	level.zombiemode_give_player_model_override = ::give_player_model_override;
 	level.zombiemode_player_set_viewmodel_override = ::player_set_viewmodel_override;
-	level.register_offhand_weapons_for_level_defaults_override = ::cosmodrome_offhand_weapon_overrride;
-	level.zombiemode_offhand_weapon_give_override = ::offhand_weapon_give_override;
 
 	level.monkey_prespawn = maps\zombie_cosmodrome_ai_monkey::monkey_cosmodrome_prespawn;
 	level.monkey_zombie_failsafe = maps\zombie_cosmodrome_ai_monkey::monkey_cosmodrome_failsafe;
 	level.max_perks = 5;
 	level.max_solo_lives = 3;
-	
+
 	// WW (01/14/11) - Start introscreen client notify
 	level thread cosmodrome_fade_in_notify();
 
 	// DO ACTUAL ZOMBIEMODE INIT
 	maps\_zombiemode::main();
-	
+
 	maps\_zombiemode_weap_sickle::init();
 	maps\_zombiemode_weap_black_hole_bomb::init();
 	maps\_zombiemode_weap_nesting_dolls::init();
-	
+
 	// Turn off generic battlechatter - Steve G
 	battlechatter_off("allies");
 	battlechatter_off("axis");
@@ -118,7 +111,7 @@ main()
 	level.zone_manager_init_func = ::cosmodrome_zone_init;
 	init_zones[0] = "centrifuge_zone";
 	init_zones[1] = "centrifuge_zone2";
-	
+
 	level thread maps\_zombiemode_zone_manager::manage_zones( init_zones );
 
 	level thread electric_switch();
@@ -129,7 +122,7 @@ main()
 	level thread centrifuge_jumpup_fix();
 	level thread centrifuge_jumpdown_fix();
 	level thread centrifuge_init();
-	
+
 	// -- WWILLIAMS: CONTROLS THE PACK A PUNCH RISING SITUATION
 	level thread maps\zombie_cosmodrome_pack_a_punch::pack_a_punch_main();
 
@@ -140,7 +133,7 @@ main()
 	// Set the CosmoDrome Vision Set
 	level.zombie_visionset = "zombie_cosmodrome_nopower";
 	level thread fx_for_power_path();
-	
+
 	level thread spawn_life_brushes();
 	level thread spawn_kill_brushes();
 
@@ -213,7 +206,7 @@ setup_water_physics()
   {
 		players[i] SetClientDvars("phys_buoyancy",1);
 	}
-}	
+}
 
 //------------------------------------------------------------------------------
 fx_for_power_path()
@@ -223,27 +216,27 @@ fx_for_power_path()
 	// trying out an fx at the end of the cable
 	while( 1 )
 	{
-		PlayFX(level._effect["dangling_wire"], ( -1066, 1024, -72), (0, 0, 1)  ); // first 
-		wait (0.3 + RandomFloat(0.5));	
-		PlayFX(level._effect["dangling_wire"], ( -900, 1446, -96), (0, 0, 1)  ); // second, perfect 
-		wait (0.3 + RandomFloat(0.5));	
-		PlayFX(level._effect["dangling_wire"], ( -895, 1442, -52), (0, 0, 1)  ); // second, perfect 
-		wait (0.3 + RandomFloat(0.5));	
+		PlayFX(level._effect["dangling_wire"], ( -1066, 1024, -72), (0, 0, 1)  ); // first
+		wait (0.3 + RandomFloat(0.5));
+		PlayFX(level._effect["dangling_wire"], ( -900, 1446, -96), (0, 0, 1)  ); // second, perfect
+		wait (0.3 + RandomFloat(0.5));
+		PlayFX(level._effect["dangling_wire"], ( -895, 1442, -52), (0, 0, 1)  ); // second, perfect
+		wait (0.3 + RandomFloat(0.5));
 		//wait (0.3 + RandomFloat(1.5));
 	}
-	
+
 }
 //------------------------------------------------------------------------------
 centrifuge_jumpup_fix()
 {
 	jumpblocker = GetEnt("centrifuge_jumpup", "targetname");
-	
+
 	if(!IsDefined(jumpblocker))
 	return;
-	
+
 	jump_pos = jumpblocker.origin;
 	centrifuge_occupied = false;
-	
+
 	while(true)
 	{
 		if(level.zones["centrifuge_zone"].is_occupied && centrifuge_occupied == false)
@@ -257,17 +250,17 @@ centrifuge_jumpup_fix()
 			jumpblocker MoveTo(jump_pos, 0.1);
 			jumpblocker ConnectPaths();
 			centrifuge_occupied = false;
-		}		
+		}
 		wait(1);
-	}	
-}	
+	}
+}
 centrifuge_jumpdown_fix()
 {
 	jumpblocker = GetEnt("centrifuge_jumpdown", "targetname");
-	
+
 	if(!IsDefined(jumpblocker))
 	return;
-	
+
 	jump_pos = jumpblocker.origin;
 	centrifuge2_occupied = true;
 
@@ -284,147 +277,10 @@ centrifuge_jumpdown_fix()
 			jumpblocker MoveTo(jump_pos, 0.1);
 			jumpblocker ConnectPaths();
 			centrifuge2_occupied = false;
-		}		
+		}
 		wait(1);
-	}	
-}	
-//*****************************************************************************
-// WEAPON FUNCTIONS
-//
-// Include the weapons that are only in your level so that the cost/hints are accurate
-// Also adds these weapons to the random treasure chest.
-// Copy all include_weapon lines over to the level.csc file too - removing the weighting funcs...
-//*****************************************************************************
-
-include_weapons()
-{
-	include_weapon( "frag_grenade_zm", false, true );
-	include_weapon( "claymore_zm", false, true );
-
-	//	Weapons - Pistols
-	include_weapon( "m1911_zm", false );						// colt
-	include_weapon( "m1911_upgraded_zm", false );
-	include_weapon( "python_zm" );						// 357
-	include_weapon( "python_upgraded_zm", false );
-  	include_weapon( "cz75_zm" );
-  	include_weapon( "cz75_upgraded_zm", false );
-
-	//	Weapons - Semi-Auto Rifles
-	include_weapon( "m14_zm", false, true );							// gewehr43
-	include_weapon( "m14_upgraded_zm", false );
-
-	//	Weapons - Burst Rifles
-	include_weapon( "m16_zm", false, true );						
-	include_weapon( "m16_gl_upgraded_zm", false );
-	include_weapon( "g11_lps_zm" );
-	include_weapon( "g11_lps_upgraded_zm", false );
-	include_weapon( "famas_zm" );
-	include_weapon( "famas_upgraded_zm", false );
-
-	//	Weapons - SMGs
-	include_weapon( "ak74u_zm", false, true );						// thompson, mp40, bar
-	include_weapon( "ak74u_upgraded_zm", false );
-	include_weapon( "mp5k_zm", false, true );
-	include_weapon( "mp5k_upgraded_zm", false );
-	include_weapon( "mpl_zm", false, true );
-	include_weapon( "mpl_upgraded_zm", false );
-	include_weapon( "pm63_zm", false, true );
-	include_weapon( "pm63_upgraded_zm", false );
-	include_weapon( "spectre_zm" );
-	include_weapon( "spectre_upgraded_zm", false );
-
-	//	Weapons - Dual Wield
-  	include_weapon( "cz75dw_zm" );
-  	include_weapon( "cz75dw_upgraded_zm", false );
-
-	//	Weapons - Shotguns
-	include_weapon( "ithaca_zm", false, true );						// shotgun
-	include_weapon( "ithaca_upgraded_zm", false );
-	include_weapon( "rottweil72_zm", false, true );
-	include_weapon( "rottweil72_upgraded_zm", false );
-	include_weapon( "spas_zm" );						// 
-	include_weapon( "spas_upgraded_zm", false );
-	include_weapon( "hs10_zm" );
-	include_weapon( "hs10_upgraded_zm", false );
-
-	//	Weapons - Assault Rifles
-	include_weapon( "aug_acog_zm" );
-	include_weapon( "aug_acog_mk_upgraded_zm", false );
-	include_weapon( "galil_zm" );
-	include_weapon( "galil_upgraded_zm", false );
-	include_weapon( "commando_zm" );
-	include_weapon( "commando_upgraded_zm", false );
-	include_weapon( "fnfal_zm" );
-	include_weapon( "fnfal_upgraded_zm", false );
-
-	//	Weapons - Sniper Rifles
-	include_weapon( "dragunov_zm" );					// ptrs41
-	include_weapon( "dragunov_upgraded_zm", false );
-	include_weapon( "l96a1_zm" );
-	include_weapon( "l96a1_upgraded_zm", false );
-
-	//	Weapons - Machineguns
-	include_weapon( "rpk_zm" );							// mg42, 30 cal, ppsh
-	include_weapon( "rpk_upgraded_zm", false );
-	include_weapon( "hk21_zm" );
-	include_weapon( "hk21_upgraded_zm", false );
-
-	//	Weapons - Misc
-	include_weapon( "m72_law_zm" );
-	include_weapon( "m72_law_upgraded_zm", false );
-	include_weapon( "china_lake_zm" );
-	include_weapon( "china_lake_upgraded_zm", false );
-
-	//	Weapons - Special
-	include_weapon( "zombie_black_hole_bomb", true, false );
-	include_weapon( "zombie_nesting_dolls", true, false );
-	include_weapon( "ray_gun_zm" );
-	include_weapon( "ray_gun_upgraded_zm", false );
-	include_weapon( "thundergun_zm" );
-	include_weapon( "thundergun_upgraded_zm", false );
-	include_weapon( "crossbow_explosive_zm" );
-	include_weapon( "crossbow_explosive_upgraded_zm", false );
-
-	include_weapon( "knife_ballistic_zm", true );
-	include_weapon( "knife_ballistic_upgraded_zm", false );
-	include_weapon( "knife_ballistic_sickle_zm", false );
-	include_weapon( "knife_ballistic_sickle_upgraded_zm", false );
-	level._uses_retrievable_ballisitic_knives = true;
-
-	// limited weapons
-	maps\_zombiemode_weapons::add_limited_weapon( "m1911_zm", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "thundergun_zm", 1 );
-	maps\_zombiemode_weapons::add_limited_weapon( "crossbow_explosive_zm", 1 );
-	maps\_zombiemode_weapons::add_limited_weapon( "knife_ballistic_zm", 1 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_nesting_dolls", 1 );
-
-	precacheItem( "explosive_bolt_zm" );
-	precacheItem( "explosive_bolt_upgraded_zm" );
-	
-	// get the sickle into the collector achievement list
-	level.collector_achievement_weapons = array_add( level.collector_achievement_weapons, "sickle_knife_zm" );
+	}
 }
-
-//*****************************************************************************
-// POWERUP FUNCTIONS
-//*****************************************************************************
-
-include_powerups()
-{
-	include_powerup( "nuke" );
-	include_powerup( "insta_kill" );
-	include_powerup( "double_points" );
-	include_powerup( "full_ammo" );
-	include_powerup( "carpenter" );
-	include_powerup( "fire_sale" );
-	
-	// minigun
-	PreCacheItem( "minigun_zm" );
-	
-	include_powerup( "minigun" );
-	include_powerup( "free_perk" );
-}
-
 
 //
 //	ZOMBIEMODE OVERRIDES
@@ -446,9 +302,9 @@ magic_box_override()
 	chest disable_trigger();
 
 	// SAMANTHA IS BACK!
-	chest.chest_lid maps\_zombiemode_weapons::treasure_chest_lid_open();
-//	self.chest_user thread maps\_zombiemode_weapons::treasure_chest_move_vo();
-	chest thread maps\_zombiemode_weapons::treasure_chest_move();
+	chest.chest_lid maps\apex\_zm_weapons::treasure_chest_lid_open();
+//	self.chest_user thread maps\apex\_zm_weapons::treasure_chest_move_vo();
+	chest thread maps\apex\_zm_weapons::treasure_chest_move();
 
 	wait 0.5;	// we need a wait here before this notify
 	level notify("weapon_fly_away_start");
@@ -468,7 +324,7 @@ magic_box_override()
 cosmodrome_zone_init()
 {
 	// Set flags here for your starting zone if there are any zones that need to be connected from the beginning.
-	// For instance, if your 
+	// For instance, if your
 	flag_init( "centrifuge" );
 	flag_set( "centrifuge" );
 
@@ -493,11 +349,11 @@ cosmodrome_zone_init()
 
 	// Drop-off connection - top of stairs in north path (one way drop)
 	add_adjacent_zone( "north_path_zone",  "roof_connector_zone",			"roof_connector_dropoff" );
-	
-	// open blast doors. 
+
+	// open blast doors.
 	add_adjacent_zone( "north_path_zone",		"under_rocket_zone",		"rocket_group" );
 	add_adjacent_zone( "control_room_zone",		"under_rocket_zone",		"rocket_group" );
-	
+
 	//############################################
 	//	Now set the connections that need to be made based on doors being open
 	//	Use add_zone_flags to connect any zones defined above.
@@ -578,28 +434,28 @@ cosmodrome_zone_init()
 //{
 //// 	pack_trigger = GetEnt( "zombie_vending_upgrade", "targetname" );
 //// 	pack_trigger trigger_off();
-//// 
+////
 //// 	// hide the batteries
 //// 	for ( i = 1; i <= 4; i++ )
 //// 	{
 //// 		battery = GetEnt( "pack_battery_0" + i, "targetname" );
 //// 		battery hide();
 //// 	}
-//// 
+////
 //// 	level.packBattery = 0;
-//// 
+////
 //// 	//MM - Pack on power on
 //// 	flag_wait( "power_on" );
-//// 
+////
 //// 	level notify( "powercell_done" );
 //// 	level notify( "Pack_A_Punch_on" );
-//// 
+////
 //// 	door_r = GetEnt( "pack_door_r", "targetname" );
 //// 	door_l = GetEnt( "pack_door_l", "targetname" );
-//// 
+////
 //// 	door_r RotateYaw( 160, 5, 0 );
 //// 	door_l RotateYaw( -160, 5, 0 );
-//// 
+////
 //// 	pack_trigger = GetEnt( "zombie_vending_upgrade", "targetname" );
 //// 	pack_trigger trigger_on();
 //}
@@ -624,13 +480,13 @@ powercell_dropoff()
 // 	{
 // 		level notify( "powercell_done" );
 // 		level notify( "Pack_A_Punch_on" );
-// 
+//
 // 		door_r = GetEnt( "pack_door_r", "targetname" );
 // 		door_l = GetEnt( "pack_door_l", "targetname" );
-// 
+//
 // 		door_r RotateYaw( 160, 5, 0 );
 // 		door_l RotateYaw( -160, 5, 0 );
-// 
+//
 // 		pack_trigger = GetEnt( "zombie_vending_upgrade", "targetname" );
 // 		pack_trigger trigger_on();
 // 	}
@@ -651,10 +507,10 @@ electric_switch()
 
 	trig waittill("trigger",user);
 
-	trig delete();	
+	trig delete();
 	flag_set( "power_on" );
 	Objective_State(8,"done");
-	
+
 	playsoundatposition( "zmb_poweron_front", (0,0,0) );
 }
 
@@ -665,7 +521,7 @@ electric_switch()
 //
 wait_for_power()
 {
-	master_switch = getent("elec_switch","targetname");	
+	master_switch = getent("elec_switch","targetname");
 	master_switch notsolid();
 
 	flag_wait( "power_on" );
@@ -687,21 +543,21 @@ wait_for_power()
 	level notify("marathon_on");
 	level notify("Pack_A_Punch_on" );
 
-//	clientnotify( "power_on" );	
+//	clientnotify( "power_on" );
 
 	clientnotify("ZPO");	 // Zombie Power On.
-	
+
 	//FX associated with turning on the power
-	exploder(5401);	
+	exploder(5401);
 
 
 	// Swap to the "power on" vision set
 	// level.zombie_visionset = "zombie_cosmodrome";
 	// VisionSetNaked( level.zombie_visionset, 2 );
-	
+
 	master_switch waittill("rotatedone");
 	playfx(level._effect["switch_sparks"] ,getstruct("elec_switch_fx","targetname").origin);
-	
+
 	//Sound - Shawn J  - adding temp sound to looping sparks & turning on power sources
 	//master_switch playloopsound("amb_sparks_loop");
 	master_switch playsound("zmb_turn_on");
@@ -714,7 +570,7 @@ custom_pandora_show_func( anchor, anchorTarget, pieces )
 {
 	level.pandora_light.angles = (-90, anchorTarget.angles[1] + 180, 0);
 	level.pandora_light moveto(anchorTarget.origin, 0.05);
-	wait(1);	
+	wait(1);
 	playfx( level._effect["lght_marker_flare"],level.pandora_light.origin );
 }
 
@@ -742,7 +598,7 @@ centrifuge_init()
 		//centrifuge link_centrifuge_pieces(); //currently no attachments
 		centrifuge centrifuge_rotate();
 	}
-}	
+}
 
 link_centrifuge_pieces()
 {
@@ -763,14 +619,14 @@ centrifuge_rotate()
 	{
 		self rotateyaw( 360, 20 );
 		self waittill("rotatedone");
-	}	
+	}
 }
 
 cosmodrome_precache()
 {
 	PreCacheModel("zombie_zapper_cagelight_red");
 	precachemodel("zombie_zapper_cagelight_green");
-	
+
 	// ww: therse pieces are used for the magic box televisions. the models are changed in csc
 	PreCacheModel( "p_zom_monitor_csm" );
 	PreCacheModel( "p_zom_monitor_csm_screen_catwalk" );
@@ -786,15 +642,15 @@ cosmodrome_precache()
 	PreCacheModel( "p_zom_monitor_csm_screen_warehouse" );
 	PreCacheModel( "p_zom_monitor_csm_screen_storage" );
 	PreCacheModel( "p_zom_monitor_csm_screen_topack" );
-	
+
 	//DCS; screens for rocket launch
 	PreCacheModel("p_zom_key_console_01");
 	PreCacheModel("p_zom_rocket_sign_02");
 	PreCacheModel("p_zom_rocket_sign_03");
 	PreCacheModel("p_zom_rocket_sign_04");
-	
+
 	PreCacheRumble( "damage_heavy" ); // rumble for centrifuge
-}	
+}
 
 precache_player_model_override()
 {
@@ -821,7 +677,7 @@ give_player_model_override( entity_num )
 			break;
 		case 3:
 			character\c_ger_richtofen_dlc2::main();// Richtofen
-			break;	
+			break;
 	}
 }
 
@@ -844,55 +700,9 @@ player_set_viewmodel_override( entity_num )
 		case 3:
 			// Richtofen
 			self SetViewModel( "viewmodel_usa_hazmat_arms" );
-			break;		
+			break;
 	}
 }
-// -- Offhand weapon override for cosmodrome
-cosmodrome_offhand_weapon_overrride()
-{
-	register_lethal_grenade_for_level( "frag_grenade_zm" );
-	level.zombie_lethal_grenade_player_init = "frag_grenade_zm";
-
-	register_tactical_grenade_for_level( "zombie_black_hole_bomb" );
-	register_tactical_grenade_for_level( "zombie_nesting_dolls" );
-	level.zombie_tactical_grenade_player_init = undefined;
-
-	register_placeable_mine_for_level( "claymore_zm" );
-	level.zombie_placeable_mine_player_init = undefined;
-
-	register_melee_weapon_for_level( "knife_zm" );
-	register_melee_weapon_for_level( "sickle_knife_zm" );
-	level.zombie_melee_weapon_player_init = "knife_zm";
-}
-
-// -- gives the player a black hole bomb when it comes out of the box
-offhand_weapon_give_override( str_weapon )
-{
-	self endon( "death" );
-	
-	if( is_tactical_grenade( str_weapon ) && IsDefined( self get_player_tactical_grenade() ) && !self is_player_tactical_grenade( str_weapon ) )
-	{
-		self SetWeaponAmmoClip( self get_player_tactical_grenade(), 0 );
-		self TakeWeapon( self get_player_tactical_grenade() );
-	}
-	
-	if( str_weapon == "zombie_black_hole_bomb" )
-	{
-		self maps\_zombiemode_weap_black_hole_bomb::player_give_black_hole_bomb();
-		//self maps\_zombiemode_weapons::play_weapon_vo( str_weapon ); // ww: need to figure out how we will get the sound here
-		return true;
-	}
-	
-	if( str_weapon == "zombie_nesting_dolls" )
-	{
-		self maps\_zombiemode_weap_nesting_dolls::player_give_nesting_dolls();
-		//self maps\_zombiemode_weapons::play_weapon_vo( str_weapon ); // ww: need to figure out how we will get the sound here
-		return true;
-	}
-
-	return false;
-}
-
 
 init_sounds()
 {
@@ -909,9 +719,9 @@ cosmodrome_fade_in_notify()
 {
 	// wait for fade_in function to finish
 	level waittill("fade_in_complete");
-	
+
 	// notify client -- "Zombie Introscreen Done"
 	level ClientNotify( "ZID" );
-	
+
 	wait_network_frame();
 }

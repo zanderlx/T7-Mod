@@ -9,19 +9,19 @@ init()
 
 	init_ape_zombie_anims();
 	init_ape_powerup_drops();
-	
+
 	level._effect["ape_groundhit"] = loadfx("maps/zombie/fx_zombie_ape_grnd_hit");
 	level._effect["ape_spawn"] = loadfx("maps/zombie/fx_zombie_ape_spawn_dust");
 	level._effect["ape_impact"] = loadfx("maps/zombie/fx_zombie_flesh_hit_ape");
 	level._effect["ape_trail"] = loadfx("maps/zombie/fx_zombie_ape_spawn_trail");
-	
+
 	// Function that will be used to calculate the value of different spawners when choosing which to use when spawning new ape
 	// Functions that overload this, should return an int, with a higher value indicating a better spawner
 	if( !isDefined( level.ape_zombie_spawn_heuristic ) )
 	{
 		level.ape_zombie_spawn_heuristic = maps\_zombiemode_ai_ape::ape_zombie_default_spawn_heuristic;
 	}
-	
+
 	// Function that will be used to calculate the value of different idle nodes for apes in the "non-active" state
 	// Functions that overload this, should return an int, with a higher value indicating a better node
 	if( !isDefined( level.ape_zombie_pathfind_heuristic ) )
@@ -40,7 +40,7 @@ init()
 	}
 
 	precacheshellshock( "electrocution" );
-	
+
 	// Nodes that will be used as goals when an ape zombie is his "non-active" state.
 	level.ape_idle_nodes = GetNodeArray( "boss_idle", "script_noteworthy" );
 
@@ -119,11 +119,11 @@ init()
 	{
 		level.ape_tesla_damage = 1000;
 	}
-	
-	// If there are any apes flagged as preferential first spawners, spawn them. If there are too many, spawn the max 
+
+	// If there are any apes flagged as preferential first spawners, spawn them. If there are too many, spawn the max
 	// number of apes chosen randomly from the array of preferential first spawners.
 	firstSpawners = GetEntArray( "first_boss_spawner", "script_noteworthy" );
-	
+
 	if( isDefined( firstSpawners ) && firstSpawners.size > 0 )
 	{
 		if( firstSpawners.size > level.max_ape_zombies )
@@ -143,13 +143,13 @@ init()
 		{
 			chosenSpawners = firstSpawners;
 		}
-		
+
 		for( i = 0; i < chosenSpawners.size; i++ )
 		{
 			chosenSpawners[i] ape_zombie_spawn();
 		}
 	}
-	
+
 	//level thread ape_zombie_manager();
 	level thread ape_zombie_update_proximity_wake();
 	level.ammo_spawn = true;
@@ -174,9 +174,9 @@ init()
 ape_prespawn()
 {
 	self.animname = "ape_zombie";
-	
+
 	self.custom_idle_setup = maps\_zombiemode_ai_ape::ape_zombie_idle_setup;
-	
+
 	self.damage_mult = level.ape_zombie_damage_mult;
 
 	self.a.idleAnimOverrideArray = [];
@@ -186,37 +186,37 @@ ape_prespawn()
 	self.a.idleAnimOverrideWeights["stand"][0][0] 	= 10;
 	self.a.idleAnimOverrideArray["stand"][0][1] 	= %ai_zombie_simianaut_idle;
 	self.a.idleAnimOverrideWeights["stand"][0][1] 	= 10;
-	
+
 	rand = randomIntRange( 1, 5 );
 	self.deathanim = level.scr_anim["ape_zombie"]["death"+rand];
 
-	self.ignorelocationaldamage = true; 
-	self.ignoreall = true; 
+	self.ignorelocationaldamage = true;
+	self.ignoreall = true;
 	self.allowdeath = true; 			// allows death during animscripted calls
 	self.is_zombie = true; 			// needed for melee.gsc in the animscripts
-	self.has_legs = true; 			// Sumeet - This tells the zombie that he is allowed to stand anymore or not, gibbing can take 
+	self.has_legs = true; 			// Sumeet - This tells the zombie that he is allowed to stand anymore or not, gibbing can take
 															// out both legs and then the only allowed stance should be prone.
-	self allowedStances( "stand" ); 
+	self allowedStances( "stand" );
 
-	self.gibbed = false; 
+	self.gibbed = false;
 	self.head_gibbed = false;
-	
-	// might need this so co-op zombie players cant block zombie pathing
-	//self PushPlayer( true ); 
 
-	self.disableArrivals = true; 
-	self.disableExits = true; 
+	// might need this so co-op zombie players cant block zombie pathing
+	//self PushPlayer( true );
+
+	self.disableArrivals = true;
+	self.disableExits = true;
 	self.grenadeawareness = 0;
 	self.badplaceawareness = 0;
 
-	self.ignoreSuppression = true; 	
-	self.suppressionThreshold = 1; 
-	self.noDodgeMove = true; 
+	self.ignoreSuppression = true;
+	self.suppressionThreshold = 1;
+	self.noDodgeMove = true;
 	self.dontShootWhileMoving = true;
 	self.pathenemylookahead = 0;
 
 	self.badplaceawareness = 0;
-	self.chatInitialized = false; 
+	self.chatInitialized = false;
 
 	self.a.disablePain = true;
 	self disable_react(); // SUMEET - zombies dont use react feature.
@@ -229,8 +229,8 @@ ape_prespawn()
 	}
 
 	self.freezegun_damage = 0;
-	
-	self.dropweapon = false; 
+
+	self.dropweapon = false;
 	self thread maps\_zombiemode_spawner::zombie_damage_failsafe();
 
 	self thread maps\_zombiemode_spawner::delayed_zombie_eye_glow();	// delayed eye glow for ground crawlers (the eyes floated above the ground before the anim started)
@@ -316,7 +316,7 @@ init_ape_zombie_anims()
 	level.scr_anim["ape_zombie"]["death4"] 	= %ai_zombie_boss_death_mg;
 
 	// run cycles
-	
+
 	level.scr_anim["ape_zombie"]["walk1"] 	= %ai_zombie_simianaut_walk;
 	level.scr_anim["ape_zombie"]["walk2"] 	= %ai_zombie_simianaut_walk;
 	level.scr_anim["ape_zombie"]["walk3"] 	= %ai_zombie_simianaut_walk;
@@ -374,11 +374,11 @@ init_ape_zombie_anims()
 	level._zombie_walk_melee["ape_zombie"] = [];
 	level._zombie_run_melee["ape_zombie"] = [];
 
-	level._zombie_melee["ape_zombie"][0] 				= %ai_semianaut_attack_v1; 
-	level._zombie_melee["ape_zombie"][1] 				= %ai_semianaut_attack_v1; 
-	level._zombie_melee["ape_zombie"][2] 				= %ai_semianaut_attack_v1; 
-	level._zombie_melee["ape_zombie"][3] 				= %ai_semianaut_attack_v1;	
-	level._zombie_melee["ape_zombie"][3] 				= %ai_semianaut_attack_v1;	
+	level._zombie_melee["ape_zombie"][0] 				= %ai_semianaut_attack_v1;
+	level._zombie_melee["ape_zombie"][1] 				= %ai_semianaut_attack_v1;
+	level._zombie_melee["ape_zombie"][2] 				= %ai_semianaut_attack_v1;
+	level._zombie_melee["ape_zombie"][3] 				= %ai_semianaut_attack_v1;
+	level._zombie_melee["ape_zombie"][3] 				= %ai_semianaut_attack_v1;
 
 	if( isDefined( level.ape_zombie_anim_override ) )
 	{
@@ -386,7 +386,7 @@ init_ape_zombie_anims()
 	}
 
 	//level._zombie_walk_melee["ape_zombie"][0]			= %ai_zombie_boss_walk_headhit;
-	
+
 	level._zombie_run_melee["ape_zombie"][0]				=	%ai_semianaut_attack_v1;
 	level._zombie_run_melee["ape_zombie"][1]				=	%ai_semianaut_attack_v1;
 	level._zombie_run_melee["ape_zombie"][2]				=	%ai_semianaut_attack_v1;
@@ -397,7 +397,7 @@ init_ape_zombie_anims()
 		level._zombie_melee_crawl = [];
 	}
 	level._zombie_melee_crawl["ape_zombie"] = [];
-	level._zombie_melee_crawl["ape_zombie"][0] 		= %ai_zombie_attack_crawl; 
+	level._zombie_melee_crawl["ape_zombie"][0] 		= %ai_zombie_attack_crawl;
 	level._zombie_melee_crawl["ape_zombie"][1] 		= %ai_zombie_attack_crawl_lunge;
 
 	if( !isDefined( level._zombie_stumpy_melee ) )
@@ -477,7 +477,7 @@ init_ape_zombie_anims()
 
 	level._zombie_rise_death_anims["ape_zombie"][2]["out"][0]		= %ai_zombie_traverse_ground_v2_death_high;
 	level._zombie_rise_death_anims["ape_zombie"][2]["out"][1]		= %ai_zombie_traverse_ground_v2_death_high_alt;
-	
+
 	//taunts
 	if( !isDefined( level._zombie_run_taunt ) )
 	{
@@ -487,10 +487,10 @@ init_ape_zombie_anims()
 	{
 		level._zombie_board_taunt = [];
 	}
-	
+
 	level._zombie_run_taunt["ape_zombie"] = [];
 	level._zombie_board_taunt["ape_zombie"] = [];
-	
+
 	level._zombie_board_taunt["ape_zombie"][0] = %ai_zombie_taunts_4;
 	level._zombie_board_taunt["ape_zombie"][1] = %ai_zombie_taunts_7;
 	level._zombie_board_taunt["ape_zombie"][2] = %ai_zombie_taunts_9;
@@ -528,34 +528,34 @@ init_ape_powerup_drops()
 
 ape_zombie_spawn()
 {
-	self.script_moveoverride = true; 
-	
+	self.script_moveoverride = true;
+
 	if( !isDefined( level.num_ape_zombies ) )
 	{
 		level.num_ape_zombies = 0;
 	}
 	level.num_ape_zombies++;
-	
+
 	ape_zombie = self maps\_zombiemode_net::network_safe_stalingrad_spawn( "boss_zombie_spawn", 1 );
-	
+
 	//Sound - Shawn J - adding boss spawn sound - note: sound is played in 2d so it doesn't matter what it's played off of.
 	//iprintlnbold( "Boss_Spawning!" );
 	//self playsound( "zmb_engineer_spawn" );
-	
-	self.count = 666; 
+
+	self.count = 666;
 
 	self.last_spawn_time = GetTime();
 
-	if( !spawn_failed( ape_zombie ) ) 
-	{ 
+	if( !spawn_failed( ape_zombie ) )
+	{
 		ape_zombie.script_noteworthy = self.script_noteworthy;
 		ape_zombie.targetname = self.targetname;
 		ape_zombie.target = self.target;
 		ape_zombie.deathFunction = maps\_zombiemode_ai_ape::ape_zombie_die;
 		ape_zombie.animname = "ape_zombie";
-	
+
 		ape_zombie thread ape_zombie_think();
-		
+
 		if( isDefined( level.ape_zombie_death_pos ) && level.ape_zombie_death_pos.size > 0 )
 		{
 			level.ape_zombie_death_pos = array_remove( level.ape_zombie_death_pos, level.ape_zombie_death_pos[0] );
@@ -573,10 +573,10 @@ ape_round_spawning()
 	level endon( "end_of_round" );
 	level endon( "restart_round" );
 
-/# 
+/#
 	level endon( "kill_round" );
 
-	if ( GetDvarInt( #"zombie_cheat" ) == 2 || GetDvarInt( #"zombie_cheat" ) >= 4 ) 
+	if ( GetDvarInt( #"zombie_cheat" ) == 2 || GetDvarInt( #"zombie_cheat" ) >= 4 )
 	{
 		return;
 	}
@@ -663,9 +663,9 @@ ape_stop_fog()
 	clear_fog_threads();
 
 	setVolFog(start_dist, half_dist, half_height, base_height, fog_r, fog_g, fog_b, fog_scale,
-		sun_col_r, sun_col_g, sun_col_b, sun_dir_x, sun_dir_y, sun_dir_z, sun_start_ang, 
-		sun_stop_ang, time, max_fog_opacity);    
-  
+		sun_col_r, sun_col_g, sun_col_b, sun_dir_x, sun_dir_y, sun_dir_z, sun_start_ang,
+		sun_stop_ang, time, max_fog_opacity);
+
 }
 
 ape_round_tracker()
@@ -707,7 +707,7 @@ ape_round_tracker()
 ape_round_start()
 {
 	flag_set( "ape_round" );
-//	setVolFog(100, 400, 200, 175, 0.4566, 0.531, 0.625, 3); 
+//	setVolFog(100, 400, 200, 175, 0.4566, 0.531, 0.625, 3);
 //	SetVolFog( 229.0, 200.0, 380.0, 200.0, 0.16, 0.204, 0.274, 3 );
 
 	//players = getplayers();
@@ -751,10 +751,10 @@ ape_zombie_manager()
 		}
 	}
 
-	while( true ) 
+	while( true )
 	{
 		AssertEx( isDefined( level.num_ape_zombies ) && isDefined( level.max_ape_zombies ), "Either max_ape_zombies or num_ape_zombies not defined, this should never be the case!" );
-		while( level.num_ape_zombies < level.max_ape_zombies ) 
+		while( level.num_ape_zombies < level.max_ape_zombies )
 		{
 			spawner = ape_zombie_pick_best_spawner();
 			if( isDefined( spawner ) )
@@ -786,10 +786,10 @@ ape_zombie_pick_best_spawner()
 ape_zombie_think()
 {
 	self endon( "death" );
-	
+
 	self.is_activated = false;
 	self.run_index = -1;
-	
+
 	self thread ape_zombie_is_activated();
 	self thread ape_zombie_check_player_proximity();
 	self thread ape_zombie_choose_run();
@@ -803,7 +803,7 @@ ape_zombie_think()
 		self thread ape_zombie_wait_for_switch();
 	}
 
-	//self.goalradius = 128; 
+	//self.goalradius = 128;
 	self.ignoreall = false;
 	self.pathEnemyFightDist = 64;
 	self.meleeAttackDist = 64;
@@ -812,7 +812,7 @@ ape_zombie_think()
 	//self.health = level.zombie_health * level.ape_zombie_health_mult;
 
 	adjusted_health = level.ape_zombie_min_health;
-	
+
 	if( self.maxhealth < adjusted_health )
 	{
 		self.maxhealth = level.ape_zombie_min_health;
@@ -846,10 +846,10 @@ ape_zombie_think()
 		self.maxhealth += bonus;
 		self.health += bonus;
 	}
-	
+
 	//try to prevent always turning towards the enemy
 	self.maxsightdistsqrd = 96 * 96;
-	
+
 	self.zombie_move_speed = "walk";
 
 /*	Z2 causing issues, won't leave start node.
@@ -857,7 +857,7 @@ ape_zombie_think()
 	{
 		wait( 0.05 );
 	}
-*/	
+*/
 
 	self thread [[ level.ape_zombie_enter_level ]]();
 
@@ -878,7 +878,7 @@ ape_zombie_think()
 			wait_network_frame();
 			continue;
 		}
-		else if( isDefined( self.performing_activation ) && self.performing_activation ) 
+		else if( isDefined( self.performing_activation ) && self.performing_activation )
 		{
 			wait_network_frame();
 			continue;
@@ -888,7 +888,7 @@ ape_zombie_think()
 			wait_network_frame();
 			continue;
 		}
-		else if( !isDefined( self.following_player ) || !self.following_player ) 
+		else if( !isDefined( self.following_player ) || !self.following_player )
 		{
 			self thread maps\_zombiemode_ai_ape::ape_find_flesh();
 			self.following_player = true;
@@ -902,38 +902,38 @@ ape_zombie_pick_idle_point()
 {
 	best_score = -1;
 	best_node = undefined;
-	
+
 	for( i = 0; i < level.ape_idle_nodes.size; i++ )
 	{
 		score = [[ level.ape_zombie_pathfind_heuristic ]]( level.ape_idle_nodes[i] );
-		
+
 		if( score > best_score )
 		{
 			best_score = score;
 			best_node = level.ape_idle_nodes[i];
 		}
 	}
-	
+
 	return best_node;
 }
 
-ape_zombie_default_pathfind_heuristic( node ) 
+ape_zombie_default_pathfind_heuristic( node )
 {
 	// Skip any nodes that don't have a zone or whose zones are not yet active
 	if( !isDefined( node.targetname ) || !isDefined( level.zones[node.targetname] ) )
 	{
 		return -1;
 	}
-	
+
 	// Skip any nodes that are already claimed by another ape
 	if( isDefined( node.is_claimed ) && node.is_claimed && ( !isDefined( self.curr_idle_node ) || self.curr_idle_node != node ) )
 	{
 		return -1;
 	}
-	
+
 	players = get_players();
 	score = 0;
-	
+
 	for( i = 0; i < players.size; i++ )
 	{
 		dist = distanceSquared( node.origin, players[i].origin );
@@ -948,7 +948,7 @@ ape_zombie_default_pathfind_heuristic( node )
 		}
 		score += int( 10000*10000/dist );
 	}
-	
+
 	return score;
 }
 
@@ -959,7 +959,7 @@ ape_zombie_default_spawn_heuristic( spawner )
 	{
 		return -1;
 	}
-	
+
 	if( !isDefined( spawner.script_noteworthy ) )
 	{
 		return -1;
@@ -969,14 +969,14 @@ ape_zombie_default_spawn_heuristic( spawner )
 	{
 		return -1;
 	}
-	
+
 	score = 0;
-	
+
 	// if we don't have a position, give score relative to player positions, farther is better
 	if( !isDefined( level.ape_zombie_death_pos ) || level.ape_zombie_death_pos.size == 0 )
 	{
 		players = get_players();
-		
+
 		for( i = 0; i < players.size; i++ )
 		{
 			score = int( distanceSquared( spawner.origin, players[i].origin ) );
@@ -992,19 +992,19 @@ ape_zombie_default_spawn_heuristic( spawner )
 		if( dist <= 1 )
 		{
 			dist = 1;
-			
+
 		}
 		score = int( 10000*10000/dist );
 	}
-	
+
 	return score;
 }
 
 ape_zombie_choose_run()
 {
 	self endon( "death" );
-	
-	while( true ) 
+
+	while( true )
 	{
 		if( self.is_activated )
 		{
@@ -1026,12 +1026,12 @@ ape_zombie_choose_run()
 			//{
 			//	self.moveplaybackrate = 0.75;
 			//}
-			//else 
+			//else
 			//{
 			//	self.moveplaybackrate = 0.7;
 			//}
 
-			if ( self.speed_up ) 
+			if ( self.speed_up )
 			{
 				self set_run_anim( "sprint4" );
 				self.run_combatanim = level.scr_anim["ape_zombie"]["sprint4"];
@@ -1102,7 +1102,7 @@ ape_zombie_wait_for_switch()
 	{
 		wait_network_frame();
 	}
-	
+
 	//time = RandomFloatRange( 5, 10 );
 	time = RandomFloatRange( 15, 30 );
 	wait( time );
@@ -1123,7 +1123,7 @@ ape_zombie_switch_player( speed_up )
 		}
 	}
 
-	player = get_closest_valid_player( self.origin, self.ignore_player ); 
+	player = get_closest_valid_player( self.origin, self.ignore_player );
 	if( !isDefined( player ) )
 	{
 		self maps\_zombiemode_spawner::zombie_history( "ape find flesh -> can't find player, continue" );
@@ -1148,13 +1148,13 @@ ape_zombie_switch_player( speed_up )
 //ape_zombie_health_manager()
 //{
 //	self endon( "death" );
-//	
+//
 //	self thread wait_for_round_over();
 //	self thread wait_for_activation();
-//	
+//
 //	while( true )
 //	{
-//		self waittill( "update_health" ); 
+//		self waittill( "update_health" );
 //		self.maxhealth = level.zombie_health * level.ape_zombie_health_mult;
 //		self.health = level.zombie_health * level.ape_zombie_health_mult;
 //		if( self.maxhealth < level.ape_zombie_min_health )
@@ -1173,7 +1173,7 @@ ape_zombie_switch_player( speed_up )
 wait_for_round_over()
 {
 	self endon( "stop_managing_health" );
-	
+
 	while( true )
 	{
 		level waittill( "between_round_over" );
@@ -1266,7 +1266,7 @@ ape_zombie_play_activate()
 	self SetFlaggedAnimKnobAllRestart( "chestbeat_anim", %ai_zombie_simianaut_chest_beat, %body, 1, .1, 1 );
 	time = time / 1.0;
 	wait( time );
-	
+
 	self notify( "play_activate_done" );
 }
 
@@ -1274,7 +1274,7 @@ ape_zombie_check_for_activation()
 {
 	self endon( "death" );
 	self endon( "ape_activated" );
-	
+
 	if( self.is_activated == true )
 	{
 		if( isDefined( self.curr_idle_node ) )
@@ -1288,9 +1288,9 @@ ape_zombie_check_for_activation()
 	{
 		wait_network_frame();
 	}
-		
+
 	self waittill_either( "damage", "hit_player" );
-	
+
 	self notify( "stop_find_flesh" );
 	self.following_player = false;
 	self.performing_activation = true;
@@ -1299,19 +1299,19 @@ ape_zombie_check_for_activation()
 	self thread scream_a_watcher( "groundhit_anim" );
 	self thread groundhit_watcher( "groundhit_anim" );
 	//self thread scream_b_watcher( "groundhit_anim" );
-	
+
 	//Sound - Shawn J - adding eng hit exert
 	//iprintlnbold( "Boss_hit!" );
 	self playsound( "zmb_engineer_vocals_hit" );
 
 	self animcustom( ::ape_zombie_play_activate );
 	self waittill( "play_activate_done" );
-	
+
 	self.performing_activation = false;
 	self.ground_hit = false;
-	
+
 	self.is_activated = true;
-	
+
 	if( isDefined( self.curr_idle_node ) )
 	{
 		self.curr_idle_node.is_claimed = false;
@@ -1337,21 +1337,21 @@ ape_zombie_ground_hit()
 	{
 		return;
 	}
-	
+
 	//self notify( "stop_finding_flesh" );
 	//self.following_player = false;
 	self.ground_hit = true;
 
 	self thread groundhit_watcher( "groundhit_anim" );
-	
+
 	//Sound - Shawn J - adding eng hit exert
 	//iprintlnbold( "Boss_hit!" );
-	
+
 	self animscripted( "groundhit_anim", self.origin, self.angles, %ai_zombie_simianaut_ground_pound );
 	//self SetFlaggedAnimKnobAllRestart( "groundhit_anim", %ai_zombie_simianaut_ground_pound, %body, 1, .1, 1 );
-	
+
 	animscripts\traverse\zombie_shared::wait_anim_length(%ai_zombie_simianaut_ground_pound, .02);
-	
+
 	self.ground_hit = false;
 
 	self.nextGroundHit = GetTime() + level.ape_ground_attack_delay;
@@ -1423,11 +1423,11 @@ scream_a_watcher( animname )
 	rand = RandomInt( 100 );
 	if( rand > level.ape_zombie_scream_a_chance )
 	{
-		return; 
+		return;
 	}
-	
+
 	self waittillmatch( animname, "scream_a" );
-	
+
 	players = get_players();
 	affected_players = [];
 	for( i = 0; i < players.size; i++ )
@@ -1448,7 +1448,7 @@ groundhit_watcher( animname )
 	self endon( "death" );
 
 	self waittillmatch( animname, "fire" );
-	
+
 //	PlayFx( level._effect["ape_groundhit"], self.origin );
 	playfxontag(level._effect["ape_groundhit"],self,"tag_origin");
 	//self RadiusDamage( self.origin, level.ape_zombie_groundhit_trigger_radius, level.ape_zombie_groundhit_damage, level.ape_zombie_groundhit_damage, self );
@@ -1493,18 +1493,18 @@ groundhit_watcher( animname )
 				continue;
 			}
 
-			refs = []; 
-			refs[refs.size] = "guts"; 
-			refs[refs.size] = "right_arm"; 
-			refs[refs.size] = "left_arm"; 
-			refs[refs.size] = "right_leg"; 
-			refs[refs.size] = "left_leg"; 
-			refs[refs.size] = "no_legs"; 
-			refs[refs.size] = "head"; 
+			refs = [];
+			refs[refs.size] = "guts";
+			refs[refs.size] = "right_arm";
+			refs[refs.size] = "left_arm";
+			refs[refs.size] = "right_leg";
+			refs[refs.size] = "left_leg";
+			refs[refs.size] = "no_legs";
+			refs[refs.size] = "head";
 
 			if( refs.size )
 			{
-				zombies[i].a.gib_ref = random( refs ); 
+				zombies[i].a.gib_ref = random( refs );
 			}
 
 			zombies[i] DoDamage( zombies[i].health + 666, self.origin, self );
@@ -1574,11 +1574,11 @@ scream_b_watcher( animname )
 	rand = RandomInt( 100 );
 	if( rand > level.ape_zombie_scream_b_chance )
 	{
-		return; 
+		return;
 	}
-	
+
 	self waittillmatch( animname, "scream_b" );
-	
+
 	players = get_players();
 	affected_players = [];
 	for( i = 0; i < players.size; i++ )
@@ -1604,13 +1604,13 @@ ape_zombie_die()
 	{
 		self.curr_idle_node.is_claimed = false;
 	}
-	
+
 	//Sound - Shawn J - adding boss death sound - note: sound is played in 2d so it doesn't matter what it's played off of.
 	//iprintlnbold( "Boss_Death!" );
 	self playsound( "zmb_engineer_death_bells" );
 
 	// Give attacker points
-	
+
 	//ChrisP - 12/8/08 - added additional 'self' argument
 	level maps\_zombiemode_spawner::zombie_death_points( self.origin, self.damagemod, self.damagelocation, self.attacker,self );
 
@@ -1622,8 +1622,8 @@ ape_zombie_die()
 	if( !isDefined( level.ape_zombie_death_pos ) )
 	{
 		level.ape_zombie_death_pos = [];
-	}	
-	
+	}
+
 	level.ape_zombie_death_pos = array_add( level.ape_zombie_death_pos, self.origin );
 
 	//self thread ape_zombie_wait_for_respawn();
@@ -1690,7 +1690,7 @@ ape_zombie_powerup_drop()
 
 	level.zombie_vars["zombie_drop_item"] = 1;
 	level.powerup_drop_count--;
-	level thread maps\_zombiemode_powerups::powerup_drop( self.origin );
+	level thread maps\apex\_zm_powerups::powerup_drop( self.origin );
 }
 
 ape_adjust_max_ammo()
@@ -1757,7 +1757,7 @@ ape_fire_damage( trap )
 	self endon( "death" );
 
 	// guarantee to damage at least once
-	self DoDamage( level.ape_fire_damage, self.origin );			
+	self DoDamage( level.ape_fire_damage, self.origin );
 
 	while ( 1 )
 	{
@@ -1765,7 +1765,7 @@ ape_fire_damage( trap )
 
 		if ( self IsTouching( trap ) )
 		{
-			self DoDamage( level.ape_fire_damage, self.origin, trap );			
+			self DoDamage( level.ape_fire_damage, self.origin, trap );
 		}
 		else
 		{
@@ -1831,7 +1831,7 @@ ape_actor_damage( weapon, damage, attacker )
 	{
 		damage *= 2;
 	}
-	
+
 	if ( (float(self.health - damage) / self.maxhealth) < 0.7 )
 	{
 		self animscripts\zombie_death::helmetPop();
@@ -1853,7 +1853,7 @@ ape_nuke_damage( location )
 	if ( DistanceSquared( self.origin, location ) < nuke_dist_sq )
 	{
 		damage = self.maxhealth * 0.5;
-		self DoDamage( damage, self.origin );			
+		self DoDamage( damage, self.origin );
 
 		if ( self.is_activated && self.health > 0 )
 		{
@@ -1973,7 +1973,7 @@ ape_pathing()
 
 ape_find_flesh()
 {
-	self endon( "death" ); 
+	self endon( "death" );
 	level endon( "intermission" );
 	self endon( "stop_find_flesh" );
 
@@ -1981,7 +1981,7 @@ ape_find_flesh()
 	{
 		return;
 	}
-	
+
 	self.helitarget = true;
 
 	self maps\_zombiemode_spawner::zombie_history( "ape find flesh -> start" );
@@ -1991,14 +1991,14 @@ ape_find_flesh()
 	players = getplayers();
 	self.ignore_player = [];
 
-	player = get_closest_valid_player( self.origin, self.ignore_player ); 
+	player = get_closest_valid_player( self.origin, self.ignore_player );
 	if( !isDefined( player ) )
 	{
 		self maps\_zombiemode_spawner::zombie_history( "ape find flesh -> can't find player, continue" );
-		//wait( 1 ); 
-		//continue; 
+		//wait( 1 );
+		//continue;
 	}
-	
+
 	self.favoriteenemy = player;
 
 	while( 1 )
@@ -2013,7 +2013,7 @@ ape_find_flesh()
 		}
 
 		self.zombie_path_timer = GetTime() + ( RandomFloatRange( 1, 3 ) * 1000 );
-		while( GetTime() < self.zombie_path_timer ) 
+		while( GetTime() < self.zombie_path_timer )
 		{
 			wait( 0.1 );
 		}

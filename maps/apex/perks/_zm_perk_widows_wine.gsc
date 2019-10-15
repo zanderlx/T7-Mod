@@ -341,7 +341,7 @@ widows_wine_override_wallbuy_purchase(weapon, wallbuy)
 {
 	if(is_lethal_grenade(weapon))
 	{
-		// ammo_cost = maps\_zombiemode_weapons::get_ammo_cost(weapon);
+		// ammo_cost = maps\apex\_zm_weapons::get_ammo_cost(weapon);
 		ammo_cost = Int(level.zombie_weapons[weapon].cost / 2);
 
 		if(self.score >= ammo_cost)

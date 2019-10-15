@@ -19,11 +19,12 @@ init()
 
 include_weapons()
 {
-	add_weapon_include_callback("claymore_zm", maps\apex\weapons\_zm_weap_claymore::include_weapon_for_level);
-	add_weapon_include_callback("crossbow_explosive_zm", maps\apex\weapons\_zm_weap_crossbow::include_weapon_for_level);
-	add_weapon_include_callback("zombie_cymbal_monkey", maps\apex\weapons\_zm_weap_cymbal_monkey::include_weapon_for_level);
-	add_weapon_include_callback("tesla_gun_zm", maps\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
-	add_weapon_include_callback("thundergun_zm", maps\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
+	add_weapon_include_callback("freezegun_zm",				maps\apex\weapons\_zm_weap_freezegun::include_weapon_for_level);
+	add_weapon_include_callback("claymore_zm",				maps\apex\weapons\_zm_weap_claymore::include_weapon_for_level);
+	add_weapon_include_callback("crossbow_explosive_zm",	maps\apex\weapons\_zm_weap_crossbow::include_weapon_for_level);
+	add_weapon_include_callback("zombie_cymbal_monkey",		maps\apex\weapons\_zm_weap_cymbal_monkey::include_weapon_for_level);
+	add_weapon_include_callback("tesla_gun_zm",				maps\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
+	add_weapon_include_callback("thundergun_zm",			maps\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
 }
 
 //============================================================================================

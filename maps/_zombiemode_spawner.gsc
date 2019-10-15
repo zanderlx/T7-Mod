@@ -3043,6 +3043,12 @@ zombie_gib_on_damage()
 	}
 }
 
+add_custom_zombie_should_gib(func_zombie_should_gib)
+{
+	if(!isdefined(level._zombie_custom_should_gib))
+		level._zombie_custom_should_gib = [];
+	level._zombie_custom_should_gib[level._zombie_custom_should_gib.size] = func_zombie_should_gib;
+}
 
 zombie_should_gib( amount, attacker, type )
 {
@@ -3066,9 +3072,13 @@ zombie_should_gib( amount, attacker, type )
 		return false;
 	}
 
-	if ( self maps\_zombiemode_weap_freezegun::is_freezegun_damage( type ) )
+	if(isdefined(level._zombie_custom_should_gib) && level._zombie_custom_should_gib.size > 0)
 	{
-		return false;
+		for(i = 0; i < level._zombie_custom_should_gib.size; i++)
+		{
+			if(maps\apex\_utility::run_function(self, level._zombie_custom_should_gib[i], type))
+				return false;
+		}
 	}
 
 	switch( type )
@@ -3357,17 +3367,6 @@ zombie_death_animscript()
 		return false;
 	}
 
-	if ( self maps\_zombiemode_weap_freezegun::should_do_freezegun_death( self.damagemod ) )
-	{
-		self thread maps\_zombiemode_weap_freezegun::freezegun_death( self.damagelocation, self.origin, self.attacker );
-
-		if ( "MOD_EXPLOSIVE" == self.damagemod )
-		{
-			// no points awarded for damage or deaths dealt by the shatter result
-			return false;
-		}
-	}
-
 	// animscript override
 	if( IsDefined( level.zombie_death_animscript_override ) )
 	{
@@ -3541,31 +3540,6 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 			player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location, self.isdog );
 		}
 	}
-	else
-	{
-		if ( self maps\_zombiemode_weap_freezegun::is_freezegun_damage( self.damagemod ) )
-		{
-			self thread maps\_zombiemode_weap_freezegun::freezegun_damage_response( player, amount );
-		}
-
-		// no points awarded for damage or deaths dealt by the shatter result
-		if ( !self maps\_zombiemode_weap_freezegun::is_freezegun_shatter_damage( self.damagemod ) )
-		{
-			if( player_using_hi_score_weapon( player ) )
-			{
-				damage_type = "damage";
-			}
-			else
-			{
-				damage_type = "damage_light";
-			}
-
-			if ( !is_true( self.no_damage_points ) )
-			{
-				player maps\_zombiemode_score::player_add_points( damage_type, mod, hit_location, self.isdog );
-			}
-		}
-	}
 
 	if ( IsDefined( self.zombie_damage_fx_func ) )
 	{
@@ -3574,11 +3548,7 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 
 	modName = remove_mod_from_methodofdeath( mod );
 
-	if ( self maps\_zombiemode_weap_freezegun::is_freezegun_damage( self.damagemod ) )
-	{
-		; // no scaling damage for the freezegun
-	}
-	else if( is_placeable_mine( self.damageweapon ) )
+	if( is_placeable_mine( self.damageweapon ) )
 	{
 		if ( IsDefined( self.zombie_damage_claymore_func ) )
 		{
@@ -3667,31 +3637,6 @@ zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 		if( self zombie_give_flame_damage_points() )
 		{
 			player maps\_zombiemode_score::player_add_points( "damage_ads", mod, hit_location );
-		}
-	}
-	else
-	{
-		if ( self maps\_zombiemode_weap_freezegun::is_freezegun_damage( self.damagemod ) )
-		{
-			self thread maps\_zombiemode_weap_freezegun::freezegun_damage_response( player, amount );
-		}
-
-		// no points awarded for damage or deaths dealt by the shatter result
-		if ( !self maps\_zombiemode_weap_freezegun::is_freezegun_shatter_damage( self.damagemod ) )
-		{
-			if( player_using_hi_score_weapon( player ) )
-			{
-				damage_type = "damage";
-			}
-			else
-			{
-				damage_type = "damage_light";
-			}
-
-			if ( !is_true( self.no_damage_points ) )
-			{
-				player maps\_zombiemode_score::player_add_points( damage_type, mod, hit_location );
-			}
 		}
 	}
 
@@ -3798,19 +3743,6 @@ zombie_death_event( zombie )
 	}
 
 	zombie check_zombie_death_event_callbacks();
-
-	// this gets called before the freezegun gets a chance to set freezegun_death, so we check whether it will do it
-	if ( !zombie maps\_zombiemode_weap_freezegun::should_do_freezegun_death( zombie.damagemod ) )
-	{
-		zombie thread maps\_zombiemode_audio::do_zombies_playvocals( "death", zombie.animname );
-		zombie thread zombie_eye_glow_stop();
-	}
-
-	if ( maps\apex\_zm_weapons::is_weapon_included( "freezegun_zm" ) )
-	{
-		zombie thread maps\_zombiemode_weap_freezegun::freezegun_clear_extremity_damage_fx();
-		zombie thread maps\_zombiemode_weap_freezegun::freezegun_clear_torso_damage_fx();
-	}
 
 	// this is controlling killstreak voice over in the asylum.gsc
 	if(isdefined (zombie.attacker) && isplayer(zombie.attacker) )

@@ -4,7 +4,7 @@
 #include maps\_zombiemode_utility;
 #include animscripts\zombie_Utility;
 
-#using_animtree( "generic_human" ); 
+#using_animtree( "generic_human" );
 init_registration()
 {
 	level.quantum_bomb_register_result_func = ::quantum_bomb_register_result;
@@ -54,7 +54,7 @@ init()
 #/
 
 	// client flags
-	
+
 }
 
 
@@ -232,9 +232,9 @@ player_handle_quantum_bomb()
 	self endon( "disconnect" );
 	self endon( "starting_quantum_bomb" );
 	level endon( "end_game" );
-	
+
 	// anything to set up before watching for the toss
-	
+
 	while( true )
 	{
 		grenade = self get_thrown_quantum_bomb();
@@ -245,7 +245,7 @@ player_handle_quantum_bomb()
 				grenade delete();
 				continue;
 			}
- 			
+
 			grenade waittill( "explode", position );
 			playsoundatposition( "wpn_quantum_exp", position );
 			result = self quantum_bomb_select_result( position );
@@ -268,8 +268,8 @@ get_thrown_quantum_bomb()
 {
 	self endon( "disconnect" );
 	self endon( "starting_quantum_bomb" );
-	
-	while( true ) 
+
+	while( true )
 	{
 		self waittill( "grenade_fire", grenade, weapName );
 		if( weapName == "zombie_quantum_bomb" )
@@ -326,7 +326,7 @@ quantum_bomb_lethal_grenade_result( position )
 quantum_bomb_random_weapon_starburst_result( position )
 {
 	self thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_good" );
-	
+
 	weapon = "ray_gun_zm";
 	rand = RandomInt( 20 );
 /#
@@ -459,7 +459,7 @@ quantum_bomb_pack_or_unpack_current_weapon_result( position )
 			continue;
 		}
 
-		if ( maps\_zombiemode_weapons::is_weapon_upgraded( weapon ) )
+		if ( maps\apex\_zm_weapons::is_weapon_upgraded( weapon ) )
 		{
 			if ( RandomInt( 5 ) ) // only 20% chance of losing the packed weapon
 			{
@@ -469,15 +469,15 @@ quantum_bomb_pack_or_unpack_current_weapon_result( position )
 			ziw_keys = GetArrayKeys( level.zombie_weapons );
 			for ( weaponindex = 0; weaponindex < level.zombie_weapons.size; weaponindex++ )
 			{
-				if ( IsDefined(level.zombie_weapons[ ziw_keys[weaponindex] ].upgrade_name) && 
+				if ( IsDefined(level.zombie_weapons[ ziw_keys[weaponindex] ].upgrade_name) &&
 					 level.zombie_weapons[ ziw_keys[weaponindex] ].upgrade_name == weapon )
 				{
 					if( player == self )
 					{
 						self thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_bad" );
 					}
-					
-					player thread maps\_zombiemode_weapons::weapon_give( ziw_keys[weaponindex] );
+
+					player thread maps\apex\_zm_weapons::weapon_give( ziw_keys[weaponindex] );
 					player quantum_bomb_play_player_effect();
 					break;
 				}
@@ -502,12 +502,12 @@ quantum_bomb_pack_or_unpack_current_weapon_result( position )
 				// since we're under the weapon limit, weapon_give won't take the current weapon, so we need to do that here ourselves
 				player TakeWeapon( weapon );
 			}
-			
+
 			if( player == self )
 			{
 				player thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_good" );
 			}
-			player thread maps\_zombiemode_weapons::weapon_give( level.zombie_weapons[weapon].upgrade_name );
+			player thread maps\apex\_zm_weapons::weapon_give( level.zombie_weapons[weapon].upgrade_name );
 			player quantum_bomb_play_player_effect();
 		}
 	}
@@ -598,7 +598,7 @@ quantum_bomb_teleport_player( player )
 	// grab all the structs
 	black_hole_teleport_structs = getstructarray( "struct_black_hole_teleport", "targetname" );
 	chosen_spot = undefined;
-	
+
 	if ( isDefined( level._special_blackhole_bomb_structs ) )
 	{
 		black_hole_teleport_structs = [[level._special_blackhole_bomb_structs]]();
@@ -623,7 +623,7 @@ quantum_bomb_teleport_player( player )
 		// decide which struct to move the player to
 		for ( i = 0; i < black_hole_teleport_structs.size; i++ )
 		{
-			if ( check_point_in_active_zone( black_hole_teleport_structs[i].origin ) && 
+			if ( check_point_in_active_zone( black_hole_teleport_structs[i].origin ) &&
 					( player_current_zone != black_hole_teleport_structs[i].script_string ) )
 			{
 				chosen_spot = black_hole_teleport_structs[i];
@@ -635,7 +635,7 @@ quantum_bomb_teleport_player( player )
 	if ( IsDefined( chosen_spot ) )
 	{
 		player thread quantum_bomb_teleport( chosen_spot );
-	}	
+	}
 
 }
 
@@ -645,17 +645,17 @@ quantum_bomb_teleport_player( player )
 quantum_bomb_teleport( struct_dest )
 {
 	self endon( "death" );
-	
+
 	if( !IsDefined( struct_dest ) )
 	{
 		return;
 	}
-	
+
 	prone_offset = (0, 0, 49);
 	crouch_offset = (0, 0, 20);
 	stand_offset = (0, 0, 0);
 	destination = undefined;
-	
+
 	// figure out the player's stance
 	if( self GetStance() == "prone" )
 	{
@@ -669,7 +669,7 @@ quantum_bomb_teleport( struct_dest )
 	{
 		destination = struct_dest.origin + stand_offset;
 	}
-	
+
 	// override
 	if( IsDefined( level._black_hole_teleport_override ) )
 	{
@@ -682,19 +682,19 @@ quantum_bomb_teleport( struct_dest )
 	self FreezeControls( true );
 	self DisableOffhandWeapons();
 	self DisableWeapons();
-	
+
 	self playsoundtoplayer( "zmb_gersh_teleporter_go_2d", self );
-	
+
 	// so the player doesn't show up while moving
 	self DontInterpolate();
 	self SetOrigin( destination );
 	self SetPlayerAngles( struct_dest.angles );
-	
+
 	// allow the funny biz
 	self EnableOffhandWeapons();
 	self EnableWeapons();
 	self FreezeControls( false );
-	
+
 	self quantum_bomb_play_player_effect();
 	self thread quantum_bomb_slightly_delayed_player_response();
 }
@@ -710,7 +710,7 @@ quantum_bomb_slightly_delayed_player_response()
 quantum_bomb_zombie_speed_buff_result( position )
 {
 	quantum_bomb_play_mystery_effect( position );
-	
+
 	self thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_bad" );
 
 	zombies = quantum_bomb_get_cached_closest_zombies( position );
@@ -763,7 +763,7 @@ quantum_bomb_zombie_speed_buff_result( position )
 quantum_bomb_zombie_fling_result( position )
 {
 	PlayFX( level._effect["zombie_fling_result"], position );
-	
+
 	self thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_good" );
 
 	range = 300;
@@ -772,10 +772,10 @@ quantum_bomb_zombie_fling_result( position )
 	for ( i = 0; i < zombies.size; i++ )
 	{
 		zombie = zombies[i];
-		
+
 		if( !IsDefined( zombie ) || !IsAlive( zombie ) )
 		{
-			// guy died on us 
+			// guy died on us
 			continue;
 		}
 
@@ -808,7 +808,7 @@ quantum_bomb_fling_zombie( player, fling_vec )
 {
 	if( !IsDefined( self ) || !IsAlive( self ) )
 	{
-		// guy died on us 
+		// guy died on us
 		return;
 	}
 
@@ -837,7 +837,7 @@ quantum_bomb_zombie_add_to_total_validation( position )
 quantum_bomb_zombie_add_to_total_result( position )
 {
 	quantum_bomb_play_mystery_effect( position );
-	
+
 	self thread maps\_zombiemode_audio::create_and_play_dialog( "kill", "quant_bad" );
 
 	level.zombie_total += level.zombie_ai_limit;

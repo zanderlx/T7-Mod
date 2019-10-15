@@ -43,13 +43,6 @@ main()
 
 	level thread maps\_callbacksetup::SetupCallbacks();
 
-	include_weapons();
-	include_powerups();
-
-	level.zombiemode_using_marathon_perk = true;
-	level.zombiemode_using_divetonuke_perk = true;
-	level.zombiemode_using_deadshot_perk = true;
-
 	level.zombiemode_precache_player_model_override = ::precache_player_model_override;
 	level.zombiemode_give_player_model_override = ::give_player_model_override;
 	level.zombiemode_player_set_viewmodel_override = ::player_set_viewmodel_override;
@@ -69,8 +62,6 @@ main()
 
 	level.max_perks = 4;
 	level.max_solo_lives = 3;
-
-	level.register_offhand_weapons_for_level_defaults_override = ::temple_offhand_weapon_overrride;
 
 	level.player_out_of_playable_area_monitor = true;
 	level.player_out_of_playable_area_monitor_callback = ::zombie_temple_player_out_of_playable_area_monitor_callback;
@@ -211,13 +202,6 @@ init_sounds()
 	maps\_zombiemode_utility::add_sound( "door_spike", "zmb_door_spike" );
 }
 
-custom_add_weapons()
-{
-	maps\_zombiemode_weapons::add_zombie_weapon( "shrink_ray_zm",	"shrink_ray_upgraded_zm", 				&"ZOMBIE_TEMPLE_SHRINK_RAY", 			2000, 	"shrink",	"", 	undefined );
-	maps\_zombiemode_weapons::add_zombie_weapon( "blow_gun_zm",		"blow_gun_upgraded_zm", 				&"ZOMBIE_TEMPLE_BLOW_GUN", 				2000, 	"darts", 		"", 	undefined );
-	maps\_zombiemode_weapons::add_zombie_weapon( "spikemore_zm",	undefined,								&"ZOMBIE_TEMPLE_SPIKEMORE_PURCHASE",	1000,	"spikemore",		"",		undefined );
-}
-
 precache_assets()
 {
 	// RB: viewmodel arms for the level
@@ -290,138 +274,6 @@ local_zone_init()
 
 	// setup the script_struct spawn locations
 	temple_init_zone_spawn_locations();
-}
-
-
-
-//*****************************************************************************
-// WEAPON FUNCTIONS
-//
-// Include the weapons that are only in your level so that the cost/hints are accurate
-// Also adds these weapons to the random treasure chest.
-//*****************************************************************************
-include_weapons()
-{
-	include_weapon( "frag_grenade_zm", false );
-	include_weapon( "sticky_grenade_zm", false, true );
-	include_weapon( "spikemore_zm", false, true );
-
-	//	Weapons - Pistols
-	include_weapon( "m1911_zm", false );						// colt
-	include_weapon( "m1911_upgraded_zm", false );
-	include_weapon( "python_zm" );								// 357
-	include_weapon( "python_upgraded_zm", false );
-	include_weapon( "cz75_zm" );
-    include_weapon( "cz75_upgraded_zm", false );
-
-	//	Weapons - Semi-Auto Rifles
-	include_weapon( "m14_zm", false, true );					// gewehr43
-	include_weapon( "m14_upgraded_zm", false );
-
-	//	Weapons - Burst Rifles
-	include_weapon( "m16_zm", false, true );
-	include_weapon( "m16_gl_upgraded_zm", false );
-	include_weapon( "g11_lps_zm" );
-	include_weapon( "g11_lps_upgraded_zm", false );
-	include_weapon( "famas_zm" );
-	include_weapon( "famas_upgraded_zm", false );
-
-	//	Weapons - SMGs
-	include_weapon( "ak74u_zm", false, true );					// thompson, mp40, bar
-	include_weapon( "ak74u_upgraded_zm", false );
-	include_weapon( "mp5k_zm", false, true );
-	include_weapon( "mp5k_upgraded_zm", false );
-	include_weapon( "mpl_zm", false, true );
-	include_weapon( "mpl_upgraded_zm", false );
-	include_weapon( "pm63_zm", false, true );
-	include_weapon( "pm63_upgraded_zm", false );
-	include_weapon( "spectre_zm" );
-	include_weapon( "spectre_upgraded_zm", false );
-
-	//	Weapons - Dual Wield
-  	include_weapon( "cz75dw_zm" );
-  	include_weapon( "cz75dw_upgraded_zm", false );
-
-	//	Weapons - Shotguns
-	include_weapon( "ithaca_zm", false, true );					// shotgun
-	include_weapon( "ithaca_upgraded_zm", false );
-	include_weapon( "rottweil72_zm", false, true );
-	include_weapon( "rottweil72_upgraded_zm", false );
-	include_weapon( "spas_zm" );
-	include_weapon( "spas_upgraded_zm", false );
-	include_weapon( "hs10_zm" );
-	include_weapon( "hs10_upgraded_zm", false );
-
-	//	Weapons - Assault Rifles
-	include_weapon( "aug_acog_zm", true );
-	include_weapon( "aug_acog_mk_upgraded_zm", false );
-	include_weapon( "galil_zm" );
-	include_weapon( "galil_upgraded_zm", false );
-	include_weapon( "commando_zm" );
-	include_weapon( "commando_upgraded_zm", false );
-	include_weapon( "fnfal_zm" );
-	include_weapon( "fnfal_upgraded_zm", false );
-
-	//	Weapons - Sniper Rifles
-	include_weapon( "dragunov_zm" );							// ptrs41
-	include_weapon( "dragunov_upgraded_zm", false );
-	include_weapon( "l96a1_zm" );
-	include_weapon( "l96a1_upgraded_zm", false );
-
-	//	Weapons - Machineguns
-	include_weapon( "rpk_zm" );									// mg42, 30 cal, ppsh
-	include_weapon( "rpk_upgraded_zm", false );
-	include_weapon( "hk21_zm" );
-	include_weapon( "hk21_upgraded_zm", false );
-
-	//	Weapons - Misc
-	include_weapon( "m72_law_zm" );
-	include_weapon( "m72_law_upgraded_zm", false );
-	include_weapon( "china_lake_zm" );
-	include_weapon( "china_lake_upgraded_zm", false );
-
-	//	Weapons - Special
-	include_weapon( "zombie_cymbal_monkey" );
-	include_weapon( "ray_gun_zm" );
-	include_weapon( "ray_gun_upgraded_zm", false );
-	include_weapon( "shrink_ray_zm" );
-	include_weapon( "shrink_ray_upgraded_zm", false );
-
-	include_weapon( "crossbow_explosive_zm" );
-	include_weapon( "crossbow_explosive_upgraded_zm", false );
-	include_weapon( "knife_ballistic_zm", true );
-	include_weapon( "knife_ballistic_upgraded_zm", false );
-	include_weapon( "knife_ballistic_bowie_zm", false );
-	include_weapon( "knife_ballistic_bowie_upgraded_zm", false );
-	level._uses_retrievable_ballisitic_knives = true;
-
-	// limited weapons
-	maps\_zombiemode_weapons::add_limited_weapon( "m1911_zm", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "crossbow_explosive_zm", 1 );
-	maps\_zombiemode_weapons::add_limited_weapon( "knife_ballistic_zm", 1 );
-	maps\_zombiemode_weapons::add_limited_weapon( "shrink_ray_zm", 1 );
-
-	precacheItem( "explosive_bolt_zm" );
-	precacheItem( "explosive_bolt_upgraded_zm" );
-
-	// get the bowie into the collector achievement list
-	level.collector_achievement_weapons = array_add( level.collector_achievement_weapons, "bowie_knife_zm" );
-}
-
-
-//*****************************************************************************
-// POWERUP FUNCTIONS
-//*****************************************************************************
-
-include_powerups()
-{
-	include_powerup( "nuke" );
-	include_powerup( "insta_kill" );
-	include_powerup( "double_points" );
-	include_powerup( "full_ammo" );
-	include_powerup( "carpenter" );
-	include_powerup( "fire_sale" );
-	include_powerup( "free_perk" );
 }
 
 add_powerups_after_round_1()
@@ -939,23 +791,6 @@ temple_find_exit_point()
 	}
 
 	self thread maps\_zombiemode_spawner::find_flesh();
-}
-
-temple_offhand_weapon_overrride()
-{
-	register_lethal_grenade_for_level( "frag_grenade_zm" );
-	register_lethal_grenade_for_level( "sticky_grenade_zm" );
-	level.zombie_lethal_grenade_player_init = "frag_grenade_zm";
-
-	register_tactical_grenade_for_level( "zombie_cymbal_monkey" );
-	level.zombie_tactical_grenade_player_init = undefined;
-
-	register_placeable_mine_for_level( "claymore_zm" );
-	level.zombie_placeable_mine_player_init = undefined;
-
-	register_melee_weapon_for_level( "knife_zm" );
-	register_melee_weapon_for_level( "bowie_knife_zm" );
-	level.zombie_melee_weapon_player_init = "knife_zm";
 }
 
 temple_shrink_ray_model_mapping_func()

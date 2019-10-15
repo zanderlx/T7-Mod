@@ -1903,7 +1903,7 @@ laststand_giveback_player_perks()
 				continue;
 			}
 
-			// maps\_zombiemode_perks::give_perk( self.laststand_perks[i] );
+			// maps\apex\_zm_perks::give_perk( self.laststand_perks[i] );
 		}
 	}
 }

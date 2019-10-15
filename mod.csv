@@ -35,6 +35,15 @@ stringtable,gamedata\weapons\melee_weapons.csv
 stringtable,gamedata\weapons\placeable_mines.csv
 stringtable,gamedata\weapons\stats.csv
 stringtable,gamedata\weapons\zombie_theater.csv
+stringtable,gamedata\weapons\zombie_coast.csv
+stringtable,gamedata\weapons\zombie_cod5_asylum.csv
+stringtable,gamedata\weapons\zombie_cod5_factory.csv
+stringtable,gamedata\weapons\zombie_cod5_prototype.csv
+stringtable,gamedata\weapons\zombie_cod5_sumpf.csv
+stringtable,gamedata\weapons\zombie_cosmodrome.csv
+stringtable,gamedata\weapons\zombie_moon.csv
+stringtable,gamedata\weapons\zombie_pentagon.csv
+stringtable,gamedata\weapons\zombie_temple.csv
 weapon,sp\fallback_zm
 weapon,sp\fallback_bowie_zm
 weapon,sp\fallback_sickle_zm

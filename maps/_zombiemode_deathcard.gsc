@@ -49,7 +49,7 @@ deathcard_spawn()
 	dc thread deathcard_timeout();
 	dc thread deathcard_wobble();
 	dc thread deathcard_grab();
-	
+
 	// The player gets pro tip message to pick up their death card on the next round
 	self.pro_tip_death_card_round = level.round_number + 1;
 }
@@ -60,7 +60,7 @@ deathcard_spawn()
 deathcard_laststand()
 {
 	players = get_players();
-	
+
 	// solo player gets everything back
 	if ( players.size == 1 )
 	{
@@ -164,7 +164,7 @@ deathcard_laststand()
 }
 
 //-----------------------------------------------------------------------------------
-// 
+//
 //-----------------------------------------------------------------------------------
 deathcard_save_perks( ent )
 {
@@ -245,7 +245,7 @@ deathcard_grab()
 
 					self delete();
 					self notify( "deathcard_grabbed" );
-					players[i] clientnotify( "dc0" );	// play death card sound				
+					players[i] clientnotify( "dc0" );	// play death card sound
 				}
 			}
 		}
@@ -267,7 +267,7 @@ deathcard_give( index )
 		stock = 0;
 		needSwitch = false;
 
-		// try to give back the weapon player was holding 
+		// try to give back the weapon player was holding
 		if ( dc.weapon[dc.current_weapon] != "none" && !self HasWeapon( dc.weapon[dc.current_weapon] ) )
 		{
 			weapon = dc.weapon[dc.current_weapon];
@@ -325,7 +325,7 @@ deathcard_give( index )
 	}
 	// don't give points back
 	// score
-	//self.old_score += dc.score; 
+	//self.old_score += dc.score;
 	//self.score += dc.score;
 
 	// perks
@@ -346,7 +346,7 @@ deathcard_give( index )
 				remaining = dc.perk.size - i;
 				if ( remaining <= newPerks || RandomInt( 100 ) > 50 )
 				{
-					maps\_zombiemode_perks::give_perk( dc.perk[i] );
+					maps\apex\_zm_perks::give_perk( dc.perk[i] );
 					newPerks--;
 				}
 

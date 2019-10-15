@@ -14,9 +14,6 @@ main()
 	clientscripts\zombie_theater_fx::main();
 	thread clientscripts\zombie_theater_amb::main();
 
-
-	clientscripts\_zombiemode_deathcard::init();
-
 	init_theater_box_indicator();
 
 

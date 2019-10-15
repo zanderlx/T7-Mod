@@ -11,8 +11,15 @@ init()
 
 include_weapons()
 {
-	add_weapon_include_callback("thundergun_zm", clientscripts\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
-	add_weapon_include_callback("tesla_gun_zm", clientscripts\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
+	// add_weapon_include_callback("sniper_explosive_zm",		clientscripts\apex\weapons\_zm_weap_sniper_explosive::include_weapon_for_level);
+	// add_weapon_include_callback("zombie_quantum_bomb",		clientscripts\apex\weapons\_zm_weap_quantum_bomb::include_weapon_for_level);
+	// add_weapon_include_callback("microwavegundw_zm",		clientscripts\apex\weapons\_zm_weap_microwavegun::include_weapon_for_level);
+	// add_weapon_include_callback("humangun_zm",				clientscripts\apex\weapons\_zm_weap_humangun::include_weapon_for_level);
+	add_weapon_include_callback("freezegun_zm",				clientscripts\apex\weapons\_zm_weap_freezegun::include_weapon_for_level);
+	// add_weapon_include_callback("spikemore_zm",				clientscripts\apex\weapons\_zm_weap_spikemore::include_weapon_for_level);
+	// add_weapon_include_callback("zombie_black_hole_bomb",	clientscripts\apex\weapons\_zm_weap_black_hole_bomb::include_weapon_for_level);
+	add_weapon_include_callback("thundergun_zm",			clientscripts\apex\weapons\_zm_weap_thundergun::include_weapon_for_level);
+	add_weapon_include_callback("tesla_gun_zm",				clientscripts\apex\weapons\_zm_weap_tesla::include_weapon_for_level);
 }
 
 //============================================================================================

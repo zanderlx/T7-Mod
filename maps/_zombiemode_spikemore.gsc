@@ -1,4 +1,4 @@
-#include common_scripts\utility; 
+#include common_scripts\utility;
 #include maps\_utility;
 #include maps\_zombiemode_utility;
 
@@ -18,13 +18,13 @@ init()
 	trigs = getentarray("spikemore_purchase","targetname");
 	for(i=0; i<trigs.size; i++)
 	{
-		model = getent( trigs[i].target, "targetname" ); 
-		model hide(); 
+		model = getent( trigs[i].target, "targetname" );
+		model hide();
 	}
 
 	array_thread(trigs,::buy_spikemores);
 	level thread give_spikemores_after_rounds();
-	
+
 	level.pickup_spikemores = ::pickup_spikemores;
 	level.pickup_spikemores_trigger_listener = ::pickup_spikemores_trigger_listener;
 
@@ -77,7 +77,7 @@ buy_spikemores()
 		{
 			continue;
 		}
-		
+
 		if( who has_powerup_weapon() )
 		{
 			wait( 0.1 );
@@ -88,22 +88,22 @@ buy_spikemores()
 		{
 
 			if( who.score >= self.zombie_cost )
-			{				
+			{
 				if ( !who is_player_placeable_mine( "spikemore_zm" ) )
 				{
 					play_sound_at_pos( "purchase", self.origin );
 
 					//set the score
-					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
-					who maps\_zombiemode_weapons::check_collector_achievement( "spikemore_zm" );
+					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
+					who maps\apex\_zm_weapons::check_collector_achievement( "spikemore_zm" );
 					who thread spikemore_setup();
 					who thread show_spikemore_hint("spikemore_purchased");
 					who thread maps\_zombiemode_audio::create_and_play_dialog( "weapon_pickup", "spikemore" );
 
 					if( self.spikemores_triggered == false )
-					{						
-						model = getent( self.target, "targetname" ); 					
-						model thread maps\_zombiemode_weapons::weapon_show( who ); 
+					{
+						model = getent( self.target, "targetname" );
+						model thread maps\apex\_zm_weapons::weapon_show( who );
 						self.spikemores_triggered = true;
 					}
 
@@ -115,7 +115,7 @@ buy_spikemores()
 				}
 				else
 				{
-					who thread show_spikemore_hint("already_purchased");				
+					who thread show_spikemore_hint("already_purchased");
 				}
 			}
 			else
@@ -128,7 +128,7 @@ buy_spikemores()
 
 set_spikemore_visible()
 {
-	players = getplayers();	
+	players = getplayers();
 	trigs = getentarray("spikemore_purchase","targetname");
 
 	while(1)
@@ -136,7 +136,7 @@ set_spikemore_visible()
 		for(j = 0; j < players.size; j++)
 		{
 			if( !players[j] is_player_placeable_mine( "spikemore_zm" ) )
-			{						
+			{
 				for(i = 0; i < trigs.size; i++)
 				{
 					trigs[i] SetInvisibleToPlayer(players[j], false);
@@ -145,7 +145,7 @@ set_spikemore_visible()
 		}
 
 		wait(1);
-		players = getplayers();	
+		players = getplayers();
 	}
 }
 
@@ -174,7 +174,7 @@ spikemore_watch()
 }
 
 spikemore_setup()
-{	
+{
 	self thread spikemore_watch();
 
 	self giveweapon("spikemore_zm");
@@ -232,7 +232,7 @@ pickup_spikemores_trigger_listener_enable( trigger, player )
 	while ( true )
 	{
 		player waittill_any( "zmb_enable_spikemore_prompt", "spawned_player" );
-		
+
 		if ( !isDefined( trigger ) )
 		{
 			return;
@@ -265,16 +265,16 @@ pickup_spikemores_trigger_listener_disable( trigger, player )
 shouldAffectWeaponObject( object )
 {
 	pos = self.origin + (0,0,32);
-	
+
 	dirToPos = pos - object.origin;
 	objectForward = anglesToForward( object.angles );
-	
+
 	dist = vectorDot( dirToPos, objectForward );
 	if ( dist < level.spikemore_detectionMinDist )
 		return false;
-	
+
 	dirToPos = vectornormalize( dirToPos );
-	
+
 	dot = vectorDot( dirToPos, objectForward );
 	return ( dot > level.spikemore_detectionDot );
 }
@@ -282,12 +282,12 @@ shouldAffectWeaponObject( object )
 spikemore_detonation()
 {
 	self endon("death");
-	
+
 	// wait until we settle
 	self waittill_not_moving();
-	
+
 	detonateRadius = 96;
-	
+
 	spawnFlag = 1;// SF_TOUCH_AI_AXIS
 	playerTeamToAllow = "axis";
 	if( isDefined( self.owner ) && isDefined( self.owner.pers["team"] ) && self.owner.pers["team"] == "axis" )
@@ -295,31 +295,31 @@ spikemore_detonation()
 		spawnFlag = 2;// SF_TOUCH_AI_ALLIES
 		playerTeamToAllow = "allies";
 	}
-	
+
 	damagearea = spawn("trigger_radius", self.origin + (0,0,0-detonateRadius), spawnFlag, detonateRadius, detonateRadius*2);
-	
+
 	damagearea enablelinkto();
 	damagearea linkto( self );
 
 	self thread delete_spikemores_on_death( damagearea );
-	
+
 	if(!isdefined(level.spikemores))
 		level.spikemores = [];
 	level.spikemores = array_add( level.spikemores, self );
-	
+
 	if( level.spikemores.size > 15 && GetDvar( #"player_sustainAmmo") != "0" )
 		level.spikemores[0] delete();
-	
+
 	while(1)
 	{
 		damagearea waittill( "trigger", ent );
-		
+
 		if ( isdefined( self.owner ) && ent == self.owner )
 			continue;
 
 		if( isDefined( ent.pers ) && isDefined( ent.pers["team"] ) && ent.pers["team"] != playerTeamToAllow )
 			continue;
-		
+
 		if ( !ent shouldAffectWeaponObject( self ) )
 			continue;
 
@@ -476,7 +476,7 @@ _spikemore_SmallSpearActivate()
 	{
 		targets = [];
 	}
-	
+
 	self _spikemore_SmallSpearDetonate(targets);
 	self Delete();
 }

@@ -8,33 +8,33 @@ main()
 	level._uses_crossbow = true;
 	level.use_freezegun_features = true;
 	level.uses_tesla_powerup = true;
-	
+
 	//for clientsiding the risers
 	level.riser_fx_on_client  = 1;
 	level.riser_type = "snow";
 	level.use_new_riser_water = 1;
 	level.use_clientside_rock_tearin_fx = 1;
 	level.use_clientside_board_fx = 1;
-	
-	
+
+
 	// WW (02-17-11): Vision set
 	// Special human gun visionsets are defined in the _zombiemode_weap_humangun::init();
 	// Human gun uses priority 8 & 9. Black hole bomb uses priority 10
 	level._coast_vision_set = "zombie_coast_2";
 	level._coast_vision_set_priority = 1;
-	
+
 	// Visionset for "lighthouse_on" transition
-	
+
 	level._coast_power_burst_vision_set = "zombie_coast_powerOn";
 	level._coast_power_burst_vision_set_priority = 5;
-	
+
 	level._coast_blizzard_vision_set = "zombie_coast_lighthouse";
 	level._coast_blizzard_vision_set_priority = 2;
-	
+
 	level._coast_lighthouse_freak_out_set = "zombie_coast_rovingEye";
 	level._coast_lighthouse_freak_out_set_priority = 7;
-	
-	//init the player zipline 
+
+	//init the player zipline
 	clientscripts\zombie_coast_player_zipline::init_player_zipline_anims();
 	clientscripts\zombie_coast_flinger::init_player_flinger_anims();
 
@@ -47,12 +47,10 @@ main()
 	clientscripts\_zombiemode::main();
 
 	register_clientflag_callbacks();
-	
-	clientscripts\zombie_coast_fx::main();
-	
-	thread clientscripts\zombie_coast_amb::main();
 
-	clientscripts\_zombiemode_deathcard::init();
+	clientscripts\zombie_coast_fx::main();
+
+	thread clientscripts\zombie_coast_amb::main();
 
 	clientscripts\_sticky_grenade::main();
 	clientscripts\_zombiemode_weap_humangun::init();
@@ -63,29 +61,29 @@ main()
 	register_zombie_types();
 
 	level thread clientscripts\_zombiemode::register_sidequest( 43, 44 );
-	
+
 	// on player connect
 	OnPlayerConnect_Callback( ::coast_player_connect );
-	
+
 	// on player spawn run this function
 	OnPlayerSpawned_Callback( ::coast_player_spawned );
-	
+
 	// This needs to be called after all systems have been registered.
 	thread waitforclient(0);
-	
+
 	// listens for power
 	level thread coast_ZPO_listener();
-	
+
 	clientscripts\zombie_coast_lighthouse::main();
-	
+
 	// lighthouse morse code
 	level thread solaris_flash();
-	
+
 	//vision set changes when fog rolls in /out
 	level thread fog_visionset_handler();
-	
+
 	level thread setup_fx_anims();
-	
+
 }
 /*------------------------------------
 setup the variables for use with clientflags
@@ -95,11 +93,11 @@ init_clientflag_variables()
 	level._CF_PLAYER_ZIPLINE_RUMBLE_QUAKE = 0;
 	level._CF_PLAYER_ZIPLINE_FAKE_PLAYER_SETUP = 1;
 
-	
+
 	level._COAST_FOG_BLIZZARD = 2;
 	level._CF_PLAYER_FLINGER_FAKE_PLAYER_SETUP_PRONE =3;
 	level._CF_PLAYER_FLINGER_FAKE_PLAYER_SETUP_STAND =4;
-	
+
 	// WW: Player flag for water frost
 	level._CF_PLAYER_WATER_FROST = 5;
 	level._CF_PLAYER_WATER_FREEZE = 6;
@@ -121,10 +119,10 @@ register_clientflag_callbacks()
 	register_clientflag_callback("player",level._CF_PLAYER_ZIPLINE_FAKE_PLAYER_SETUP, clientscripts\zombie_coast_player_zipline::zipline_player_setup);
 	register_clientflag_callback("player",level._CF_PLAYER_FLINGER_FAKE_PLAYER_SETUP_PRONE, clientscripts\zombie_coast_flinger::flinger_player_setup_prone);
 	register_clientflag_callback("player",level._CF_PLAYER_FLINGER_FAKE_PLAYER_SETUP_STAND, clientscripts\zombie_coast_flinger::flinger_player_setup_stand);
-	
+
 
 	register_clientflag_callback("player", level._COAST_FOG_BLIZZARD , clientscripts\zombie_coast_fx::coast_fog_blizzard);
-	
+
 	// coastal water frost
 	register_clientflag_callback( "player", level._CF_PLAYER_WATER_FROST, ::coast_water_frost );
 	register_clientflag_callback( "player", level._CF_PLAYER_WATER_FREEZE, ::coast_water_freeze );
@@ -136,7 +134,7 @@ register_clientflag_callbacks()
 	register_clientflag_callback( "actor", level._ZOMBIE_ACTOR_FLAG_DIRECTOR_LIGHT, clientscripts\_zombiemode_ai_director::zombie_director_light_update);
 	register_clientflag_callback( "actor", level._ZOMBIE_ACTOR_FLAG_DIRECTORS_STEPS, ::director_footsteps );
 	register_clientflag_callback( "actor", level._ZOMBIE_ACTOR_FLAG_DIRECTOR_DEATH, clientscripts\_zombiemode_ai_director::zombie_director_death);
-	
+
 	register_clientflag_callback( "actor", level._ZOMBIE_ACTOR_FLAG_LAUNCH_RAGDOLL, clientscripts\zombie_coast_flinger::launch_zombie);
 
 
@@ -153,105 +151,6 @@ register_zombie_types()
 	character\clientscripts\c_zom_barechest::register_gibs();
 }
 
-include_weapons()
-{
-	include_weapon( "frag_grenade_zm", false );
-	include_weapon( "claymore_zm", false );
-
-	//	Weapons - Pistols
-	include_weapon( "m1911_zm", false );						// colt
-	include_weapon( "m1911_upgraded_zm", false );
-	include_weapon( "python_zm" );						// 357
-	include_weapon( "python_upgraded_zm", false );
-  	include_weapon( "cz75_zm" );
-  	include_weapon( "cz75_upgraded_zm", false );
-
-	//	Weapons - Semi-Auto Rifles
-	include_weapon( "m14_zm", false );							// gewehr43
-	include_weapon( "m14_upgraded_zm", false );
-
-	//	Weapons - Burst Rifles
-	include_weapon( "m16_zm", false );						
-	include_weapon( "m16_gl_upgraded_zm", false );
-	include_weapon( "g11_lps_zm" );
-	include_weapon( "g11_lps_upgraded_zm", false );
-	include_weapon( "famas_zm" );
-	include_weapon( "famas_upgraded_zm", false );
-
-	//	Weapons - SMGs
-	include_weapon( "ak74u_zm", false );						// thompson, mp40, bar
-	include_weapon( "ak74u_upgraded_zm", false );
-	include_weapon( "mp5k_zm", false );
-	include_weapon( "mp5k_upgraded_zm", false );
-	include_weapon( "mp40_zm", false );
-	include_weapon( "mp40_upgraded_zm", false );
-	include_weapon( "mpl_zm", false );
-	include_weapon( "mpl_upgraded_zm", false );
-	include_weapon( "pm63_zm", false );
-	include_weapon( "pm63_upgraded_zm", false );
-	include_weapon( "spectre_zm" );
-	include_weapon( "spectre_upgraded_zm", false );
-
-	//	Weapons - Dual Wield
-  	include_weapon( "cz75dw_zm" );
-  	include_weapon( "cz75dw_upgraded_zm", false );
-
-	//	Weapons - Shotguns
-	include_weapon( "ithaca_zm", false );						// shotgun
-	include_weapon( "ithaca_upgraded_zm", false );
-	include_weapon( "rottweil72_zm", false );
-	include_weapon( "rottweil72_upgraded_zm", false );
-	include_weapon( "spas_zm" );						// 
-	include_weapon( "spas_upgraded_zm", false );
-	include_weapon( "hs10_zm" );
-	include_weapon( "hs10_upgraded_zm", false );
-
-	//	Weapons - Assault Rifles
-	include_weapon( "aug_acog_zm" );
-	include_weapon( "aug_acog_mk_upgraded_zm", false );
-	include_weapon( "galil_zm" );
-	include_weapon( "galil_upgraded_zm", false );
-	include_weapon( "commando_zm" );
-	include_weapon( "commando_upgraded_zm", false );
-	include_weapon( "fnfal_zm" );
-	include_weapon( "fnfal_upgraded_zm", false );
-
-	//	Weapons - Sniper Rifles
-	include_weapon( "dragunov_zm" );					// ptrs41
-	include_weapon( "dragunov_upgraded_zm", false );
-	include_weapon( "l96a1_zm" );
-	include_weapon( "l96a1_upgraded_zm", false );
-
-	//	Weapons - Machineguns
-	include_weapon( "rpk_zm" );							// mg42, 30 cal, ppsh
-	include_weapon( "rpk_upgraded_zm", false );
-	include_weapon( "hk21_zm" );
-	include_weapon( "hk21_upgraded_zm", false );
-
-	//	Weapons - Misc
-	include_weapon( "m72_law_zm" );
-	include_weapon( "m72_law_upgraded_zm", false );
-	include_weapon( "china_lake_zm" );
-	include_weapon( "china_lake_upgraded_zm", false );
-
-	//	Weapons - Special
-	include_weapon( "ray_gun_zm" );
-	include_weapon( "ray_gun_upgraded_zm", false );
-	include_weapon( "crossbow_explosive_zm" );
-	include_weapon( "crossbow_explosive_upgraded_zm", false );
-
-	include_weapon( "humangun_zm" );
-	include_weapon( "humangun_upgraded_zm", false );
-	include_weapon( "sniper_explosive_zm" );
-	include_weapon( "sniper_explosive_upgraded_zm", false );
-	include_weapon( "zombie_nesting_dolls" );
-
-	include_weapon( "knife_ballistic_zm", true );
-	include_weapon( "knife_ballistic_upgraded_zm", false );
-	include_weapon( "knife_ballistic_bowie_zm", false );
-	include_weapon( "knife_ballistic_bowie_upgraded_zm", false );
-}
-
 disable_deadshot( i_local_client_num )
 {
 	// Wait until all the rendered objects are setup
@@ -259,7 +158,7 @@ disable_deadshot( i_local_client_num )
 	{
 		wait( 0.05 );
 	}
-	
+
 	players = GetLocalPlayers();
 	for ( i = 0; i < players.size; i++ )
 	{
@@ -273,9 +172,9 @@ disable_deadshot( i_local_client_num )
 spectator_monitor(lcn)
 {
 	self endon("disconnect");
-	
+
 	en = self GetEntityNumber();
-	
+
 	while(1)
 	{
 		if(en != self GetEntityNumber())
@@ -284,7 +183,7 @@ spectator_monitor(lcn)
 			level notify("spectator_change", lcn);
 			en = self GetEntityNumber();
 		}
-		
+
 		wait(0.1);
 	}
 }
@@ -293,7 +192,7 @@ spectator_monitor(lcn)
 coast_player_connect( i_local_client_num )
 {
 	self endon( "disconnect" );
-	
+
 	// make sure the client has a snapshot from the server before continuing
 	while( !ClientHasSnapshot( i_local_client_num ) )
 	{
@@ -308,41 +207,41 @@ coast_player_connect( i_local_client_num )
 	{
 		return;
 	}
-	
+
 	self thread disable_deadshot( i_local_client_num );
-	
+
 	// flare effect
 	self thread flare_effects( i_local_client_num );
-	
+
 	// run any functions on all the local players from the first local player
 	players = GetLocalPlayers();
 	for( i = 0; i < players.size; i++ )
 	{
-		players[i] notify("stop_sunlight_flashing");		
+		players[i] notify("stop_sunlight_flashing");
 		players[i] clientscripts\_zombiemode::zombie_vision_set_remove( level._coast_power_burst_vision_set, 0, i );
 
 		players[i] thread coast_set_visionset( i );
-		
+
 		players[i] thread coast_reset_frost();
 
 		players[i] thread clientscripts\_zombiemode_ai_director::zombie_director_aggro();
 	}
 
 	ResetSunlight();
-	
+
 }
 
 // WW (02-17-11): Stuff that needs to run on the player at spawn.
 coast_player_spawned( i_local_client_num )
 {
 	self endon( "disconnect" );
-		
+
 	// Wait until all the rendered objects are setup
 	while ( !self hasdobj( i_local_client_num ) )
 	{
 		wait( 0.05 );
 	}
-	
+
 //	self clear_frost_overlay();
 
 
@@ -351,20 +250,20 @@ coast_player_spawned( i_local_client_num )
 	{
 		return;
 	}
-	
+
 	if ( !IsDefined( level.fog_triggers_active ) )
 	{
 		level.fog_triggers_active = [];
 	}
-	
+
 	// run any functions on all the local players from the first local player
 	players = GetLocalPlayers();
 	for( i = 0; i < players.size; i++ )
 	{
 		players[i] thread coast_set_visionset( i );
-		
+
 //		players[i] thread coast_reset_frost();
-		
+
 		if(!IsDefined(level.fog_triggers_active[i]))
 		{
 			if(i == 0)
@@ -375,16 +274,16 @@ coast_player_spawned( i_local_client_num )
 		}
 
 		players[i] thread clientscripts\_zombiemode_ai_director::zombie_director_aggro();
-	}	
+	}
 }
 
 coast_reset_frost()
 {
 	self endon( "disconnect" );
-	
+
 //	PrintLn("C: coast reset frost " + self GetEntityNumber() );
 
-	
+
 	init_filter_frost( self );
 
 	self._frost_opacity = 0.0;
@@ -404,9 +303,9 @@ coast_reset_frost()
 coast_set_visionset( i_local_client_num )
 {
 	self endon( "disconnect" );
-	
+
 	// level waittill( "ZID" );
-	
+
 	self thread clientscripts\_zombiemode::zombie_vision_set_apply( level._coast_vision_set, level._coast_vision_set_priority, 0.1, i_local_client_num );
 }
 
@@ -422,7 +321,7 @@ coast_water_frost( local_client_num, set, newEnt )
 	{
 		return;	// only do this for the player in the water
 	}
-	
+
 	if(self IsSpectating())
 	{
 		return;	// Dont set frost overlays on spectating players.
@@ -447,7 +346,7 @@ coast_water_frost( local_client_num, set, newEnt )
 		self notify( "frost_retreat" );
 		self thread coast_water_frost_retreat();
 	}
-	
+
 }
 
 clear_frost_overlay()
@@ -466,30 +365,30 @@ clear_frost_overlay()
 coast_water_frost_invade()
 {
 	self endon( "frost_retreat" );
-	
+
 	if( !IsDefined( self._frost_opacity ) )
 	{
 		self._frost_opacity = 0.0;
 	}
-	
+
 	start_opacity = 0.0;
-	final_opacity = 1.0; 
+	final_opacity = 1.0;
 	time_to_max = 30000;
 	self._frost_curr_time = 0;
-	
+
 	startTime = GetRealTime();
 	nextTime = GetRealTime();
-	
+
 	if( self._frost_opacity > 0 )
 	{
 		self._frost_curr_time = self._frost_opacity * time_to_max;
 	}
-	
+
 	init_filter_frost( self );
 
 	// turn on the filter
 	enable_filter_frost( self, 0, self._frost_opacity );
-	
+
 	// loop up to the frost overlay max
 	while( 1 )
 	{
@@ -497,11 +396,11 @@ coast_water_frost_invade()
 		{
 			return;
 		}
-		
+
 		diff = nextTime - startTime;
-		
-		self._frost_opacity = self._frost_curr_time / time_to_max; 
-		
+
+		self._frost_opacity = self._frost_curr_time / time_to_max;
+
 		if( self._frost_opacity < start_opacity )
 		{
 			self._frost_opacity = start_opacity;
@@ -510,11 +409,11 @@ coast_water_frost_invade()
 		{
 			self._frost_opacity = final_opacity;
 		}
-		
+
 		self._frost_curr_time += diff;
 		//PrintLn( "OPACITY: " + self._frost_opacity );
 		set_filter_frost_opacity( self, 0, self._frost_opacity );
-		
+
 		startTime = GetRealTime();
 		wait( 0.1 );
 		nextTime = GetRealTime();
@@ -524,41 +423,41 @@ coast_water_frost_invade()
 coast_water_frost_retreat()
 {
 	self endon( "frost_invade" );
-	
+
 	// this should eliminate bunny hopping causing the overlay to pop in and out
 	wait( 0.5 );
-	
+
 	time_to_max = 30000;
-	
+
 	startTime = GetRealTime();
 	nextTime = GetRealTime();
-	
+
 	if( !IsDefined( self._frost_opacity ) )
 	{
 		self._frost_opacity = 0.5;
 	}
 	opacity = 0.5;
 	inc = 0.01;
-	
+
 	while( self._frost_opacity > 0 )
 	{
 		diff = nextTime - startTime;
-		
-		self._frost_opacity = self._frost_curr_time / time_to_max; 
-		
+
+		self._frost_opacity = self._frost_curr_time / time_to_max;
+
 		self._frost_curr_time -= diff;
 		//PrintLn( "&&&& OPACITY: " + self._frost_opacity );
 		set_filter_frost_opacity( self, 0, self._frost_opacity );
 		startTime = GetRealTime();
 		wait( 0.1 );
 		nextTime = GetRealTime();
-		
+
 		if( self._frost_opacity <= 0 )
 		{
 			break;
 		}
 	}
-	
+
 	// remove frost filter from player
 	disable_filter_frost( self, 0 );
 }
@@ -570,13 +469,13 @@ coast_water_frost_remove( local_client_num, set, newEnt )
 	{
 		return;	// only do this for the player in the water
 	}
-	
+
 	if(self IsSpectating())
 	{
 		return;	// Dont set frost overlays on spectating players.
-	}	
-	
-	
+	}
+
+
 	if( set )
 	{
 //		PrintLn("C: water frost remove " + self GetEntityNumber() );
@@ -656,7 +555,7 @@ coast_water_play_all_torso_damage_fx( localclientnum )
 	{
 		return;
 	}
-	
+
 	level.freezegun_damage_torso_fx[localclientnum][entNum] = PlayFxOnTag( localclientnum, level._effect[ "waterfreeze" ], self, "tag_origin" );
 }
 
@@ -693,7 +592,7 @@ coast_player_electrified( local_client_num, set, newEnt )
 	{
 		return;
 	}
-	
+
 	player = GetLocalPlayers()[ local_client_num ];
 
 	if( set )
@@ -773,7 +672,7 @@ coast_ZPO_listener()
 	{
 		level waittill( "ZPO" );
 		level._power_on = true;
-		
+
 		players = GetLocalPlayers();
 		for( i = 0; i < players.size; i++ )
 		{
@@ -789,31 +688,31 @@ coast_ZPO_listener()
 coast_power_on()
 {
 	self endon( "disconnect" );
-	
+
 	if(!isDefined(self GetLocalClientNumber()))
 	{
 		return;
 	}
-	
+
 	// in split screen only the main player should do this or it will happen twice
 	if( self GetLocalClientNumber() != 0 )
 	{
 		return;
 	}
-	
+
 	// set the vision set on the players for the kit
-	
+
 	level notify("power_on_burst");
-	
+
 	// change around the sun direction
 	level coast_sun_light_flashes(self);
-		
+
 }
 
 power_on_burst(lcn)
 {
 	self endon("disconnect");
-	
+
 //	lcn = self getlocalclientnumber();
 //		int_client_num = playeRs[i] GetLocalClientNumber();
 	while(1)
@@ -832,99 +731,99 @@ coast_sun_light_flashes(player)
 {
 	player endon("entityshutdown");
 	player endon("stop_sunlight_flashing");
-	
-	SetSunLight( .6, .6, .6 ); 
+
+	SetSunLight( .6, .6, .6 );
 	wait(.05);
-	
-              
+
+
 	SetSunLight( .8, .8, .8 );
 	wait(0.1);
-	
+
 
 	SetSunLight( .4, .4, .4 );
 	wait(0.05);
-	
-	
+
+
 	SetSunLight( .7, .7, .7 );
 	wait(0.1);
-	
-	
-	SetSunLight( 2, 2, 2 ); 
+
+
+	SetSunLight( 2, 2, 2 );
 	wait(0.15);
-	
-	SetSunLight( 1.5, 1.5, 1.5 ); 
+
+	SetSunLight( 1.5, 1.5, 1.5 );
 	wait(0.2);
-	
-             
+
+
 	SetSunLight( .7, .7, .7 );
 	wait(0.1);
-	
+
 
 	SetSunLight( 2, 2, 2);
 	wait(0.2);
-	
-	
+
+
 	SetSunLight( 1, 1, 1 );
 	wait(0.1);
-	
 
-	SetSunLight( 2, 2, 2 ); 
+
+	SetSunLight( 2, 2, 2 );
 	wait(0.05);
-	
+
 	SetSunLight( .7, .7, .7 );
 	wait(0.1);
-	
-	
-	SetSunLight( 2.2, 2.2, 2.2 ); 
+
+
+	SetSunLight( 2.2, 2.2, 2.2 );
 	wait(0.15);
-	
-	
-	SetSunLight( 2, 2, 2 ); 
+
+
+	SetSunLight( 2, 2, 2 );
 	wait(0.05);
-	
-             
+
+
 	SetSunLight( 1, 1, 1 );
 	wait(0.05);
-	
+
 
 	SetSunLight( 1.2, 1.2, 1.2 );
 	wait(0.1);
-	
-	
+
+
 	SetSunLight( 1.5, 1.5, 1.5 );
 	wait(0.15);
-	
 
-	SetSunLight( 1, 1, 1 ); 
+
+	SetSunLight( 1, 1, 1 );
 	wait(0.1);
-	
-	             
+
+
 	SetSunLight( .8,.8, .8 );
 	wait(0.05);
-	
+
 
 	SetSunLight( .4, .4, .4 );
 	wait(0.1);
-	
-	SetSunLight( 1.2, 1.2, 1.2 ); 
+
+	SetSunLight( 1.2, 1.2, 1.2 );
 	wait(0.1);
-	
-	             
+
+
 	SetSunLight( 2, 2, 2 );
 	wait(0.7);
-	
+
 
 	SetSunLight( .4, .4, .4 );
 	wait(0.1);
-	
-	
+
+
 	SetSunLight( .5, .5, .5 );
 	wait(0.3);
-	
 
-	SetSunLight( .3, .3, .3 ); 
+
+	SetSunLight( .3, .3, .3 );
 	wait(0.1);
-	
+
 	// reset sun light
 	ResetSunlight();
 }
@@ -936,19 +835,19 @@ coast_sun_light_flashes(player)
 flash_setup()
 {
 	message = [];
-	
+
 	message[0] = [];
 	message[0] = array( 0, 1, 0, 0 );
-	
+
 	message[1] = [];
 	message[1] = array( 0 );
 
 	message[2] = [];
 	message[2] = array( 0, 0, 1, 0 );
-	
+
 	message[3] = [];
 	message[3] = array( 1 );
-	
+
 	message[4] = "Hyena";
 
 	message[5] = [];
@@ -969,7 +868,7 @@ flash_setup()
 	message[10] = array( 1, 1, 0, 0, 1, 1 );
 
 	message[11] = "Sam";
-	
+
 	message[12] = [];
 	message[12] = array( 0, 1, 0 );
 
@@ -981,65 +880,65 @@ flash_setup()
 
 	message[15] = [];
 	message[15] = array( 0, 0, 0, 0 );
-	
+
 	message[16] = [];
 	message[16] = array( 1 );
-	
+
 	message[17] = "Thief";
-	
+
 	message[18] = [];
 	message[18] = array( 0, 0, 1, 0 );
-	
+
 	message[19] = [];
 	message[19] = array( 0, 0, 1 );
-	
+
 	message[20] = [];
 	message[20] = array( 0, 1, 0, 0 );
-	
+
 	message[21] = [];
 	message[21] = array( 0, 1, 0, 0 );
-	
+
 	message[22] = "Director";
-	
+
 	message[23] = [];
-	message[23] = array( 1, 1, 0, 0, 1, 1 );	
+	message[23] = array( 1, 1, 0, 0, 1, 1 );
 
 	message[24] = "Cheaters";
-	
+
 	message[25] = [];
 	message[25] = array( 0, 0, 1, 1, 1 );
-	
+
 	message[26] = "Never";
-	
+
 	message[27] = [];
 	message[27] = array( 0, 1, 0 );
-	
+
 	message[28] = [];
 	message[28] = array( 0, 0 );
-	
+
 	message[29] = [];
 	message[29] = array( 1, 1, 0 );
-	
+
 	message[30] = [];
 	message[30] = array( 0, 0, 0, 0 );
-	
+
 	message[31] = [];
 	message[31] = array( 1 );
-	
+
 	message[32] = "Prosper";
-	
+
 	message[33] = [];
 	message[33] = array( 0, 1, 0, 1, 0, 1 );
-	
+
 	return message;
-	
+
 }
 
 
 solaris_flash()
 {
 	level endon( "slc" ); // Stop Lighthouse Code
-	
+
 	// objects
 	light_struct = getstruct( "struct_musical_chairs_lighthouse", "targetname" );
 	level._light_message = 0;
@@ -1048,19 +947,19 @@ solaris_flash()
 	{
 		return;
 	}
-	
+
 	level thread stop_muscial_chair_message( level._light_message );
-	
+
 	message = flash_setup();
-	
+
 	level waittill( "lmc" ); // Lighthouse Morse Code
-	
+
 	while( level._light_message == 0 )
 	{
 		// loop through the message
-		for( i = 0; i < message.size; i++ ) 
+		for( i = 0; i < message.size; i++ )
 		{
-			
+
 			if( IsArray( message[i] ) )
 			{
 				for( j = 0; j < message[i].size; j++ )
@@ -1072,7 +971,7 @@ solaris_flash()
 						{
 							players[k] solaris_ball( k, light_struct.origin );
 						}
-						
+
 						//light_fx_spot = Spawn( k, light_struct.origin, "script_model" );
 						//light_fx_spot SetModel( "tag_origin" );
 						//PlayFXOnTag( k, level._effect[ "lighthouse_morse_code" ], light_fx_spot, "tag_origin" );
@@ -1104,7 +1003,7 @@ solaris_flash()
 						// light_fx_spot PlaySound( 0, "zmb_beepbadeepbadoop" );
 						wait( 0.6 );
 					}
-					
+
 					players = GetLocalPlayers();
 					for( l = 0; l < players.size; l++ )
 					{
@@ -1114,18 +1013,18 @@ solaris_flash()
 							players[l] solaris_destroy();
 						}
 					}
-					
+
 					wait( 0.2 );
-					
+
 				}
-				
+
 				wait( 0.6 );
 			}
 			else
 			{
 				wait( 1.4 );
 			}
-			
+
 		}
 	}
 }
@@ -1136,24 +1035,24 @@ solaris_ball( localClientNum, vec_origin )
 	{
 		self._fx_array = [];
 	}
-	
+
 	temp_spot = Spawn( localClientNum, vec_origin, "script_model" );
 	temp_spot SetModel( "tag_origin" );
-	
+
 	PlayFXOnTag( localClientNum, level._effect[ "lighthouse_morse_code" ], temp_spot, "tag_origin" );
-	
+
 	self._fx_array = add_to_array( self._fx_array, temp_spot, false );
 }
 
 solaris_howl( localClientNum, int_lenght )
 {
 	fx_array = self._fx_array;
-	
+
 	if(!IsDefined(fx_array))
 	{
 		return;
 	}
-	
+
 	if( int_lenght )
 	{
 		for( i = 0; i < fx_array.size; i++ )
@@ -1173,12 +1072,12 @@ solaris_howl( localClientNum, int_lenght )
 solaris_destroy()
 {
 	temp_array = self._fx_array;
-	
+
 	if(!IsDefined(self._fx_array))
 	{
 		return;
 	}
-	
+
 	for( i = 0; i < temp_array.size; i++ )
 	{
 		if(IsDefined(self._fx_array[i]))
@@ -1186,7 +1085,7 @@ solaris_destroy()
 			self._fx_array[i] Delete();
 		}
 	}
-	
+
 	self._fx_array = [];
 }
 
@@ -1194,9 +1093,9 @@ solaris_destroy()
 stop_muscial_chair_message( i_light_message )
 {
 	level waittill( "slc" );
-	
+
 	i_light_message = 1;
-	
+
 }
 
 director_footsteps(localClientNum, set, newEnt)
@@ -1238,15 +1137,15 @@ flare_effects( local_client )
 	{
 		return;
 	}
-	
+
 	// grabbin flares
 	flares = GetEntArray( local_client, "coast_flare", "targetname" );
-	
+
 	if( !IsDefined( flares ) )
 	{
 		return; // avoid a script error if the bsp isn't up to date
 	}
-	
+
 	// start all of them up
 	players = GetLocalPlayers();
 	for( i = 0; i < players.size; i++ )
@@ -1285,7 +1184,7 @@ setup_fx_anims()
 #using_animtree("fxanim_props_dlc3");
 fxanim_init( localClientNum )
 {
-	
+
 	level.fxanims = [];
 	level.fxanims["hook_anim"]		= %fxanim_zom_ship_crane01_hook_anim;
 	level.fxanims["boat_anim"]		= %fxanim_zom_ship_lifeboat_anim;
