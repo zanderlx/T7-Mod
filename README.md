@@ -2,7 +2,7 @@
   <br>
   <a href="#"><img src="https://www.logolynx.com/images/logolynx/9b/9b46de160f0bc8164dd449d195404f52.jpeg" alt="Markdownify" width="200"></a>
   <br>
-  T7 Zombies Mod
+  BlackOps-Overhauled
   <br>
 </h1>
 
@@ -19,13 +19,10 @@
   </a>
 </p>
 
-<hr>
-
 ## Description
+
 A **Call of Duty: Black Ops 1 Zombies** mod involving rescripting and downporting several features from the newer releases of Call of Duty: Black Ops (2, 3, 4) Come check out the development livestream at [https://www.twitch.tv/apexmdr/](https://www.twitch.tv/apexmdr/)
 Future and upcoming features can be viewed by [clicking here](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true)
-
-<hr>
 
 ## Current Features & Changes
 
@@ -116,17 +113,14 @@ Future and upcoming features can be viewed by [clicking here](https://github.com
 	- Downported **`_zm_place_mines`** script
 		- Allows for easy regisration of custom placeable mines
 
-<hr>
-
 ## Disclaimer
 
 This mod has **only** been tested on Kino Der Toten so other maps will most likely crash due to refactoring functions and code of the original scripts. Support for other maps will be announced once the base mod's major functions and script changes have been fully completed.
 
 This mod may have potential bugs and issues that have not been documented. Feel free to provide feedback on such problems so that they may fixed with the initial release of the mod. Thank you
 
-<hr>
-
 ## Contributors and Honorable Mentions
+
 - **_ApexModder_** - Mod Owner
 - **_xSanchez78_**
 	- Ported **Black Ops 3** models and anims to **Black Ops 1**
@@ -139,7 +133,6 @@ This mod may have potential bugs and issues that have not been documented. Feel 
 - **_DTZxPorter_** - For developing and release **BassDrop**
 	- Thanks to **_Papa Pop_** in the **LinkerMod** discord server for fixing issues involving sound.
 
-<hr>
-
 ## License
+
 [GNU GENERAL PUBLIC LICENSE](https://github.com/ApexModder/T7-Mod/blob/master/LICENSE)
