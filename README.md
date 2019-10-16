@@ -20,11 +20,13 @@
 </p>
 
 <hr>
+
 ## Description
 A **Call of Duty: Black Ops 1 Zombies** mod involving rescripting and downporting several features from the newer releases of Call of Duty: Black Ops (2, 3, 4) Come check out the development livestream at [https://www.twitch.tv/apexmdr/](https://www.twitch.tv/apexmdr/)
 Future and upcoming features can be viewed by [clicking here](https://github.com/ApexModder/T7-Mod/projects/1?fullscreen=true)
 
 <hr>
+
 ## Current Features & Changes
 
 - **Player Trigger**
